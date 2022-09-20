@@ -8,8 +8,8 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes, force_str
 from django.contrib.auth import authenticate, login, logout
 from .tokens import generate_token
-from decouple import config
 from .forms import UserRegisterForm
+from django.conf import settings
 
 
 # Create your views here.
@@ -40,7 +40,7 @@ def signup(request):
             try:
                 subject = "Welcome to GFG- Django Login!!"
                 message = "Hello " + myuser.username + "!! \n" + "Welcome to GFG!! \nThank you for visiting our website\n. We have also sent you a confirmation email, please confirm your email address. \n\nThanking You\nAnubhav Madhav"
-                from_email = config("EMAIL_HOST_USER")
+                from_email = settings.EMAIL_HOST_USER
                 to_list = [myuser.email]
                 send_mail(subject,
                           message,
@@ -64,7 +64,7 @@ def signup(request):
                 email = EmailMessage(
                     email_subject,
                     message2,
-                    config("EMAIL_HOST_USER"),
+                    settings.EMAIL_HOST_USER,
                     [myuser.email],
                 )
                 email.fail_silently = True
