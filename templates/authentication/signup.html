@@ -1,43 +1,31 @@
 {% extends "base.html" %}
-
+{% load static %}
+{% load crispy_forms_tags %}
 {% block body %}
-    
-{% for message in messages %}
-<div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-    <strong>Message:</strong> {{ message }}
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-<span aria-hidden="true">&times;</span>
-</button>
-</div>
-{% endfor %}
-
-<h3>Create your account!</h3>
-<form method="post" action="/signup">
-    {% csrf_token %}
-    <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" class="form-control" id="username" name="username" placeholder="Create A Username (use only letters and numbers)" Required>
-    </div>
-    <div class="form-group">
-        <label for="fname">First Name</label>
-        <input type="text" class="form-control" id="fname" name="fname" placeholder="Enter Your First Name" Required>
-    </div>
-    <div class="form-group">
-        <label for="lname">Last Name</label>
-        <input type="text" class="form-control" id="lname" name="lname" placeholder="Enter Your Last Name" Required>
-    </div>
-    <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" class="form-control" id="email" name="email" placeholder="Enter Your Email Address" Required>
-    </div>
-    <div class="form-group">
-        <label for="pass1">Password</label>
-        <input type="password" class="form-control" id="pass1" name="pass1" placeholder="Create Your Password" Required>
-    </div>
-    <div class="form-group">
-        <label for="pass2">Confirm Password</label>
-        <input type="password" class="form-control" id="pass2" name="pass2" placeholder="Confirm Your Password" Required>
-    </div>
-    <button type="submit" class="btn btn-primary">Sign Up</button>
-</form>
+    <h3>Create your account!</h3>
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="form-row">
+            {% for field in register_form %}
+                <div class="form-group col-12 row">
+                    <label for='{{ field.id_for_label }}'
+                           class="col-12 col-form-label text-blue-dark">{{ field.label }}</label>
+                    <div class="col-12 row">
+                        <div class="col-12">{{ field }}</div>
+                        <div class="col-12">
+                            {% if field.help_text %}<small style="color: grey" class="col-12">{{ field.help_text }}</small>{% endif %}
+                        </div>
+                        <div class="col-12">
+                            {% for error in field.errors %}<p style="color: red" class="col-12">{{ error }}</p>{% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="form-group d-flex flex-column">
+            <input type="submit"
+                   value="Dang ky"
+                   class="btn btn-primary align-self-end pl-lg-5 pr-lg-5 mr-lg-5"/>
+        </div>
+    </form>
 {% endblock body %}
