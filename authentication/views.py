@@ -1,3 +1,4 @@
+from django.http import BadHeaderError
 from django.shortcuts import render, redirect
 from .models import User
 from django.contrib import messages
@@ -10,6 +11,7 @@ from django.contrib.auth import authenticate, login, logout
 from .tokens import generate_token
 from .forms import UserRegisterForm
 from django.conf import settings
+from smtplib import SMTPException
 
 
 # Create your views here.
@@ -34,7 +36,6 @@ def signup(request):
                 request,
                 "Your Account has been created succesfully!! Please check your email to confirm your email address in order to activate your account."
             )
-            print(1)
 
             # Welcome Email
             try:
@@ -47,11 +48,9 @@ def signup(request):
                           from_email,
                           to_list,
                           fail_silently=True)
-            except Exception as e:
-                print(e)
-            print(2)
-            # Email Address Confirmation Email
-            try:
+
+                # Email Address Confirmation Email
+
                 current_site = get_current_site(request)
                 email_subject = "Confirm your Email @ GFG - Django Login!!"
                 message2 = render_to_string(
@@ -69,9 +68,13 @@ def signup(request):
                 )
                 email.fail_silently = True
                 email.send()
-            except Exception as e:
-                print(e)
-            print(3)
+            except BadHeaderError:
+                print("Invalid header found")
+            except SMTPException as e:
+                print('Send mail error: ' + e)
+            except:
+                print("Send mail failed")
+
             return redirect('signin')
     else:
         form = UserRegisterForm()
