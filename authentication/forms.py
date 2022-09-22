@@ -24,3 +24,10 @@ class UserRegisterForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
+
+    def __init__(self, *args, **kwargs):
+        super(UserRegisterForm, self).__init__(*args, **kwargs)
+
+        for _, field in self.fields.items():
+            field.error_messages.update(
+                {'required': f'{field.label} không được bỏ trống'})
