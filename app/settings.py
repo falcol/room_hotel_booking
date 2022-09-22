@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     "django.contrib.admin", "django.contrib.auth",
     "django.contrib.contenttypes", "django.contrib.sessions",
     "django.contrib.messages", "django.contrib.staticfiles", 'crispy_forms',
-    'authentication'
+    'authentication', 'tailwind', 'theme', 'django_browser_reload'
 ]
 
 MIDDLEWARE = [
@@ -46,6 +46,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
 ROOT_URLCONF = "app.urls"
@@ -53,11 +54,14 @@ ROOT_URLCONF = "app.urls"
 # os.path.join(BASE_DIR, 'folder/templates')
 TEMPLATES = [
     {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "BACKEND":
+        "django.template.backends.django.DjangoTemplates",
         "DIRS": [
-            os.path.join(BASE_DIR, 'templates'),
+            # os.path.join(BASE_DIR, 'templates'),
+            os.path.join(BASE_DIR, 'theme/templates'),
         ],
-        "APP_DIRS": True,
+        "APP_DIRS":
+        True,
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",
@@ -156,3 +160,10 @@ EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = 'authentication.User'
+
+# tailwind
+TAILWIND_APP_NAME = 'theme'
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+NPM_BIN_PATH = r"/usr/bin/npm"

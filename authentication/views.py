@@ -1,17 +1,19 @@
-from django.http import BadHeaderError
-from django.shortcuts import render, redirect
-from .models import User
-from django.contrib import messages
-from django.core.mail import EmailMessage, send_mail
-from django.contrib.sites.shortcuts import get_current_site
-from django.template.loader import render_to_string
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-from django.utils.encoding import force_bytes, force_str
-from django.contrib.auth import authenticate, login, logout
-from .tokens import generate_token
-from .forms import UserRegisterForm
-from django.conf import settings
 from smtplib import SMTPException
+
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import EmailMessage, send_mail
+from django.http import BadHeaderError
+from django.shortcuts import redirect, render
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes, force_str
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+
+from .forms import UserRegisterForm
+from .models import User
+from .tokens import generate_token
 
 
 # Create your views here.
@@ -81,7 +83,7 @@ def signup(request):
 
     context = {'register_form': form}
 
-    return render(request, "authentication/signup.html", context)
+    return render(request, "signup.html", context)
 
 
 def activate(request, uidb64, token):
@@ -105,7 +107,7 @@ def activate(request, uidb64, token):
 def signin(request):
     if request.method == 'POST':
         username = request.POST['username']
-        pass1 = request.POST['pass1']
+        pass1 = request.POST['password']
 
         user = authenticate(username=username, password=pass1)
 
@@ -113,13 +115,12 @@ def signin(request):
             login(request, user)
             fname = user.first_name
             # messages.success(request, "Logged In Sucessfully!!")
-            return render(request, "authentication/index.html",
-                          {"fname": fname})
+            return render(request, "index.html", {"fname": fname})
         else:
             messages.error(request, "Bad Credentials!!")
             return redirect('home')
 
-    return render(request, "authentication/signin.html")
+    return render(request, "signin.html")
 
 
 def signout(request):
