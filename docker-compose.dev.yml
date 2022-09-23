@@ -52,7 +52,7 @@ services:
         tty: true
         restart: always
         env_file:
-            - django_ex/.env
+            - .env
         command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
         volumes:
             - .:/app
