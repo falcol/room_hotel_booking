@@ -27,24 +27,6 @@ services:
         networks:
             - hotel_net
 
-    reload:
-        build:
-            context: .
-            dockerfile: Dockerfile
-        tty: true
-        restart: always
-        env_file:
-            - .env
-        command: python manage.py livereload --host=0.0.0.0 --port=35729
-        ports:
-            - "35729:35729"
-        volumes:
-            - .:/app
-        depends_on:
-            - db
-        networks:
-            - hotel_net
-
     web:
         build:
             context: .
@@ -60,7 +42,6 @@ services:
             - "8000:8000"
         depends_on:
             - db
-            - reload
         networks:
             - hotel_net
 
