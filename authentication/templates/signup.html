@@ -3,91 +3,67 @@
 {% load value_dict %}
 {% load crispy_forms_tags %}
 {% block body %}
-    <div class="row justify-content-center">
-        <div class="col-md-5">
-            <div class="card">
-                <h2 class="card-title text-center">
-                Register <a href="http://opensnippets.com">open snippets</a>
-            </h2>
-            <div class="card-body py-md-4">
-                <form action="" method="post">
-                    {% csrf_token %}
-                    <div class="form-row">
-                        {% for field in register_form %}
-                            <div class="form-group col-sm-12 row">
-                                <div class="col-12">
-                                    <input type="{{ field.field.widget.input_type }}"
-                                           id="{{ field.auto_id }}"
-                                           name="{{ field.name }}"
-                                           class="{{ field.field.widget.attrs.class }}"
-                                           placeholder="{{ field.label }}"/>
-                                    {% if field.help_text %}<small class="col-12 text-secondary">{{ field.help_text }}</small>{% endif %}
-                                    {% for error in field.errors %}<span class="text-danger col-12">{{ error }}</span>{% endfor %}
-                                </div>
-                            </div>
-                        {% endfor %}
+    <section class="vh-100 bg-image"
+             style="background-image: url('https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp');">
+        <div class="mask d-flex align-items-center h-100 gradient-custom-3">
+            <div class="container h-100">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+                        <div class="card" style="border-radius: 15px;">
+                            <div class="card-body p-5">
+                                <h2 class="text-uppercase text-center mb-5">Create an account</h2>
+                                <form action="" method="post">
+                                    {% csrf_token %}
+                                    {% for field in register_form %}
+                                        <div class="form-outline mb-4">
+                                            <label class="form-label" for="field.id_for_label">{{ field.label }}</label>
+                                            <input type="{{ field.field.widget.input_type }}"
+                                                   id="{{ field.auto_id }}"
+                                                   name="{{ field.name }}"
+                                                   class="{{ field.field.widget.attrs.class }} form-control-lg"
+                                                   placeholder="{{ field.label }}"/>
+                                            {% if field.help_text %}<small class="col-12 text-secondary">{{ field.help_text }}</small>{% endif %}
+                                            {% for error in field.errors %}<span class="text-danger col-12">{{ error }}</span>{% endfor %}
+                                        </div>
+                                    {% endfor %}
+                                    <div class="d-flex justify-content-center">
+                                        <input type="submit"
+                                               value="Dang ky"
+                                               class="btn btn-success btn-block btn-lg gradient-custom-4 text-body"/>
+                                    </div>
+                                    <p class="text-center text-muted mt-5 mb-0">
+                                    Have already an account? <a href="{% url 'signin' %}" class="fw-bold text-body"><u>Login here</u></a>
+                                </p>
+                            </form>
+                        </div>
                     </div>
-					<div class="d-flex flex-row align-items-center justify-content-between">
-                    <a href="{% url 'signin' %}">Login</a>
-                    <input type="submit" class="btn btn-primary btn-submit" value="Dang ky"/>
                 </div>
-                </form>
             </div>
         </div>
     </div>
-</div>
+</section>
 {% endblock body %}
 {% block footer %}
     <style type="text/css">
-        @import url('https://fonts.googleapis.com/css?family=PT+Sans');
+        .gradient-custom-3 {
+		/* fallback for old browsers */
+		background: #84fab0;
 
-body{
-  background: #fff;
-  font-family: 'PT Sans', sans-serif;
-}
-h2{
-  padding-top: 1.5rem;
-}
-a{
-  color: #333;
-}
-a:hover{
-  color: #da5767;
-  text-decoration: none;
-}
-.card{
-  border: 0.40rem solid #f8f9fa;
-  top: 10%;
-}
-.form-control{
-  background-color: #f8f9fa;
-  padding: 20px;
-  padding: 25px 15px;
-  margin-bottom: 1.3rem;
-}
+		/* Chrome 10-25, Safari 5.1-6 */
+		background: -webkit-linear-gradient(to right, rgba(132, 250, 176, 0.5), rgba(143, 211, 244, 0.5));
 
-.form-control:focus {
+		/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+		background: linear-gradient(to right, rgba(132, 250, 176, 0.5), rgba(143, 211, 244, 0.5))
+		}
+		.gradient-custom-4 {
+		/* fallback for old browsers */
+		background: #84fab0;
 
-    color: #000000;
-    background-color: #ffffff;
-    border: 3px solid #da5767;
-    outline: 0;
-    box-shadow: none;
+		/* Chrome 10-25, Safari 5.1-6 */
+		background: -webkit-linear-gradient(to right, rgba(132, 250, 176, 1), rgba(143, 211, 244, 1));
 
-}
-
-.btn-submit{
-  padding: 0.6rem 1.2rem;
-  background: #da5767;
-  border: 2px solid #da5767;
-}
-.btn-submit:hover {
-
-    
-    background-color: #df8c96;
-    border-color: #df8c96;
-  transition: .3s;
-
-}
+		/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+		background: linear-gradient(to right, rgba(132, 250, 176, 1), rgba(143, 211, 244, 1))
+		}
     </style>
 {% endblock footer %}

@@ -59,14 +59,11 @@ ROOT_URLCONF = "app.urls"
 # os.path.join(BASE_DIR, 'folder/templates')
 TEMPLATES = [
     {
-        "BACKEND":
-        "django.template.backends.django.DjangoTemplates",
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
             os.path.join(BASE_DIR, 'templates'),
-            os.path.join(BASE_DIR, 'theme/templates'),
         ],
-        "APP_DIRS":
-        True,
+        "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",
@@ -149,7 +146,7 @@ MEDIA_URL = '/media/'
 # Path where media is stored
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
-CRISPY_TEMPLATE_PACK = 'bootstrap'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # smtp mail
 EMAIL_BACKEND = config("EMAIL_BACKEND")
@@ -165,10 +162,3 @@ EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = 'authentication.User'
-
-# tailwind
-TAILWIND_APP_NAME = 'theme'
-INTERNAL_IPS = [
-    "127.0.0.1",
-]
-NPM_BIN_PATH = config("NPM_BIN_PATH")
