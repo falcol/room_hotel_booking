@@ -1,41 +1,93 @@
 {% extends "base.html" %}
 {% load static %}
+{% load value_dict %}
 {% load crispy_forms_tags %}
 {% block body %}
-    <section class="bg-gray-50 dark:bg-gray-900">
-        <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-            <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
-                <img class="w-8 h-8 mr-2" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg" alt="logo">
-                Hotel Booking
-            </a>
-            <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-                <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-                    <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                        Create and account
-                    </h1>
-                    <form class="space-y-4 md:space-y-6" action="" method="POST">
-                        {% csrf_token %}
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card">
+                <h2 class="card-title text-center">
+                Register <a href="http://opensnippets.com">open snippets</a>
+            </h2>
+            <div class="card-body py-md-4">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="form-row">
                         {% for field in register_form %}
-                            <div>
-                                <label for="{{ field.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                    {{ field.label }}
-                                </label>
-                                <input type="{{ field.field.widget.input_type }}"
-                                            id="{{ field.auto_id }}"
-                                            name="{{ field.name }}"
-                                            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                            placeholder="{{ field.label }}"/>
-                                {% if field.help_text %}<small class="text-gray-500">{{ field.help_text }}</small>{% endif %}
-                                {% for error in field.errors %}<p class="text-red-600">{{ error }}</p>{% endfor %}
+                            <div class="form-group col-sm-12 row">
+                                <div class="col-12">
+                                    <input type="{{ field.field.widget.input_type }}"
+                                           id="{{ field.auto_id }}"
+                                           name="{{ field.name }}"
+                                           class="{{ field.field.widget.attrs.class }}"
+                                           placeholder="{{ field.label }}"/>
+                                    {% if field.help_text %}<small class="col-12 text-secondary">{{ field.help_text }}</small>{% endif %}
+                                    {% for error in field.errors %}<span class="text-danger col-12">{{ error }}</span>{% endfor %}
+                                </div>
                             </div>
                         {% endfor %}
-                        <button type="submit" class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Create an account</button>
-                        <p class="text-sm font-light text-gray-500 dark:text-gray-400">
-                            Already have an account? <a href="{% url 'signin' %}" class="font-medium text-primary-600 hover:underline dark:text-primary-500">Login here</a>
-                        </p>
-                    </form>
+                    </div>
+					<div class="d-flex flex-row align-items-center justify-content-between">
+                    <a href="{% url 'signin' %}">Login</a>
+                    <input type="submit" class="btn btn-primary btn-submit" value="Dang ky"/>
                 </div>
+                </form>
             </div>
         </div>
-        </section>
+    </div>
+</div>
 {% endblock body %}
+{% block footer %}
+    <style type="text/css">
+        @import url('https://fonts.googleapis.com/css?family=PT+Sans');
+
+body{
+  background: #fff;
+  font-family: 'PT Sans', sans-serif;
+}
+h2{
+  padding-top: 1.5rem;
+}
+a{
+  color: #333;
+}
+a:hover{
+  color: #da5767;
+  text-decoration: none;
+}
+.card{
+  border: 0.40rem solid #f8f9fa;
+  top: 10%;
+}
+.form-control{
+  background-color: #f8f9fa;
+  padding: 20px;
+  padding: 25px 15px;
+  margin-bottom: 1.3rem;
+}
+
+.form-control:focus {
+
+    color: #000000;
+    background-color: #ffffff;
+    border: 3px solid #da5767;
+    outline: 0;
+    box-shadow: none;
+
+}
+
+.btn-submit{
+  padding: 0.6rem 1.2rem;
+  background: #da5767;
+  border: 2px solid #da5767;
+}
+.btn-submit:hover {
+
+    
+    background-color: #df8c96;
+    border-color: #df8c96;
+  transition: .3s;
+
+}
+    </style>
+{% endblock footer %}
