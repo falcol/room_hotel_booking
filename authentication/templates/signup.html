@@ -2,6 +2,9 @@
 {% load static %}
 {% load value_dict %}
 {% load crispy_forms_tags %}
+{% block title %}
+    Đăng ký
+{% endblock title %}
 {% block body %}
     <section class="vh-100 bg-image"
              style="background-image: url('https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp');">
@@ -11,7 +14,7 @@
                     <div class="col-12 col-md-9 col-lg-7 col-xl-6">
                         <div class="card" style="border-radius: 15px;">
                             <div class="card-body p-5">
-                                <h2 class="text-uppercase text-center mb-5">Create an account</h2>
+                                <h2 class="text-uppercase text-center mb-5">Tạo tài khoản</h2>
                                 <form action="" method="post">
                                     {% csrf_token %}
                                     {% for field in register_form %}
@@ -28,11 +31,11 @@
                                     {% endfor %}
                                     <div class="d-flex justify-content-center">
                                         <input type="submit"
-                                               value="Dang ky"
+                                               value="Đăng ký"
                                                class="btn btn-success btn-block btn-lg gradient-custom-4 text-body"/>
                                     </div>
                                     <p class="text-center text-muted mt-5 mb-0">
-                                    Have already an account? <a href="{% url 'signin' %}" class="fw-bold text-body"><u>Login here</u></a>
+                                    Bạn đã có tài khoản? <a href="{% url 'signin' %}" class="fw-bold text-body"><u>Đăng nhập</u></a>
                                 </p>
                             </form>
                         </div>

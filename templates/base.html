@@ -24,7 +24,7 @@
             {% for message in messages %}<script>alert("{{ message }}");</script>{% endfor %}
         {% endif %}
     </head>
-    <body class="container">
+    <body class="container-fluid">
         <div>
             <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
                 <a href="/"
@@ -59,8 +59,8 @@
                         <h3>Hello {{ fname }}!</h3>
                         <button type="submit"><a href="{% url 'signout' %}">SignOut</a></button>
                     {% else %}
-                        <a href="{% url 'signin' %}"><button type="button" class="btn btn-outline-primary me-2">Login</button></a>
-                        <a href="{% url 'signup' %}"><button type="button" class="btn btn-outline-primary">Sign-up</button></a>
+                        <a href="{% url 'signin' %}"><button type="button" class="btn btn-outline-primary me-2">Đăng nhập</button></a>
+                        <a href="{% url 'signup' %}"><button type="button" class="btn btn-outline-primary">Đăng ký</button></a>
                     {% endif %}
                 </div>
             </header>
