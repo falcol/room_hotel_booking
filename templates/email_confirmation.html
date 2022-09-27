@@ -1,9 +1,9 @@
 {% autoescape off %}
 
- Welcome to GFG - Django Login!!
- Hello {{ name }}!!
- Please confirm your email by clicking on the following link.
+ Xin chào {{ name }}!!
+ Chào mừng bạn đến với website đặt phòng khách sạn!!
+ Vui lòng xác nhận email của bạn bằng cách nhấp vào liên kết sau.
 
- Confirmation Link: http://{{ domain }}{% url 'activate' uidb64=uid token=token %} 
+ Liên kết xác nhận: http://{{ domain }}{% url 'activate' uidb64=uid token=token %} 
 
  {% endautoescape %}

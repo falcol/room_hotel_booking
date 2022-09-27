@@ -34,15 +34,16 @@ def signup(request):
             myuser.is_active = False
             myuser.save()
             print(myuser)
-            messages.success(
-                request,
-                "Your Account has been created succesfully!! Please check your email to confirm your email address in order to activate your account."
-            )
+            messages.success(request,
+                             "Kiểm tra email để kích hoạt tài khoản của bạn")
 
             # Welcome Email
             try:
-                subject = "Welcome to GFG- Django Login!!"
-                message = "Hello " + myuser.username + "!! \n" + "Welcome to GFG!! \nThank you for visiting our website\n. We have also sent you a confirmation email, please confirm your email address. \n\nThanking You\nAnubhav Madhav"
+                subject = "Đăng ký tài khoản thành công"
+                message = "Xin chào " + myuser.username
+                message += "\n Chào mừng bạn đến với website của chúng tôi"
+                message += "\n Tôi sẽ gửi bạn email để xác nhận danh tính"
+                message += "\n Xin hãy xác nhận lại trong email"
                 from_email = settings.EMAIL_HOST_USER
                 to_list = [myuser.email]
                 send_mail(subject,
@@ -54,7 +55,7 @@ def signup(request):
                 # Email Address Confirmation Email
 
                 current_site = get_current_site(request)
-                email_subject = "Confirm your Email @ GFG - Django Login!!"
+                email_subject = "Xác nhận đăng ký tài khoản!!"
                 message2 = render_to_string(
                     'email_confirmation.html', {
                         'name': myuser.username,

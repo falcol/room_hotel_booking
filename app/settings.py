@@ -32,15 +32,11 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    "django.contrib.admin",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    'django_browser_reload',
-    "django.contrib.staticfiles",
-    'crispy_forms',
-    'authentication',
+    "django.contrib.admin", "django.contrib.auth",
+    "django.contrib.contenttypes", "django.contrib.sessions",
+    "django.contrib.messages", 'django_browser_reload',
+    "django.contrib.staticfiles", 'crispy_forms', 'authentication',
+    "phonenumber_field"
 ]
 
 MIDDLEWARE = [
