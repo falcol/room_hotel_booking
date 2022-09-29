@@ -36,7 +36,8 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes", "django.contrib.sessions",
     "django.contrib.messages", 'django_browser_reload',
     "django.contrib.staticfiles", 'crispy_forms', 'authentication',
-    "phonenumber_field"
+    "phonenumber_field", "customer", "hotel_manager", "payment",
+    "room_booking", "room_manager"
 ]
 
 MIDDLEWARE = [
@@ -122,7 +123,7 @@ TIME_ZONE = "UTC"
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/

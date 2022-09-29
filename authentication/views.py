@@ -32,8 +32,10 @@ def signup(request):
             myuser = User.objects.get(username=username)
 
             myuser.is_active = False
+            if form.is_staff:
+                myuser.is_staff = True
             myuser.save()
-            print(myuser)
+
             messages.success(request,
                              "Kiểm tra email để kích hoạt tài khoản của bạn")
 
@@ -75,7 +77,7 @@ def signup(request):
                 print("Invalid header found")
             except SMTPException as e:
                 print('Send mail error: ' + e)
-            except:
+            except Exception:
                 print("Send mail failed")
 
             return redirect('signin')
