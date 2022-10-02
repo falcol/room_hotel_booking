@@ -22,11 +22,11 @@ class UserRegisterForm(UserCreationForm):
         widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     is_staff = forms.BooleanField(
         label='Bạn là chủ khách sạn?',
-        widget=forms.CheckboxInput(attrs={'class': 'form-control'}))
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}))
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2', 'is_staff']
+        fields = ('username', 'email', 'password1', 'password2', 'is_staff')
 
     def __init__(self, *args, **kwargs):
         super(UserRegisterForm, self).__init__(*args, **kwargs)

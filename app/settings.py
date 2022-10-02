@@ -36,8 +36,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes", "django.contrib.sessions",
     "django.contrib.messages", 'django_browser_reload',
     "django.contrib.staticfiles", 'crispy_forms', 'authentication',
-    "phonenumber_field", "customer", "hotel_manager", "payment",
-    "room_booking", "room_manager"
+    "phonenumber_field", "customer", "hotel_manager", "payment", "room_booking"
 ]
 
 MIDDLEWARE = [
@@ -97,20 +96,20 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME":
-        "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "NAME": "django.contrib.auth.password_validation."
+                "UserAttributeSimilarityValidator",
     },
     {
         "NAME":
-        "django.contrib.auth.password_validation.MinimumLengthValidator",
+            "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
         "NAME":
-        "django.contrib.auth.password_validation.CommonPasswordValidator",
+            "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
         "NAME":
-        "django.contrib.auth.password_validation.NumericPasswordValidator",
+            "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 

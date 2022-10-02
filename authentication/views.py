@@ -15,10 +15,7 @@ from .forms import UserRegisterForm
 from .models import User
 from .tokens import generate_token
 
-
 # Create your views here.
-def home(request):
-    return render(request, "index.html")
 
 
 def signup(request):
