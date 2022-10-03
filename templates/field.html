@@ -1,0 +1,25 @@
+{% if field.field.widget.input_type == 'select' %}
+    <select name="{{ field.name }}"
+            id="{{ field.auto_id }}"
+            class="{{ field.field.widget.attrs.class }} rounded-item">
+        <option value selected>
+        </option>
+        {% for id, name in field.field.choices %}
+            {% if id != '' %}
+                <option value="{{ id }}"
+                        {% if data_form|get_item:field.name == id|to_str %}selected{% endif %}>
+                    {{ id }} : {{ name }}
+                </option>
+            {% endif %}
+        {% endfor %}
+    </select>
+{% else %}
+    <input type="{{ field.field.widget.input_type }}"
+           id="{{ field.auto_id }}"
+           name="{{ field.name }}"
+           class="{{ field.field.widget.attrs.class }} rounded-item"
+           placeholder="{{ field.label }}"
+           {% if data_form|get_item:field.name != '' %}value="{{ data_form|get_item:field.name }}"{% endif %}/>
+{% endif %}
+{% for error in field.errors %}<p style="color: red">{{ error }}</p>{% endfor %}
+{% if field.help_text %}<small style="color: grey">{{ field.help_text }}</small>{% endif %}
