@@ -1,15 +1,18 @@
 from django.contrib import admin
 from .models import (RoomDetails, RoomPriceDetails, DrinkAndFood, BookingDetails, Photos, DrinkAndFoodOrder)
+from .forms import RoomPriceDetailsForms, DrinkAndFoodForms, RoomDetailsForms, BookingDetailsForms
 
 
 # Register your models here.
 @admin.register(RoomDetails)
 class RoomAdmin(admin.ModelAdmin):
+    form = RoomDetailsForms
     pass
 
 
 @admin.register(BookingDetails)
 class BookingAdmin(admin.ModelAdmin):
+    form = BookingDetailsForms
     list_select_related = True
     autocomplete_fields = ['guest']
     pass
@@ -17,11 +20,13 @@ class BookingAdmin(admin.ModelAdmin):
 
 @admin.register(RoomPriceDetails)
 class RoomPriceAdmin(admin.ModelAdmin):
+    form = RoomPriceDetailsForms
     pass
 
 
 @admin.register(DrinkAndFood)
 class DrinkAndFoodAdmin(admin.ModelAdmin):
+    form = DrinkAndFoodForms
     pass
 
 

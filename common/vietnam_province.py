@@ -10,6 +10,4 @@ def vietnam_province():
     return result
 
 
-data = vietnam_province()
-
-print(data)
+VIETNAM_CITY = vietnam_province()

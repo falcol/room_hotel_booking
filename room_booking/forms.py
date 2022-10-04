@@ -156,9 +156,7 @@ class PhotoRoomForms(forms.ModelForm):
     class Meta:
         model = Photos
         fields = (
-            'hotel_id',
             'room_id',
-            'image_hotel',
             'image_room',
             'image_name',
             'description',

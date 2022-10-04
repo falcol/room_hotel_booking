@@ -33,22 +33,22 @@ class HotelCreateForm(forms.ModelForm):
         super(HotelCreateForm, self).__init__(*args, **kwargs)
 
         for _, field in self.fields.items():
-            field.error_messages.update(
-                {'required': f'{field.label}không được bỏ trống'})
+            field.error_messages.update({'required': f'{field.label}không được bỏ trống'})
 
 
 class HotelUpdateForm(forms.ModelForm):
 
     class Meta:
         model = HotelDetails
-        fields = ('name', 'email', 'contact_no', 'owner', 'address', 'city',
-                  'latitude', 'logtitude')
+        fields = ('name', 'email', 'contact_no', 'owner', 'address', 'city', 'latitude', 'logtitude')
         labels = {
             "name": "Tên khách sạn",
             "email": "Email khách sạn",
             "contact_no": "Số điện thoại",
             "address": "Địa chỉ khách sạn",
-            "city": "Thuộc thành phố"
+            "city": "Thuộc thành phố",
+            "latitude": "Vĩ độ",
+            "logtitude": "Kinh độ"
         }
 
     def clean(self) -> Dict[str, Any]:
@@ -61,5 +61,4 @@ class HotelUpdateForm(forms.ModelForm):
         super(HotelUpdateForm, self).__init__(*args, **kwargs)
 
         for _, field in self.fields.items():
-            field.error_messages.update(
-                {'required': f'{field.label}không được bỏ trống'})
+            field.error_messages.update({'required': f'{field.label}không được bỏ trống'})
