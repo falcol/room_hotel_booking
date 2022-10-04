@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import (RoomDetails, RoomPriceDetails, DrinkAndFood,
-                     BookingDetails, Photos)
+from .models import (RoomDetails, RoomPriceDetails, DrinkAndFood, BookingDetails, Photos, DrinkAndFoodOrder)
 
 
 # Register your models here.
@@ -11,6 +10,8 @@ class RoomAdmin(admin.ModelAdmin):
 
 @admin.register(BookingDetails)
 class BookingAdmin(admin.ModelAdmin):
+    list_select_related = True
+    autocomplete_fields = ['guest']
     pass
 
 
@@ -21,6 +22,11 @@ class RoomPriceAdmin(admin.ModelAdmin):
 
 @admin.register(DrinkAndFood)
 class DrinkAndFoodAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(DrinkAndFoodOrder)
+class DrinkAndFoodOrderAdmin(admin.ModelAdmin):
     pass
 
 

@@ -1,3 +1,4 @@
+from tkinter import image_names
 from django.db import models
 from authentication.models import User
 from hotel_manager.models import HotelDetails
@@ -30,7 +31,7 @@ class DrinkAndFoodOrder(models.Model):
     amount = models.FloatField(default=0)
 
     def __str__(self) -> str:
-        return self.drink_and_food.item_name
+        return self.total
 
 
 class BookingDetails(models.Model):
@@ -43,6 +44,7 @@ class BookingDetails(models.Model):
                               null=True,
                               related_name="guest_bookings")
     guest_name = models.CharField(max_length=255, blank=True, null=True)
+    guest_phone_number = models.CharField(max_length=255, blank=True, null=True)
     BOOKING_TYPE = ((0, "Nghỉ giờ"), (1, "Nghỉ qua đêm"), (2, "Nghỉ ngày"))
     booking_type = models.IntegerField(choices=BOOKING_TYPE)
     hotel = models.ForeignKey(HotelDetails, on_delete=models.CASCADE, related_name="hotel_bookings")
@@ -51,7 +53,7 @@ class BookingDetails(models.Model):
     check_out_time = models.DateTimeField(null=True, blank=True)
     room = models.ForeignKey(RoomPriceDetails, on_delete=models.CASCADE, related_name="room_bookings")
     total_guests = models.PositiveIntegerField(default=0)
-    drink_and_food = models.ForeignKey(DrinkAndFoodOrder, related_name='menu', blank=True, on_delete=models.DO_NOTHING)
+    drink_and_food = models.ManyToManyField(DrinkAndFoodOrder, related_name='menu', blank=True)
     total_cost = models.FloatField(default=0)
     discounted_price = models.FloatField(default=0)
     booking_date = models.DateTimeField(auto_now_add=True)
@@ -71,16 +73,10 @@ class RoomDetails(models.Model):
     room_name = models.CharField(max_length=255)
     room_no = models.PositiveIntegerField(null=True)
     hotel = models.ForeignKey(HotelDetails, on_delete=models.CASCADE, related_name='room_hotel')
-    guest = models.ForeignKey(User,
-                              to_field='username',
-                              related_name="room",
-                              on_delete=models.CASCADE,
-                              blank=True,
-                              null=True)
     room_price = models.ForeignKey(RoomPriceDetails, to_field='room_type', on_delete=models.CASCADE)
     layout = models.TextField(blank=True)
     floor_no = models.PositiveIntegerField(default=0)
-    room_status = models.CharField(choices=ROOM_STATUS, max_length=1)
+    room_status = models.CharField(choices=ROOM_STATUS, max_length=1, default="T")
 
     def __str__(self):
         return self.room_status
@@ -99,7 +95,8 @@ class Photos(models.Model):
                                 related_name='room_photos')
     image_hotel = models.ImageField(upload_to='hotels/% Y/% m/% d/', blank=False, null=False, unique=True)
     image_room = models.ImageField(upload_to='rooms/% Y/% m/% d/', blank=False, null=False, unique=True)
+    image_name = models.CharField(max_length=255, blank=True, null=True, default="")
     description = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return self.id
+        return self.image_name
