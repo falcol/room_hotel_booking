@@ -8,7 +8,6 @@ class CustomerDetails(models.Model):
     customer_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name="info")
     address = models.CharField(blank=True, max_length=255)
     city = models.CharField(blank=True, max_length=255)
-    state = models.CharField(blank=True, max_length=255)
     country = models.CharField(blank=True, max_length=255)
 
     def __str__(self):

@@ -1,4 +1,3 @@
-from tkinter import image_names
 from django.db import models
 from authentication.models import User
 from hotel_manager.models import HotelDetails
