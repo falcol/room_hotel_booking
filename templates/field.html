@@ -1,4 +1,5 @@
 {% if field.field.widget.input_type == 'select' %}
+    {% include 'label.html' %}
     <select name="{{ field.name }}"
             id="{{ field.auto_id }}"
             class="{{ field.field.widget.attrs.class }} rounded-item">
@@ -13,13 +14,24 @@
             {% endif %}
         {% endfor %}
     </select>
-{% else %}
-    <input type="{{ field.field.widget.input_type }}"
-           id="{{ field.auto_id }}"
-           name="{{ field.name }}"
-           class="{{ field.field.widget.attrs.class }} rounded-item"
-           placeholder="{{ field.label }}"
-           {% if data_form|get_item:field.name != '' %}value="{{ data_form|get_item:field.name }}"{% endif %}/>
-{% endif %}
-{% for error in field.errors %}<p style="color: red">{{ error }}</p>{% endfor %}
-{% if field.help_text %}<small style="color: grey">{{ field.help_text }}</small>{% endif %}
+{% elif field.field.widget.input_type in "text email password" %}
+    <div class="form-outline mb-4">
+        {% include 'label.html' %}
+        <input type="{{ field.field.widget.input_type }}"
+               id="{{ field.auto_id }}"
+               name="{{ field.name }}"
+               class="{{ field.field.widget.attrs.class }} form-control-lg"
+               placeholder="{{ field.label }}"/>
+    {% else %}
+        <input type="{{ field.field.widget.input_type }}"
+               id="{{ field.auto_id }}"
+               name="{{ field.name }}"
+               class="{{ field.field.widget.attrs.class }} rounded-item"
+               placeholder="{{ field.label }}"
+               {% if data_form|get_item:field.name != '' %}value="{{ data_form|get_item:field.name }}"{% endif %}/>
+        {% include 'label.html' %}
+    {% endif %}
+    <br/>
+    {% for error in field.errors %}<p style="color: red">{{ error }}</p>{% endfor %}
+    {% if field.help_text %}<small style="color: grey">{{ field.help_text }}</small>{% endif %}
+    </div>
