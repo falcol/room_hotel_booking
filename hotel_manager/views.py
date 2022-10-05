@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import HotelDetails
+from .forms import HotelCreateForm
 
 
 # Create your views here.

@@ -9,10 +9,35 @@
         <link rel="stylesheet"
               type="text/css"
               href="{% static 'css/bootstrap.min.css' %}"/>
-        <script type="text/javascript" src="{% static 'js/jquery.slim.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+        <link rel="stylesheet"
+              type="text/css"
+              href="{% static 'css/font-awesome.min.css' %}"/>
+        <link rel="stylesheet"
+              type="text/css"
+              href="{% static 'css/jquery-ui.min.css' %}"/>
+        <link rel="stylesheet"
+              type="text/css"
+              href="{% static 'css/elegant-icons.css' %}"/>
+        <link rel="stylesheet"
+              type="text/css"
+              href="{% static 'css/flaticon.css' %}"/>
+        <link rel="stylesheet"
+              type="text/css"
+              href="{% static 'css/magnific-popup.css' %}"/>
+        <link rel="stylesheet"
+              type="text/css"
+              href="{% static 'css/nice-select.css' %}"/>
+        <link rel="stylesheet"
+              type="text/css"
+              href="{% static 'css/owl.carousel.min.css' %}"/>
+        <link rel="stylesheet"
+              type="text/css"
+              href="{% static 'css/slicknav.min.css' %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
+        <link href="https://fonts.googleapis.com/css?family=Lora:400,700&display=swap"
+              rel="stylesheet"/>
+        <link href="https://fonts.googleapis.com/css?family=Cabin:400,500,600,700&display=swap"
+              rel="stylesheet"/>
         <title>
             {% block title %}
                 My amazing site
@@ -21,81 +46,190 @@
         {% block header %}
         {% endblock header %}
     </head>
-    <body class="container-fluid">
-        <div>
-            <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-                <a href="{% url 'home' %}"
-                   class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
-                    <svg class="bi me-2"
-                         width="40"
-                         height="32"
-                         role="img"
-                         aria-label="Bootstrap">
-                        <use xlink:href="#bootstrap"></use>
-                    </svg>
-                </a>
-                <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-                    <li>
-                        <a href="#" class="nav-link px-2 link-secondary">Trang chủ</a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link px-2 link-dark">Đặt phòng</a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link px-2 link-dark">Quản lý khách sạn</a>
-                    </li>
-                </ul>
-                <div class="col-md-3 text-end">
-                    {% if request.user.is_authenticated %}
-                        <h3>Hello {{ request.user.username }}!</h3>
-                        <button class="btn" type="submit">
-                            <a href="{% url 'signout' %}">Đăng xuất</a>
-                        </button>
-                    {% else %}
-                        <a href="{% url 'signin' %}">
-                            <button type="button" class="btn btn-outline-primary me-2">Đăng nhập</button>
-                        </a>
-                        <a href="{% url 'signup' %}">
-                            <button type="button" class="btn btn-outline-primary">Đăng ký</button>
-                        </a>
-                    {% endif %}
+    <body>
+        {% comment %} Header {% endcomment %}
+        <header class="header-section">
+            <div class="menu-item">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-2"></div>
+                        <div class="col-lg-10">
+                            <div class="nav-menu">
+                                <nav class="mainmenu">
+                                    <ul>
+                                        <li class="active">
+                                            <a href="{% url 'home' %}">Trang chủ</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Phòng đã đặt</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Khách sạn đã ở</a>
+                                        </li>
+                                        {% if request.user.is_staff %}
+                                            <li>
+                                                {% comment %} if staff {% endcomment %}
+                                                <a href="#">Khách sạn</a>
+                                                <ul class="dropdown">
+                                                    <li>
+                                                        <a href="#">Thêm mới</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">Danh sách</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        {% endif %}
+                                        {% if request.user.is_authenticated %}
+                                            <li>
+                                                <a href="#">Xin chào {{ request.user.username }}</a>
+                                                <ul class="dropdown">
+                                                    <li>
+                                                        <a href="./room-details.html">Thông tin</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <a href="{% url 'signout' %}">Đăng xuất</a>
+                                            </li>
+                                        {% else %}
+                                            <li>
+                                                <a href="{% url 'signin' %}">Đăng nhập</a>
+                                            </li>
+                                            <li>
+                                                <a href="{% url 'signup' %}">Đăng ký</a>
+                                            </li>
+                                        {% endif %}
+                                    </ul>
+                                </nav>
+                                <div class="nav-right search-switch">
+                                    <i class="icon_search"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </header>
-        </div>
+            </div>
+        </header>
+        {% comment %} End Header {% endcomment %}
+        {% comment %} Alert message {% endcomment %}
         <div>
             {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show"
-                     role="alert">
-                    <strong>Thông báo:</strong> {{ message }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            {% endfor %}
-        {% endif %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show"
+                         role="alert">
+                        <strong>Thông báo:</strong> {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            {% endif %}
         </div>
-        <div class="container-fluid">
+        {% comment %} End alert {% endcomment %}
+        <section class="main">
             {% block body %}
-                {% if user.is_authenticated %}
-                    <center>
-                        <h1>welcome back {{ user.username }}!</h1>
-                    </center>
-                {% else %}
-                    <center>
-                        <h1>log in, plz . . .</h1>
-                    </center>
-                {% endif %}
             {% endblock body %}
-        </div>
+        </section>
         <div>
-            <footer>
-                <p>Footer Text</p>
-                {% block footer %}
-                {% endblock footer %}
-            </footer>
-        </div>
-        {% block script %}
-        {% endblock script %}
-    </body>
+            {% block footer %}
+            {% endblock footer %}
+            <!-- Footer Section Begin -->
+            <footer class="footer-section">
+                <div class="container">
+                    <div class="footer-text">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="ft-about">
+                                    <div class="logo">
+                                        <a href="#">
+                                            {% comment %} <img src="img/footer-logo.png" alt=""> {% endcomment %}
+                                        </a>
+                                    </div>
+                                    <p>
+                                        Chúng tôi truyền cảm hứng và tiếp cận hàng triệu khách du lịch
+                                    </p>
+                                    <div class="fa-social">
+                                        <a href="#"><i class="fa fa-facebook"></i></a>
+                                        <a href="#"><i class="fa fa-twitter"></i></a>
+                                        <a href="#"><i class="fa fa-tripadvisor"></i></a>
+                                        <a href="#"><i class="fa fa-instagram"></i></a>
+                                        <a href="#"><i class="fa fa-youtube-play"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 offset-lg-1">
+                                <div class="ft-contact">
+                                    <h6>Liên hệ chúng tôi</h6>
+                                    <ul>
+                                        <li>(84) 0000000000</li>
+                                        <li>test@gmail.com</li>
+                                        <li>D13CNPM4 Đại học điện lực</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 offset-lg-1">
+                                <div class="ft-newslatter">
+                                    <h6>Gửi ý kiến qua hòm thư</h6>
+                                    <p>hello@gmail.com</p>
+                                    {% comment %} <form action="#" class="fn-form">
+                                        <input type="text" placeholder="Email" />
+                                        <button type="submit">
+                                            <i class="fa fa-send"></i>
+                                        </button>
+                                    </form> {% endcomment %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="copyright-option">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-7">
+                                {% comment %} <ul>
+                                    <li>
+                                        <a href="#">Contact</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Terms of use</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Privacy</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Environmental Policy</a>
+                                    </li>
+                                </ul> {% endcomment %}
+                            </div>
+                            <div class="col-lg-5">
+                                <div class="co-text">
+                                    <p>
+                                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                        Bản quyền &copy;<script>
+    document.write(new Date().getFullYear());
+</script>
+                                    </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- Footer Section End -->
+    </div>
+    {% block script %}
+    {% endblock script %}
+    <!-- Js Plugins -->
+    <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.nice-select.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.slicknav.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/owl.carousel.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+</body>
 </html>

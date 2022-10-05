@@ -1,6 +1,7 @@
 from django.db import models
 from authentication.models import User
 from hotel_manager.models import HotelDetails
+from datetime import datetime
 
 
 class RoomPriceDetails(models.Model):
@@ -92,9 +93,10 @@ class Photos(models.Model):
                                 blank=True,
                                 null=True,
                                 related_name='room_photos')
-    image_hotel = models.ImageField(upload_to='hotels/% Y/% m/% d/', blank=False, null=False, unique=True)
-    image_room = models.ImageField(upload_to='rooms/% Y/% m/% d/', blank=False, null=False, unique=True)
-    image_name = models.CharField(max_length=255, blank=True, null=True, default="")
+    FOLDER_NAME = datetime.strftime(datetime.now(), "%Y%m%d")
+    image_hotel = models.ImageField(upload_to=f'hotels/{FOLDER_NAME}/', blank=True, null=True)
+    image_room = models.ImageField(upload_to=f'rooms/{FOLDER_NAME}/', blank=True, null=True)
+    image_name = models.CharField(max_length=255, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
 
     def __str__(self):

@@ -25,7 +25,8 @@
                                                        id="{{ field.auto_id }}"
                                                        name="{{ field.name }}"
                                                        class="{{ field.field.widget.attrs.class }} form-control-lg"
-                                                       placeholder="{{ field.label }}"/>
+                                                       placeholder="{{ field.label }}"
+                                                       autocomplete="on" />
                                         {% else %}
                                                 <input type="{{ field.field.widget.input_type }}"
                                                        id="{{ field.auto_id }}"

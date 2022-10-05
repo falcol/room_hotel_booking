@@ -7,10 +7,21 @@
     Khách sạn
 {% endblock title %}
 {% block body %}
-    
+    <div class="row" style="background-color: black">
+        <div class="col-3"></div>
+        <div class="col-6">
+            {% for  hotel in hotels %}
+                <div>{{ hotel.name }}</div>
+                <div>{{ hotel.address }}</div>
+                <div>{{ hotel.city }}</div>
+                <img src="{{ hotel.hotel_photos.first.image_hotel.url }}" class="img-fluid ${3|rounded-top,rounded-right,rounded-bottom,rounded-left,rounded-circle,|}" alt="">
+            {% endfor %}
+        </div>
+        <div class="col-3"></div>
+    </div>
 {% endblock body %}
 {% block footer %}
     <style type="text/css">
-       
+
     </style>
 {% endblock footer %}
