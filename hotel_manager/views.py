@@ -7,8 +7,8 @@ from .forms import HotelCreateForm
 def home(request):
     hotels = HotelDetails.objects.all()
 
-    context = {"hotels": hotels}
-    return render(request, "index.html", context)
+    context = {"menu": "home", "hotels": hotels}
+    return render(request, "hotels/index.html", context)
 
 
 def create_hotel(request):

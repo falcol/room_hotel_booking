@@ -96,7 +96,7 @@ class Photos(models.Model):
     FOLDER_NAME = datetime.strftime(datetime.now(), "%Y%m%d")
     image_hotel = models.ImageField(upload_to=f'hotels/{FOLDER_NAME}/', blank=True, null=True)
     image_room = models.ImageField(upload_to=f'rooms/{FOLDER_NAME}/', blank=True, null=True)
-    image_name = models.CharField(max_length=255, blank=True, null=True)
+    image_name = models.CharField(max_length=255, default="image")
     description = models.TextField(blank=True, null=True)
 
     def __str__(self):
