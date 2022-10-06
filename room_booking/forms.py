@@ -185,18 +185,14 @@ class PhotoHotelForms(forms.ModelForm):
 
     class Meta:
         model = Photos
-        fields = (
-            'hotel_id',
-            'image_hotel',
-            'image_name',
-            'description',
-        )
+        fields = ('image_hotel',)
         labels = {
             'hotel_id': 'Thuộc khách sạn',
             'image_hotel': 'Ảnh',
             'image_name': 'Tên ảnh',
             'description': 'Giới thiệu',
         }
+        widgets = {"image_hotel": forms.FileInput(attrs={'class': 'form-control-file'})}
 
     def clean(self) -> Dict[str, Any]:
         cleaned_data = super().clean()
@@ -205,6 +201,7 @@ class PhotoHotelForms(forms.ModelForm):
         return cleaned_data
 
     def __init__(self, *args, **kwargs):
+        self.required = True
         super(PhotoHotelForms, self).__init__(*args, **kwargs)
 
         for _, field in self.fields.items():

@@ -21,7 +21,7 @@ from .tokens import generate_token
 def signup(request):
     if request.method == "POST":
         form = UserRegisterForm(request.POST)
-        print(form.error_messages)
+
         if form.is_valid():
             form.save()
             username = request.POST.get('username')
@@ -109,8 +109,10 @@ def signin(request):
         if user is not None:
             login(request, user)
             fname = user.first_name
-            # messages.success(request, "Logged In Sucessfully!!")
-            return render(request, "hotels/index.html", {"fname": fname})
+            if 'signup' not in request.META.get('HTTP_REFERER'):
+                # messages.success(request, "Logged In Sucessfully!!")
+                return render(request, "hotels/index.html", {"fname": fname})
+            return redirect(request.META.get('HTTP_REFERER'))
         else:
             messages.error(request, "Đăng nhập thất bại, thông tin tài khoản hoặc mật khẩu không chính xác!!")
             return redirect('home')

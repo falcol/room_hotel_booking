@@ -17,7 +17,31 @@ class HotelCreateForm(forms.ModelForm):
             "introduce": "Dịch vụ"
         }
 
-        widgets = {"name": forms.TextInput(attrs={"class": "form-control"})}
+        widgets = {
+            "name": forms.TextInput(attrs={
+                "class": "form-control",
+                "type": "text",
+            }),
+            "email": forms.EmailInput(attrs={
+                "class": "form-control",
+                "type": "text",
+            }),
+            "contact_no": forms.TextInput(attrs={
+                "class": "form-control",
+                "type": "text",
+            }),
+            "address": forms.TextInput(attrs={
+                "class": "form-control",
+                "type": "text",
+            }),
+            "city": forms.TextInput(attrs={
+                "class": "form-control",
+                "type": "text",
+            }),
+            "introduce": forms.Textarea(attrs={
+                "class": "form-control",
+            }),
+        }
 
     def clean(self) -> Dict[str, Any]:
         cleaned_data = super().clean()
@@ -29,7 +53,8 @@ class HotelCreateForm(forms.ModelForm):
         super(HotelCreateForm, self).__init__(*args, **kwargs)
 
         for _, field in self.fields.items():
-            field.error_messages.update({'required': f'{field.label}không được bỏ trống'})
+            field.required = True
+            field.error_messages.update({'required': f'{field.label} không được bỏ trống'})
 
 
 class HotelUpdateForm(forms.ModelForm):

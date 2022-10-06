@@ -1,37 +1,39 @@
-{% if field.field.widget.input_type == 'select' %}
-    {% include 'label.html' %}
-    <select name="{{ field.name }}"
-            id="{{ field.auto_id }}"
-            class="{{ field.field.widget.attrs.class }} rounded-item">
-        <option value selected>
-        </option>
-        {% for id, name in field.field.choices %}
-            {% if id != '' %}
-                <option value="{{ id }}"
-                        {% if data_form|get_item:field.name == id|to_str %}selected{% endif %}>
-                    {{ id }} : {{ name }}
-                </option>
-            {% endif %}
-        {% endfor %}
-    </select>
-{% elif field.field.widget.input_type in "text email password" %}
-    <div class="form-outline mb-4">
+<div class="form-group mb-4">
+    {% if field.field.widget.input_type == 'select' %}
+        {% include 'label.html' %}
+        <select name="{{ field.name }}"
+                id="{{ field.auto_id }}"
+                class="{{ field.field.widget.attrs.class }} form-control">
+            <option value selected>
+            </option>
+            {% for id, name in field.field.choices %}
+                {% if id != '' %}
+                    <option value="{{ id }}" {% if field.value == id|to_str %}selected{% endif %}>
+                        {{ name }}
+                    </option>
+                {% endif %}
+            {% endfor %}
+        </select>
+    {% elif field.field.widget.input_type in "text email password tel" %}
         {% include 'label.html' %}
         <input type="{{ field.field.widget.input_type }}"
                id="{{ field.auto_id }}"
                name="{{ field.name }}"
                class="{{ field.field.widget.attrs.class }} form-control-lg"
-               placeholder="{{ field.label }}"/>
+               placeholder="{{ field.label }}"
+               value="{{ field.value|check_value_none }}"/>
+    {% elif field.field.widget.input_type is None %}
+        {% include 'label.html' %}
+        <textarea name="{{ field.name }}" value="{{ field.value|check_value_none }}" id="{{ field.auto_id }}" class="{{ field.field.widget.attrs.class }}" placeholder="{{ field.label }}" cols="30" rows="10">{{ field.value|check_value_none }}</textarea>
     {% else %}
         <input type="{{ field.field.widget.input_type }}"
                id="{{ field.auto_id }}"
                name="{{ field.name }}"
                class="{{ field.field.widget.attrs.class }} rounded-item"
                placeholder="{{ field.label }}"
-               {% if data_form|get_item:field.name != '' %}value="{{ data_form|get_item:field.name }}"{% endif %}/>
+               value="{{ field.value|check_value_none }}"/>
         {% include 'label.html' %}
     {% endif %}
-    <br/>
     {% for error in field.errors %}<p style="color: red">{{ error }}</p>{% endfor %}
     {% if field.help_text %}<small style="color: grey">{{ field.help_text }}</small>{% endif %}
-    </div>
+</div>

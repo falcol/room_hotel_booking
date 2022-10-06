@@ -16,3 +16,10 @@ def check_date(date_1, date_2):
     if date_1 is None or date_1 == "":
         return date_2
     return date_1
+
+
+@register.filter
+def check_value_none(data):
+    if data:
+        return data
+    return ""

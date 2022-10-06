@@ -57,7 +57,7 @@
                             <div class="nav-menu">
                                 <nav class="mainmenu">
                                     <ul>
-                                        <li class="active">
+                                        <li class=" {% if menu == 'home' %} active {% endif %}">
                                             <a href="{% url 'home' %}">Trang chủ</a>
                                         </li>
                                         <li>
@@ -67,7 +67,7 @@
                                             <a href="#">Khách sạn đã ở</a>
                                         </li>
                                         {% if request.user.is_staff %}
-                                            <li>
+                                            <li class=" {% if menu == 'hotel' %} active {% endif %}">
                                                 {% comment %} if staff {% endcomment %}
                                                 <a href="#">Khách sạn</a>
                                                 <ul class="dropdown">
@@ -146,9 +146,7 @@
                                             {% comment %} <img src="img/footer-logo.png" alt=""> {% endcomment %}
                                         </a>
                                     </div>
-                                    <p>
-                                        Chúng tôi truyền cảm hứng và tiếp cận hàng triệu khách du lịch
-                                    </p>
+                                    <p>Chúng tôi truyền cảm hứng và tiếp cận hàng triệu khách du lịch</p>
                                     <div class="fa-social">
                                         <a href="#"><i class="fa fa-facebook"></i></a>
                                         <a href="#"><i class="fa fa-twitter"></i></a>
@@ -210,26 +208,26 @@
     document.write(new Date().getFullYear());
 </script>
                                     </p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </footer>
-        <!-- Footer Section End -->
-    </div>
-    {% block script %}
-    {% endblock script %}
-    <!-- Js Plugins -->
-    <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/jquery.nice-select.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/jquery.slicknav.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/owl.carousel.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
-</body>
+            </footer>
+            <!-- Footer Section End -->
+        </div>
+        {% block script %}
+        {% endblock script %}
+        <!-- Js Plugins -->
+        <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/jquery.nice-select.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/jquery.slicknav.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/owl.carousel.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+    </body>
 </html>
