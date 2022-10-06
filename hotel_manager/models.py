@@ -10,6 +10,7 @@ class HotelDetails(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="hotels")
     address = models.CharField(max_length=400, blank=True, unique=True)
     city = models.CharField(max_length=255, blank=True)
+    introduce = models.TextField(blank=True)
     latitude = models.CharField(blank=True, max_length=255)
     logtitude = models.CharField(blank=True, max_length=255)
 

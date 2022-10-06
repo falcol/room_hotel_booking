@@ -7,21 +7,17 @@ class HotelCreateForm(forms.ModelForm):
 
     class Meta:
         model = HotelDetails
-        fields = (
-            'name',
-            'email',
-            'contact_no',
-            'owner',
-            'address',
-            'city',
-        )
+        fields = ('name', 'email', 'contact_no', 'address', 'city', 'introduce')
         labels = {
             "name": "Tên khách sạn",
             "email": "Email khách sạn",
             "contact_no": "Số điện thoại",
             "address": "Địa chỉ khách sạn",
-            "city": "Thuộc thành phố"
+            "city": "Thuộc thành phố",
+            "introduce": "Dịch vụ"
         }
+
+        widgets = {"name": forms.TextInput(attrs={"class": "form-control"})}
 
     def clean(self) -> Dict[str, Any]:
         cleaned_data = super().clean()
@@ -40,7 +36,7 @@ class HotelUpdateForm(forms.ModelForm):
 
     class Meta:
         model = HotelDetails
-        fields = ('name', 'email', 'contact_no', 'owner', 'address', 'city', 'latitude', 'logtitude')
+        fields = ('name', 'email', 'contact_no', 'owner', 'address', 'city', 'latitude', 'logtitude', 'introduce')
         labels = {
             "name": "Tên khách sạn",
             "email": "Email khách sạn",
@@ -48,7 +44,8 @@ class HotelUpdateForm(forms.ModelForm):
             "address": "Địa chỉ khách sạn",
             "city": "Thuộc thành phố",
             "latitude": "Vĩ độ",
-            "logtitude": "Kinh độ"
+            "logtitude": "Kinh độ",
+            "introduce": "Dịch vụ"
         }
 
     def clean(self) -> Dict[str, Any]:

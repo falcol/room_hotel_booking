@@ -72,7 +72,7 @@
                                                 <a href="#">Khách sạn</a>
                                                 <ul class="dropdown">
                                                     <li>
-                                                        <a href="#">Thêm mới</a>
+                                                        <a href="{% url 'hotel_create' %}">Thêm mới</a>
                                                     </li>
                                                     <li>
                                                         <a href="#">Danh sách</a>
@@ -127,10 +127,10 @@
             {% endif %}
         </div>
         {% comment %} End alert {% endcomment %}
-        <section class="main">
+        <div class="main">
             {% block body %}
             {% endblock body %}
-        </section>
+        </div>
         <div>
             {% block footer %}
             {% endblock footer %}

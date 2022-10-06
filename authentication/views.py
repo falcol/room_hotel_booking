@@ -33,8 +33,7 @@ def signup(request):
                 myuser.is_staff = True
             myuser.save()
 
-            messages.success(request,
-                             "Kiểm tra email để kích hoạt tài khoản của bạn")
+            messages.success(request, "Kiểm tra email để kích hoạt tài khoản của bạn")
 
             # Welcome Email
             try:
@@ -45,11 +44,7 @@ def signup(request):
                 message += "\n Xin hãy xác nhận lại trong email"
                 from_email = settings.EMAIL_HOST_USER
                 to_list = [myuser.email]
-                send_mail(subject,
-                          message,
-                          from_email,
-                          to_list,
-                          fail_silently=True)
+                send_mail(subject, message, from_email, to_list, fail_silently=True)
 
                 # Email Address Confirmation Email
 
@@ -73,7 +68,7 @@ def signup(request):
             except BadHeaderError:
                 print("Invalid header found")
             except SMTPException as e:
-                print('Send mail error: ' + e)
+                print('Send mail error: ', e)
             except Exception:
                 print("Send mail failed")
 
@@ -98,7 +93,7 @@ def activate(request, uidb64, token):
         # user.profile.signup_confirmation = True
         myuser.save()
         login(request, myuser)
-        messages.success(request, "Your Account has been activated!!")
+        messages.success(request, "Tài khoản của bạn đã được kích hoạt!!")
         return redirect('signin')
     else:
         return render(request, 'activation_failed.html')
@@ -115,9 +110,9 @@ def signin(request):
             login(request, user)
             fname = user.first_name
             # messages.success(request, "Logged In Sucessfully!!")
-            return render(request, "index.html", {"fname": fname})
+            return render(request, "hotels/index.html", {"fname": fname})
         else:
-            messages.error(request, "Bad Credentials!!")
+            messages.error(request, "Đăng nhập thất bại, thông tin tài khoản hoặc mật khẩu không chính xác!!")
             return redirect('home')
 
     return render(request, "signin.html")
@@ -125,5 +120,5 @@ def signin(request):
 
 def signout(request):
     logout(request)
-    messages.success(request, "Logged Out Successfully!!")
+    messages.success(request, "Đăng xuất thành công!!")
     return redirect('home')

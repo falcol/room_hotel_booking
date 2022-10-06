@@ -2,26 +2,136 @@
 {% load static %}
 {% load value_dict %}
 {% load crispy_forms_tags %}
-
 {% block title %}
     Khách sạn
 {% endblock title %}
 {% block body %}
-    <div class="row" style="background-color: black">
-        <div class="col-3"></div>
-        <div class="col-6">
-            {% for  hotel in hotels %}
-                <div>{{ hotel.name }}</div>
-                <div>{{ hotel.address }}</div>
-                <div>{{ hotel.city }}</div>
-                <img src="{{ hotel.hotel_photos.first.image_hotel.url }}" class="img-fluid ${3|rounded-top,rounded-right,rounded-bottom,rounded-left,rounded-circle,|}" alt="">
-            {% endfor %}
+    <section class="hero-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="hero-text">
+                        <h1>Website đặt phòng khách sạn</h1>
+                        <p>
+                            Chào mừng bạn đến với website của chúng tôi
+                        </p>
+                        <a href="#" class="primary-btn">Khám phá ngay</a>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1">
+                    <div class="booking-form">
+                        <h3>Đặt phòng khách sạn</h3>
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <div class="check-date">
+                                <label for="date-in">Thời gian vào:</label>
+                                <input type="text" class="date-input" id="date-in" />
+                                <i class="icon_calendar"></i>
+                            </div>
+                            <div class="check-date">
+                                <label for="date-out">Thời gian ra:</label>
+                                <input type="text" class="date-input" id="date-out" />
+                                <i class="icon_calendar"></i>
+                            </div>
+                            <div class="select-option">
+                                <label for="guest">Khách:</label>
+                                <select id="guest">
+                                    <option value="">
+                                        2 Người
+                                    </option>
+                                    <option value="">
+                                        4 Người
+                                    </option>
+                                    <option value="">
+                                        6 Người
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="select-option">
+                                <label for="room">Phòng:</label>
+                                <select id="room">
+                                    <option value="">
+                                        1 Phòng
+                                    </option>
+                                    <option value="">
+                                        2 Phòng
+                                    </option>
+                                </select>
+                            </div>
+                            <button type="submit">Kiểm tra khách sạn</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-3"></div>
-    </div>
+        <div class="hero-slider owl-carousel">
+            <div class="hs-item set-bg"
+                 data-setbg="{% static 'images/hero/hero-1.jpg' %}"></div>
+            <div class="hs-item set-bg"
+                 data-setbg="{% static 'images/hero/hero-2.jpg' %}"></div>
+            <div class="hs-item set-bg"
+                 data-setbg="{% static 'images/hero/hero-3.jpg' %}"></div>
+        </div>
+    </section>
+    <section class="hp-room-section pt-5 pb-5">
+        <div class="section-title">
+            <h2>Danh sách khách sạn</h2>
+        </div>
+        <div class="row">
+            <div class="col-lg-2"></div>
+            <div class="col-lg-8">
+                <section class="hp-room-section">
+                    <div class="container-fluid">
+                        <div class="hp-room-items">
+                            <div class="row">
+                                {% for  hotel in hotels %}
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="hp-room-item set-bg" data-setbg="{{ hotel.hotel_photos.first.image_hotel.url }}">
+                                            <div class="hr-text">
+                                                <h3>Khách sạn</h3>
+                                                <h2>
+                                                    {{ hotel.name }}
+                                                </h2>
+                                                <table>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="r-o">Email:</td>
+                                                            <td>{{ hotel.email }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="r-o">Điện thoại:</td>
+                                                            <td>{{ hotel.contact_no }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="r-o">Địa chỉ:</td>
+                                                            <td>{{ hotel.address }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="r-o">Thành phố:</td>
+                                                            <td>{{ hotel.city }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="r-o">Dịch vụ:</td>
+                                                            <td>{{ hotel.introduce }}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <a href="#" class="primary-btn">Chi tiết</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                            {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="col-lg-2">
+            </div>
+        </div>
+    </section>
 {% endblock body %}
 {% block footer %}
     <style type="text/css">
-
     </style>
 {% endblock footer %}
