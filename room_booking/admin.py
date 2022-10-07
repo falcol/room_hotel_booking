@@ -1,12 +1,12 @@
 from django.contrib import admin
 from .models import (RoomDetails, RoomPriceDetails, DrinkAndFood, BookingDetails, Photos, DrinkAndFoodOrder)
-from .forms import RoomPriceDetailsForms, DrinkAndFoodForms, RoomDetailsForms, BookingDetailsForms
+from .forms import RoomPriceDetailsForms, DrinkAndFoodForms, BookingDetailsForms
 
 
 # Register your models here.
 @admin.register(RoomDetails)
 class RoomAdmin(admin.ModelAdmin):
-    form = RoomDetailsForms
+    # form = RoomDetailsForms
     pass
 
 
@@ -20,7 +20,7 @@ class BookingAdmin(admin.ModelAdmin):
 
 @admin.register(RoomPriceDetails)
 class RoomPriceAdmin(admin.ModelAdmin):
-    form = RoomPriceDetailsForms
+    # form = RoomPriceDetailsForms
     pass
 
 

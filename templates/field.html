@@ -14,7 +14,7 @@
                 {% endif %}
             {% endfor %}
         </select>
-    {% elif field.field.widget.input_type in "text email password tel" %}
+    {% elif field.field.widget.input_type in "text email password tel number" %}
         {% include 'label.html' %}
         <input type="{{ field.field.widget.input_type }}"
                id="{{ field.auto_id }}"

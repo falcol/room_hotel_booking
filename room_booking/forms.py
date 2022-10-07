@@ -1,6 +1,9 @@
 from typing import Any, Dict
 from django import forms
-from .models import RoomPriceDetails, DrinkAndFood, BookingDetails, RoomDetails, Photos
+from django.forms import ModelChoiceField
+
+from hotel_manager.models import HotelDetails
+from .models import RoomPriceDetails, DrinkAndFood, BookingDetails, RoomDetails
 
 
 class RoomPriceDetailsForms(forms.ModelForm):
@@ -118,10 +121,8 @@ class RoomDetailsForms(forms.ModelForm):
     class Meta:
         model = RoomDetails
         fields = (
-            'booking',
             'room_name',
             'room_no',
-            'hotel',
             'room_price',
             'layout',
             'floor_no',
@@ -151,58 +152,17 @@ class RoomDetailsForms(forms.ModelForm):
             field.error_messages.update({'required': f'{field.label}không được bỏ trống'})
 
 
-class PhotoRoomForms(forms.ModelForm):
-
-    class Meta:
-        model = Photos
-        fields = (
-            'room_id',
-            'image_room',
-            'image_name',
-            'description',
-        )
-        labels = {
-            'room_id': 'Thuộc phòng',
-            'image_room': 'Ảnh',
-            'image_name': 'Tên ảnh',
-            'description': 'Giới thiệu',
-        }
-
-    def clean(self) -> Dict[str, Any]:
-        cleaned_data = super().clean()
-        if self.is_valid():
-            pass
-        return cleaned_data
-
-    def __init__(self, *args, **kwargs):
-        super(PhotoRoomForms, self).__init__(*args, **kwargs)
-
-        for _, field in self.fields.items():
-            field.error_messages.update({'required': f'{field.label}không được bỏ trống'})
-
-
-class PhotoHotelForms(forms.ModelForm):
-
-    class Meta:
-        model = Photos
-        fields = ('image_hotel',)
-        labels = {
-            'hotel_id': 'Thuộc khách sạn',
-            'image_hotel': 'Ảnh',
-            'image_name': 'Tên ảnh',
-            'description': 'Giới thiệu',
-        }
-        widgets = {"image_hotel": forms.FileInput(attrs={'class': 'form-control-file'})}
-
-    def clean(self) -> Dict[str, Any]:
-        cleaned_data = super().clean()
-        if self.is_valid():
-            pass
-        return cleaned_data
+class PhotoForms(forms.Form):
+    images = forms.ImageField(label='Hình ảnh',
+                              required=True,
+                              widget=forms.FileInput(attrs={
+                                  'class': 'form-control-file',
+                                  'multiple': True
+                              }))
 
     def __init__(self, *args, **kwargs):
         self.required = True
-        super(PhotoHotelForms, self).__init__(*args, **kwargs)
+        super(PhotoForms, self).__init__(*args, **kwargs)
 
         for _, field in self.fields.items():
             field.error_messages.update({'required': f'{field.label}không được bỏ trống'})
