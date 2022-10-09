@@ -12,8 +12,8 @@ class RoomPriceDetailsForms(forms.ModelForm):
         model = RoomPriceDetails
         fields = (
             'room_type',
-            'hotel',
             'price_per_day',
+            'price_per_night',
             'price_first_two_hours',
             'price_next_hours',
             'max_person',
@@ -25,6 +25,34 @@ class RoomPriceDetailsForms(forms.ModelForm):
             'price_first_two_hours': 'Giá hai giờ đầu',
             'price_next_hours': "Giá mỗi giờ tiếp theo",
             'max_person': 'Số người tối đa',
+            'price_per_night': 'Giá qua đêm'
+        }
+
+        widgets = {
+            "room_type": forms.TextInput(attrs={
+                "class": "form-control",
+                "type": "text",
+            }),
+            "price_per_day": forms.TextInput(attrs={
+                "class": "form-control",
+                "type": "number",
+            }),
+            "price_per_night": forms.TextInput(attrs={
+                "class": "form-control",
+                "type": "number",
+            }),
+            "price_first_two_hours": forms.TextInput(attrs={
+                "class": "form-control",
+                "type": "number",
+            }),
+            "price_next_hours": forms.TextInput(attrs={
+                "class": "form-control",
+                "type": "number",
+            }),
+            "max_person": forms.TextInput(attrs={
+                "class": "form-control",
+                "type": "number",
+            }),
         }
 
     def clean(self) -> Dict[str, Any]:
@@ -124,9 +152,10 @@ class RoomDetailsForms(forms.ModelForm):
             'room_name',
             'room_no',
             'room_price',
-            'layout',
             'floor_no',
+            'size',
             'room_status',
+            'layout',
         )
         labels = {
             'booking': 'Đặt phòng',
@@ -136,7 +165,36 @@ class RoomDetailsForms(forms.ModelForm):
             'room_price': 'Giá phòng',
             'layout': 'Giới thiệu',
             'floor_no': 'Thuộc tầng',
+            'size': 'Diện tích (m2)',
             'room_status': 'Trạng thái phòng',
+        }
+
+        widgets = {
+            "room_name": forms.TextInput(attrs={
+                "class": "form-control",
+                "type": "text",
+            }),
+            "room_no": forms.TextInput(attrs={
+                "class": "form-control",
+                "type": "number",
+            }),
+            "room_price": forms.Select(attrs={
+                "class": "form-control",
+            }),
+            "layout": forms.Textarea(attrs={
+                "class": "form-control",
+            }),
+            "floor_no": forms.TextInput(attrs={
+                "class": "form-control",
+                "type": "number",
+            }),
+            "size": forms.TextInput(attrs={
+                "class": "form-control",
+                "type": "text",
+            }),
+            "room_status": forms.Select(attrs={
+                "class": "form-control",
+            }),
         }
 
     def clean(self) -> Dict[str, Any]:
@@ -146,10 +204,11 @@ class RoomDetailsForms(forms.ModelForm):
         return cleaned_data
 
     def __init__(self, *args, **kwargs):
+        self.required = True
         super(RoomDetailsForms, self).__init__(*args, **kwargs)
 
         for _, field in self.fields.items():
-            field.error_messages.update({'required': f'{field.label}không được bỏ trống'})
+            field.error_messages.update({'required': f'{field.label} không được bỏ trống'})
 
 
 class PhotoForms(forms.Form):

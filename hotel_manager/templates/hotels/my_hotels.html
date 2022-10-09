@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% load static %}
+{% load template_support %}
+{% load crispy_forms_tags %}
+{% block title %}
+    Khách sạn của tôi
+{% endblock title %}
+{% block body %}
+    <section class="hp-room-section pt-5 pb-5">
+        <div class="section-title">
+            <h2>Danh sách khách sạn của {{ request.user }}</h2>
+        </div>
+        <div class="row">
+            <div class="col-lg-2"></div>
+            <div class="col-lg-8">
+                <section class="hp-room-section">
+                    <div class="container-fluid">
+                        <div class="hp-room-items">
+                            <div class="row">
+                                {% for  hotel in hotels %}
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="hp-room-item set-bg"
+                                             data-setbg="{{ hotel.hotel_photos.first.image_hotel.url }}">
+                                            <div class="hr-text">
+                                                <h3>Khách sạn</h3>
+                                                <h2>{{ hotel.name }}</h2>
+                                                <table>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="r-o">Phòng nghỉ:</td>
+                                                            <td>
+                                                                <a href="{% url 'my_hotel_rooms' pk=hotel.pk %}"
+                                                                   class="btn text-info primary-btn">Xem phòng khách sạn</a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="r-o">Sửa:</td>
+                                                            <td>
+                                                                <a href="" class="btn text-warning primary-btn">Thay đổi thông tin khách sạn</a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="r-o">Thêm phòng:</td>
+                                                            <td>
+                                                                <a href="{% url 'hotel_new_room' hotel_pk=hotel.pk %}"
+                                                                   class="btn text-success primary-btn">Thêm phòng khách sạn</a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="r-o">Thêm loại phòng</td>
+                                                            <td>
+                                                                <a href="{% url 'hotel_room_price' hotel_pk=hotel.pk %}"
+                                                                   class="btn text-success primary-btn">Thêm loại phòng khách sạn</a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="r-o">Xóa</td>
+                                                            <td>
+                                                                <a href="" class="btn text-danger primary-btn">Xóa khách sạn</a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="col-lg-2"></div>
+        </div>
+    </section>
+{% endblock body %}
+{% block footer %}
+    <style type="text/css">
+        .hp-room-items {
+            margin-left: -15px;
+            margin-right: -15px;
+            overflow: hidden;
+        }
+
+        .hp-room-items .hp-room-item {
+            height: 600px;
+            margin-right: -15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hp-room-items .hp-room-item:hover .hr-text {
+            bottom: 135px;
+        }
+
+        .hp-room-items .hp-room-item:hover .hr-text h2 {
+            margin-bottom: 30px;
+        }
+
+        .hp-room-items .hp-room-item .hr-text {
+            position: absolute;
+            left: 45px;
+            right: 25px;
+            bottom: -250px;
+            -webkit-transition: all 0.5s;
+            -o-transition: all 0.5s;
+            transition: all 0.5s;
+        }
+
+        .hp-room-items .hp-room-item .hr-text h3 {
+            color: #ffffff;
+            margin-bottom: 15px;
+        }
+
+        .hp-room-items .hp-room-item .hr-text h2 {
+            color: #dfa974;
+            font-weight: 700;
+            margin-bottom: 50px;
+            -webkit-transition: all 0.2s;
+            -o-transition: all 0.2s;
+            transition: all 0.2s;
+        }
+
+        .hp-room-items .hp-room-item .hr-text h2 span {
+            font-family: "Cabin", sans-serif;
+            font-size: 16px;
+            font-weight: 400;
+            color: #ffffff;
+        }
+
+        .hp-room-items .hp-room-item .hr-text table {
+            margin-bottom: 30px;
+            background-color: #ffffff;
+        }
+
+        .hp-room-items .hp-room-item .hr-text table tbody tr td {
+            font-size: 16px;
+            color: #ffffff;
+            line-height: 36px;
+        }
+
+        .hp-room-items .hp-room-item .hr-text table tbody tr td.r-o {
+            width: 120px;
+            color: #000000;
+        }
+
+        .hp-room-items .hp-room-item .hr-text .primary-btn:after {
+            background: #ffffff;
+        }
+    </style>
+{% endblock footer %}

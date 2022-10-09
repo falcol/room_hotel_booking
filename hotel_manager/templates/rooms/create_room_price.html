@@ -3,7 +3,7 @@
 {% load template_support %}
 {% load crispy_forms_tags %}
 {% block title %}
-    Thêm phòng khách sạn
+    Thêm giá phòng
 {% endblock title %}
 {% block body %}
     <section class="bg-image create-hotel-section pt-4 pb-4"
@@ -14,16 +14,14 @@
                     <div class="col-12 col-md-9 col-lg-7 col-xl-6">
                         <div class="card" style="border-radius: 15px;">
                             <div class="card-body p-5">
-                                <h2 class="text-uppercase text-center mb-5">Thêm phòng cho khách sạn</h2>
+                                <h2 class="text-uppercase text-center mb-5">Thêm loại phòng</h2>
                                 <form action="" method="post" enctype="multipart/form-data">
                                     {% csrf_token %}
                                     {% for field in form %}
                                         {% include 'field.html' %}
                                     {% endfor %}
-                                    <br/>
-                                    <div class="form-group mb-4">{{ photo_form }}</div>
                                     <div class="pt-2 pb-2 pr-5 justify-content-end align-items-end d-flex">
-                                        <button class="btn btn-outline-primary btn-lg" type="submit">Thêm phòng</button>
+                                        <button class="btn btn-outline-primary btn-lg" type="submit">Thêm mới</button>
                                     </div>
                                 </form>
                             </div>

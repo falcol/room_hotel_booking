@@ -6,13 +6,21 @@
                 class="{{ field.field.widget.attrs.class }} form-control">
             <option value selected>
             </option>
-            {% for id, name in field.field.choices %}
-                {% if id != '' %}
-                    <option value="{{ id }}" {% if field.value == id|to_str %}selected{% endif %}>
-                        {{ name }}
-                    </option>
-                {% endif %}
-            {% endfor %}
+            {% if field.name != 'room_price' %}
+                {% for id, name in field.field.choices %}
+                    {% if id != '' %}
+                        <option value="{{ id }}" {% if field.value == id|to_str %}selected{% endif %}>
+                            {{ name }}
+                        </option>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                    {% for price in room_prices %}
+                        <option value="{{ price.pk }}" {% if field.value == price.pk|to_str %}selected{% endif %}>
+                            {{ price.room_type }}
+                        </option>
+                    {% endfor %}
+            {% endif %}
         </select>
     {% elif field.field.widget.input_type in "text email password tel number" %}
         {% include 'label.html' %}

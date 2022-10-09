@@ -23,21 +23,6 @@ class DrinkAndFoodOrder(models.Model):
         return self.total
 
 
-class RoomDetails(models.Model):
-    ROOM_STATUS = (('T', 'Trống'), ('B', 'Bẩn'), ('C', 'Cho thuê'), ('D', 'Đã đặt'))
-    room_name = models.CharField(max_length=255)
-    room_no = models.PositiveIntegerField(null=True)
-    hotel = models.ForeignKey(HotelDetails, on_delete=models.CASCADE, related_name='room_hotel')
-    room_price = models.CharField(blank=False, max_length=255)
-    layout = models.TextField(blank=True)
-    size = models.CharField(max_length=255, blank=True, default="30")
-    floor_no = models.PositiveIntegerField(default=0)
-    room_status = models.CharField(choices=ROOM_STATUS, max_length=1, default="T")
-
-    def __str__(self):
-        return self.room_status
-
-
 class RoomPriceDetails(models.Model):
     room_type = models.CharField(max_length=255)
     hotel = models.ForeignKey(HotelDetails,
@@ -45,11 +30,6 @@ class RoomPriceDetails(models.Model):
                               related_name="rooms_hotel_prices",
                               blank=True,
                               null=True)
-    room = models.ForeignKey(RoomDetails,
-                             on_delete=models.CASCADE,
-                             related_name="room_detail_prices",
-                             blank=True,
-                             null=True)
     price_per_day = models.PositiveIntegerField(default=0)
     price_first_two_hours = models.PositiveIntegerField(default=0)
     price_next_hours = models.PositiveIntegerField(default=0)
@@ -58,6 +38,21 @@ class RoomPriceDetails(models.Model):
 
     def __str__(self):
         return self.room_type
+
+
+class RoomDetails(models.Model):
+    ROOM_STATUS = (('T', 'Trống'), ('B', 'Bẩn'), ('C', 'Cho thuê'), ('D', 'Đã đặt'))
+    room_name = models.CharField(max_length=255)
+    room_no = models.PositiveIntegerField(null=True)
+    hotel = models.ForeignKey(HotelDetails, on_delete=models.CASCADE, related_name='room_hotel')
+    room_price = models.ForeignKey(RoomPriceDetails, on_delete=models.CASCADE, blank=True, null=True)
+    layout = models.TextField(blank=True)
+    size = models.CharField(max_length=255, blank=True, default="30")
+    floor_no = models.PositiveIntegerField(default=0)
+    room_status = models.CharField(choices=ROOM_STATUS, max_length=1, default="T")
+
+    def __str__(self):
+        return self.room_status
 
 
 class BookingDetails(models.Model):

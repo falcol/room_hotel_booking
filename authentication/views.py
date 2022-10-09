@@ -19,6 +19,9 @@ from .tokens import generate_token
 
 
 def signup(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+
     if request.method == "POST":
         form = UserRegisterForm(request.POST)
 
@@ -29,8 +32,6 @@ def signup(request):
             myuser = User.objects.get(username=username)
 
             myuser.is_active = False
-            if form.is_staff:
-                myuser.is_staff = True
             myuser.save()
 
             messages.success(request, "Kiểm tra email để kích hoạt tài khoản của bạn")
@@ -94,12 +95,15 @@ def activate(request, uidb64, token):
         myuser.save()
         login(request, myuser)
         messages.success(request, "Tài khoản của bạn đã được kích hoạt!!")
-        return redirect('signin')
+        return redirect('home')
     else:
         return render(request, 'activation_failed.html')
 
 
 def signin(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+
     if request.method == 'POST':
         username = request.POST['username']
         pass1 = request.POST['password']

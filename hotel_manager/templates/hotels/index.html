@@ -117,7 +117,6 @@
                                                     </tbody>
                                                 </table>
                                                 <a href="{% url 'hotel_rooms' pk=hotel.pk %}" class="primary-btn">Chi tiết</a>
-                                                url
                                             </div>
                                         </div>
                                     </div>
@@ -134,5 +133,14 @@
 {% endblock body %}
 {% block footer %}
     <style type="text/css">
+        .booking-form form .select-option .nice-select:after {
+            border-bottom: 2px solid #dfa274;
+            border-right: 2px solid #dfa974;
+            height: 10px;
+            margin-top: 0;
+            right: 20px;
+            width: 10px;
+            top: 36%;
+        }
     </style>
 {% endblock footer %}
