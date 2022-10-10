@@ -12,7 +12,7 @@ class RoomAdmin(admin.ModelAdmin):
 
 @admin.register(BookingDetails)
 class BookingAdmin(admin.ModelAdmin):
-    form = BookingDetailsForms
+    # form = BookingDetailsForms
     list_select_related = True
     autocomplete_fields = ['guest']
     pass

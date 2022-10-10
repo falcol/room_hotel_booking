@@ -41,23 +41,23 @@ class RoomPriceDetails(models.Model):
 
 
 class RoomDetails(models.Model):
-    ROOM_STATUS = (('T', 'Trống'), ('B', 'Bẩn'), ('C', 'Cho thuê'), ('D', 'Đã đặt'))
+    ROOM_STATUS = (('E', 'Trống'), ('C', 'Đang dọn'), ('L', 'Cho thuê'), ('B', 'Đã đặt'))
     room_name = models.CharField(max_length=255)
     room_no = models.PositiveIntegerField(null=True)
     hotel = models.ForeignKey(HotelDetails, on_delete=models.CASCADE, related_name='room_hotel')
     room_price = models.ForeignKey(RoomPriceDetails, on_delete=models.CASCADE, blank=True, null=True)
     layout = models.TextField(blank=True)
+    introduce = models.TextField(blank=True)
     size = models.CharField(max_length=255, blank=True, default="30")
     floor_no = models.PositiveIntegerField(default=0)
-    room_status = models.CharField(choices=ROOM_STATUS, max_length=1, default="T")
+    room_status = models.CharField(choices=ROOM_STATUS, max_length=1, default="E")
 
     def __str__(self):
         return self.room_status
 
 
 class BookingDetails(models.Model):
-    BOOKING_STATUS = (('C', 'Còn phòng'), ('D', 'Đã có người đặt'), ('KH', 'Khách hàng hủy'), ('KSH', 'Khách sạn hủy'),
-                      ('TP', 'Trả phòng'))
+    BOOKING_STATUS = (('KH', 'Khách hàng hủy'), ('KSH', 'Khách sạn hủy'), ('TP', 'Trả phòng'), ('DP', 'Đặt phòng'))
     booking_id = models.AutoField(primary_key=True)
     guest = models.ForeignKey(User,
                               to_field='username',
@@ -69,7 +69,7 @@ class BookingDetails(models.Model):
     BOOKING_TYPE = ((0, "Nghỉ giờ"), (1, "Nghỉ qua đêm"), (2, "Nghỉ ngày"))
     booking_type = models.IntegerField(choices=BOOKING_TYPE)
     hotel = models.ForeignKey(HotelDetails, on_delete=models.CASCADE, related_name="hotel_bookings")
-    booking_status = models.CharField(max_length=3, choices=BOOKING_STATUS)
+    booking_status = models.CharField(max_length=3, choices=BOOKING_STATUS, default='DP')
     check_in_time = models.DateTimeField(null=True, blank=True)
     check_out_time = models.DateTimeField(null=True, blank=True)
     room = models.ForeignKey(RoomDetails, on_delete=models.CASCADE, related_name="room_bookings")

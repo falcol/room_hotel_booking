@@ -1,7 +1,7 @@
 from typing import Any, Dict
 from django import forms
 from django.forms import ModelChoiceField
-
+from phonenumber_field.formfields import PhoneNumberField
 from hotel_manager.models import HotelDetails
 from .models import RoomPriceDetails, DrinkAndFood, BookingDetails, RoomDetails
 
@@ -21,9 +21,9 @@ class RoomPriceDetailsForms(forms.ModelForm):
         labels = {
             'room_type': 'Loại phòng',
             'hotel': "Khách sạn",
-            'price_per_day': 'Giá một ngày',
-            'price_first_two_hours': 'Giá hai giờ đầu',
-            'price_next_hours': "Giá mỗi giờ tiếp theo",
+            'price_per_day': 'Giá một ngày (VNĐ)',
+            'price_first_two_hours': 'Giá hai giờ đầu (VNĐ)',
+            'price_next_hours': "Giá mỗi giờ tiếp theo (VNĐ)",
             'max_person': 'Số người tối đa',
             'price_per_night': 'Giá qua đêm'
         }
@@ -97,23 +97,17 @@ class DrinkAndFoodForms(forms.ModelForm):
 
 
 class BookingDetailsForms(forms.ModelForm):
+    guest_phone_number = PhoneNumberField(region="VN")
 
     class Meta:
         model = BookingDetails
         fields = (
-            'guest',
             'guest_name',
             'guest_phone_number',
             'booking_type',
-            'hotel',
-            'booking_status',
             'check_in_time',
             'check_out_time',
-            'room',
             'total_guests',
-            'drink_and_food',
-            'total_cost',
-            'discounted_price',
         )
         labels = {
             'guest': 'Khách hàng',
@@ -125,10 +119,32 @@ class BookingDetailsForms(forms.ModelForm):
             'check_in_time': 'Thời gian nhận phòng',
             'check_out_time': 'Thời gian trả phòng',
             'room': 'Phòng',
-            'total_guests': 'Tổng khách',
+            'total_guests': 'Số người',
             'drink_and_food': 'Menu',
             'total_cost': 'Tổng tiền',
             'discounted_price': 'Giảm giá',
+        }
+
+        widgets = {
+            "guest_name": forms.TextInput(attrs={
+                "class": "form-control",
+                "type": "text",
+            }),
+            "booking_type": forms.Select(attrs={
+                "class": "form-control",
+            }),
+            "check_in_time": forms.TextInput(attrs={
+                "class": "form-control",
+                "type": "datetime-local",
+            }),
+            "check_out_time": forms.TextInput(attrs={
+                "class": "form-control",
+                "type": "datetime-local",
+            }),
+            "total_guests": forms.TextInput(attrs={
+                "class": "form-control",
+                "type": "number",
+            }),
         }
 
     def clean(self) -> Dict[str, Any]:
@@ -141,32 +157,25 @@ class BookingDetailsForms(forms.ModelForm):
         super(BookingDetailsForms, self).__init__(*args, **kwargs)
 
         for _, field in self.fields.items():
-            field.error_messages.update({'required': f'{field.label}không được bỏ trống'})
+            field.error_messages.update({'required': f'{field.label} không được bỏ trống'})
 
 
 class RoomDetailsForms(forms.ModelForm):
 
     class Meta:
         model = RoomDetails
-        fields = (
-            'room_name',
-            'room_no',
-            'room_price',
-            'floor_no',
-            'size',
-            'room_status',
-            'layout',
-        )
+        fields = ('room_name', 'room_no', 'room_price', 'floor_no', 'size', 'room_status', 'layout', 'introduce')
         labels = {
             'booking': 'Đặt phòng',
             'room_name': 'Tên phòng',
             'room_no': 'Phòng số',
             'hotel': 'Thuộc khách sạn',
             'room_price': 'Giá phòng',
-            'layout': 'Giới thiệu',
+            'layout': 'Dịch vụ',
             'floor_no': 'Thuộc tầng',
             'size': 'Diện tích (m2)',
             'room_status': 'Trạng thái phòng',
+            'introduce': 'Giới thiệu'
         }
 
         widgets = {

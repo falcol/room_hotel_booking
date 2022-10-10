@@ -97,8 +97,6 @@ def create_room_hotel(request, hotel_pk):
         form = RoomDetailsForms(request.POST or None)
         photo = PhotoForms(request.POST, request.FILES)
 
-        print(form.errors)
-        print(form.errors)
         if form.is_valid() and photo.is_valid():
             new_room = form.save(commit=False)
             hotel = HotelDetails.objects.get(pk=hotel_pk)
@@ -110,10 +108,10 @@ def create_room_hotel(request, hotel_pk):
                 photo = Photos.objects.create(room_id=new_room, image_room=image, image_name=image.name)
                 photo.save()
 
-            return reverse('hotel_rooms', args=(hotel_pk))
+            return redirect('hotel_rooms', pk=hotel_pk)
     else:
         form = RoomDetailsForms()
         photo = PhotoForms()
-    context = {"form": form, "photo_form": photo, "room_prices": room_prices}
+    context = {"form": form, "photo_form": photo, "room_prices": room_prices, "hotel_pk": hotel_pk}
 
     return render(request, 'rooms/create_room.html', context)

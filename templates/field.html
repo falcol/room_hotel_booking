@@ -15,21 +15,27 @@
                     {% endif %}
                 {% endfor %}
             {% else %}
-                    {% for price in room_prices %}
-                        <option value="{{ price.pk }}" {% if field.value == price.pk|to_str %}selected{% endif %}>
-                            {{ price.room_type }}
-                        </option>
-                    {% endfor %}
+                {% for price in room_prices %}
+                    <option value="{{ price.pk }}"
+                            {% if field.value == price.pk|to_str %}selected{% endif %}>
+                        {{ price.room_type }}
+                    </option>
+                {% endfor %}
             {% endif %}
         </select>
-    {% elif field.field.widget.input_type in "text email password tel number" %}
+        {% if field.name == 'room_price' %}
+        <div id="room-price">
+            <a href="{% url 'hotel_room_price' hotel_pk=hotel_pk %}">Thêm giá phòng</a>
+        </div>
+        {% endif %}
+    {% elif field.field.widget.input_type in "text email password tel number datetime-local" %}
         {% include 'label.html' %}
         <input type="{{ field.field.widget.input_type }}"
                id="{{ field.auto_id }}"
                name="{{ field.name }}"
-               class="{{ field.field.widget.attrs.class }} form-control-lg"
+               class="{{ field.field.widget.attrs.class }} form-control"
                placeholder="{{ field.label }}"
-               value="{{ field.value|check_value_none }}"/>
+               value="{% if request.user.is_authenticated %}{% if field.name == 'guest_name' %}{{ request.user.fullname|check_value_none }}{% elif field.field.widget.input_type == 'tel'  %}{{ request.user.info.first|check_value_none }}{% else %}{{ field.value|check_value_none }}{% endif %}{% else %}{{ field.value|check_value_none }}{% endif %}"/>
     {% elif field.field.widget.input_type is None %}
         {% include 'label.html' %}
         <textarea name="{{ field.name }}" value="{{ field.value|check_value_none }}" id="{{ field.auto_id }}" class="{{ field.field.widget.attrs.class }}" placeholder="{{ field.label }}" cols="30" rows="10">{{ field.value|check_value_none }}</textarea>

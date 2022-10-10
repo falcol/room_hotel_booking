@@ -23,3 +23,9 @@ def check_value_none(data):
     if data:
         return data
     return ""
+
+
+@register.filter
+def get_full_room_status(data):
+    ROOM_STATUS = {'E': 'Trống', 'C': 'Đang dọn', 'L': 'Cho thuê', 'B': 'Đã đặt'}
+    return ROOM_STATUS.get(data, "")
