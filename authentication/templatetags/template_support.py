@@ -1,3 +1,6 @@
+from datetime import datetime
+
+from dateutil.parser import parse
 from django.template.defaulttags import register
 
 
@@ -33,5 +36,6 @@ def get_full_room_status(data):
 
 @register.filter
 def format_datetime_local(date):
-    print(date)
-    return date
+    date = parse(str(date))
+    result = datetime.strftime(date, '%Y-%m-%d %H:%M:%S')
+    return result
