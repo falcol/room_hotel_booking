@@ -10,13 +10,19 @@ from .forms import BookingDetailsForms
 def create_booking(request, pk):
     room_book = RoomDetails.objects.get(pk=pk)
     if request.method == 'POST':
-        form = BookingDetailsForms(request.POST or None)
+        if request.user.is_authenticated:
+            form = BookingDetailsForms(request.POST or None)
 
-        if form.is_valid():
-            form.save(commit=False)
+            if form.is_valid():
+                booking = form.save(commit=False)
+                booking.guest = request.user
+                booking.hotel = room_book.hotel
+                booking.room = room_book
 
-            messages.success("Đặt phòng thành công")
-            return redirect('home')
+                booking.save()
+                messages.success(request, "Đặt phòng thành công")
+                return redirect('home')
+        return redirect('signin')
     else:
         form = BookingDetailsForms()
 

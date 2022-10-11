@@ -41,7 +41,7 @@ class RoomPriceDetails(models.Model):
 
 
 class RoomDetails(models.Model):
-    ROOM_STATUS = (('E', 'Trống'), ('C', 'Đang dọn'), ('L', 'Cho thuê'), ('B', 'Đã đặt'))
+    ROOM_STATUS = (('E', 'Trống'), ('C', 'Đang dọn'), ('L', 'Cho thuê'))
     room_name = models.CharField(max_length=255)
     room_no = models.PositiveIntegerField(null=True)
     hotel = models.ForeignKey(HotelDetails, on_delete=models.CASCADE, related_name='room_hotel')
@@ -80,7 +80,7 @@ class BookingDetails(models.Model):
     booking_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.booking_status
+        return self.guest_name
 
 
 class Photos(models.Model):

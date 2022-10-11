@@ -29,3 +29,9 @@ def check_value_none(data):
 def get_full_room_status(data):
     ROOM_STATUS = {'E': 'Trống', 'C': 'Đang dọn', 'L': 'Cho thuê', 'B': 'Đã đặt'}
     return ROOM_STATUS.get(data, "")
+
+
+@register.filter
+def format_datetime_local(date):
+    print(date)
+    return date

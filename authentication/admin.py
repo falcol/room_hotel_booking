@@ -19,18 +19,16 @@ class BaseUser(UserAdmin):
         'last_login',
     )
     list_filter = ('is_active', 'is_staff', 'is_superuser')
-    fieldsets = ((None, {
-        'fields': ('username', 'email', 'password')
+    fieldsets = (('UserInfo', {
+        'fields': ('username', 'email', 'password', 'first_name', 'last_name', 'name')
     }), ('Permissions', {
-        'fields': ('is_staff', 'is_active', 'is_superuser', 'groups',
-                   'user_permissions')
+        'fields': ('is_staff', 'is_active', 'is_superuser', 'groups', 'user_permissions')
     }), ('Dates', {
         'fields': ('last_login', 'date_joined')
     }))
     add_fieldsets = ((None, {
         'classes': ('wide',),
-        'fields': ('username', 'email', 'password1', 'password2', 'is_staff',
-                   'is_active')
+        'fields': ('username', 'email', 'password1', 'password2', 'is_staff', 'is_active')
     }),)
     search_fields = ('email',)
     ordering = ('email',)

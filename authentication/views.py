@@ -112,11 +112,8 @@ def signin(request):
 
         if user is not None:
             login(request, user)
-            fname = user.first_name
-            if 'signup' not in request.META.get('HTTP_REFERER'):
-                # messages.success(request, "Logged In Sucessfully!!")
-                return render(request, "hotels/index.html", {"fname": fname})
-            return redirect(request.META.get('HTTP_REFERER'))
+            messages.success(request, "Đăng nhập thành công!!")
+            return redirect('home')
         else:
             messages.error(request, "Đăng nhập thất bại, thông tin tài khoản hoặc mật khẩu không chính xác!!")
             return redirect('home')

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load static %}
+{% load template_support %}
+{% load crispy_forms_tags %}
+{% block title %}
+    Khách sạn
+{% endblock title %}
+{% block body %}
+    <section class="hp-room-section pt-5 pb-5">
+        <div class="section-title">
+            <h2>Danh sách đặt phòng</h2>
+        </div>
+        <div class="row">
+            <div class="col-lg-2"></div>
+            <div class="col-lg-8">
+                <section class="hp-room-section">
+                    <div class="container-fluid">
+                        <div class="hp-room-items">
+                            <div class="row">
+                                {% for  book in bookings %}
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="hp-room-item set-bg" data-setbg="{{ book.room.room_photos.first.image_room.url }}">
+                                            <div class="hr-text">
+                                                <h3>Khách sạn</h3>
+                                                <h2>
+                                                    {{ book.hotel }}
+                                                </h2>
+                                                <table>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="r-o">Email:</td>
+                                                            <td>{{ book.hotel.email }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="r-o">Điện thoại:</td>
+                                                            <td>{{  book.hotel.contact_no }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="r-o">Địa chỉ:</td>
+                                                            <td>{{  book.hotel.address }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="r-o">Thành phố:</td>
+                                                            <td>{{  book.hotel.city }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="r-o">Dịch vụ:</td>
+                                                            <td>{{  book.hotel.introduce }}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <a href="{% url 'update_booking' pk=book.hotel.pk %}?bpk={{ book.booking_id }}" class="primary-btn">Chi tiết phòng</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                            {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="col-lg-2">
+            </div>
+        </div>
+    </section>
+{% endblock body %}
+{% block footer %}
+    <style type="text/css">
+        .booking-form form .select-option .nice-select:after {
+            border-bottom: 2px solid #dfa274;
+            border-right: 2px solid #dfa974;
+            height: 10px;
+            margin-top: 0;
+            right: 20px;
+            width: 10px;
+            top: 36%;
+        }
+    </style>
+{% endblock footer %}

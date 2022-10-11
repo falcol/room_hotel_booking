@@ -46,6 +46,7 @@
                     <div class="room-booking">
                         <h3>Đặt phòng của bạn</h3>
                         <form action="#" method="post">
+                            {% csrf_token %}
                              {% for field in form %}
                                 {% include 'field.html' %}
                              {% endfor %}

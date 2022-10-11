@@ -154,6 +154,7 @@ class BookingDetailsForms(forms.ModelForm):
         return cleaned_data
 
     def __init__(self, *args, **kwargs):
+        self.required = True
         super(BookingDetailsForms, self).__init__(*args, **kwargs)
 
         for _, field in self.fields.items():
