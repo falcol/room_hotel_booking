@@ -100,9 +100,15 @@ def activate(request, uidb64, token):
         return render(request, 'activation_failed.html')
 
 
+next_redirect = ""
+
+
 def signin(request):
     if request.user.is_authenticated:
         return redirect('home')
+    global next_redirect
+    if request.GET.get('next'):
+        next_redirect = request.GET.get('next')
 
     if request.method == 'POST':
         username = request.POST['username']
@@ -113,6 +119,9 @@ def signin(request):
         if user is not None:
             login(request, user)
             messages.success(request, "Đăng nhập thành công!!")
+
+            if next_redirect:
+                return redirect(next_redirect)
             return redirect('home')
         else:
             messages.error(request, "Đăng nhập thất bại, thông tin tài khoản hoặc mật khẩu không chính xác!!")

@@ -1,9 +1,9 @@
-from django.urls import reverse
 from common.vietnam_province import VIETNAM_CITY
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.db.models import Q
 from django.shortcuts import redirect, render
-from room_booking.forms import PhotoForms, RoomDetailsForms, RoomPriceDetailsForms
-from room_booking.models import Photos, RoomPriceDetails, RoomDetails
+from room_booking.forms import (PhotoForms, RoomDetailsForms, RoomPriceDetailsForms)
+from room_booking.models import (BookingDetails, Photos, RoomDetails, RoomPriceDetails)
 
 from .forms import HotelCreateForm
 from .models import HotelDetails
@@ -115,3 +115,9 @@ def create_room_hotel(request, hotel_pk):
     context = {"form": form, "photo_form": photo, "room_prices": room_prices, "hotel_pk": hotel_pk}
 
     return render(request, 'rooms/create_room.html', context)
+
+
+def my_hotel_book(request, hotel_pk):
+    hotel_books = BookingDetails.objects.filter(Q(hotel=hotel_pk) & Q(booking_status="DP"))
+    context = {"books": hotel_books}
+    return render(request, 'hotels/my_hotel_books.html', context)

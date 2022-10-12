@@ -1,12 +1,13 @@
 from django.contrib import messages
 from django.shortcuts import redirect, render
-
+from django.contrib.auth.decorators import login_required
 from room_booking.models import RoomDetails
 from .forms import BookingDetailsForms
 
 # Create your views here.
 
 
+@login_required(login_url='/signin')
 def create_booking(request, pk):
     room_book = RoomDetails.objects.get(pk=pk)
     if request.method == 'POST':

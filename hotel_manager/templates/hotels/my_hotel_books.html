@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load static %}
+{% load template_support %}
+{% load crispy_forms_tags %}
+{% block title %}
+    Khách sạn
+{% endblock title %}
+{% block body %}
+    <section class="rooms-section spad">
+        <div class="container">
+            <div class="row">
+                {% for book in books %}
+                    <div class="col-lg-4 col-md-6">
+                        <div class="room-item">
+                            <img src="{{ book.room.room_photos.first.image_room.url }}" alt="" />
+                            <div class="ri-text">
+                                <h4>{{ book.room.room_name }}</h4>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td class="r-o">Tên khách hàng</td>
+                                            <td>{{ book.guest_name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="r-o">Số điện thoại:</td>
+                                            <td>{{ book.guest_phone_number }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="r-o">Email:</td>
+                                            <td>{{ book.guest.email }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="r-o">Thời gian vào</td>
+                                            <td>{{ book.check_in_time|format_datetime_local }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="r-o">Thời gian ra</td>
+                                            <td>{{ book.check_out_time|format_datetime_local }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <a href="#" class="primary-btn mr-3">Sửa</a>
+                                <a href="#" class="primary-btn mr-3">Trả phòng</a>
+                                <a href="#" class="primary-btn">Hủy phòng</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="col-lg-12">
+                    <div class="room-pagination">
+                        <a href="#">1</a>
+                        <a href="#">2</a>
+                        <a href="#">Next <i class="fa fa-long-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock body %}
+{% block footer %}
+    <style type="text/css">
+        .booking-form form .select-option .nice-select:after {
+            border-bottom: 2px solid #dfa274;
+            border-right: 2px solid #dfa974;
+            height: 10px;
+            margin-top: 0;
+            right: 20px;
+            width: 10px;
+            top: 36%;
+        }
+    </style>
+{% endblock footer %}

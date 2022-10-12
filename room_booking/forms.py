@@ -1,8 +1,6 @@
 from typing import Any, Dict
 from django import forms
-from django.forms import ModelChoiceField
 from phonenumber_field.formfields import PhoneNumberField
-from hotel_manager.models import HotelDetails
 from .models import RoomPriceDetails, DrinkAndFood, BookingDetails, RoomDetails
 
 
