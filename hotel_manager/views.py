@@ -1,8 +1,9 @@
+from jmespath import search
 from common.vietnam_province import VIETNAM_CITY
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Q
 from django.shortcuts import redirect, render
-from room_booking.forms import (PhotoForms, RoomDetailsForms, RoomPriceDetailsForms)
+from room_booking.forms import (PhotoForms, RoomDetailsForms, RoomPriceDetailsForms, SearchRoomsEmty)
 from room_booking.models import (BookingDetails, Photos, RoomDetails, RoomPriceDetails)
 
 from .forms import HotelCreateForm
@@ -12,7 +13,23 @@ from .models import HotelDetails
 # Create your views here.
 def home(request):
     hotels = HotelDetails.objects.all().order_by("-id")
-    context = {"menu": "home", "hotels": hotels}
+    if request.method == "POST":
+        form = SearchRoomsEmty(request.POST or None)
+
+        if form.is_valid():
+            data_search = form.cleaned_data
+            time_start = data_search.get('datetime_check_in')
+            time_end = data_search.get('datetime_check_out')
+            max_person = data_search.get('max_person')
+
+            books_room = BookingDetails.objects.filter(
+                ~Q(book_status='DP') & Q(check_in_time__range=[time_start, time_end]) |
+                Q(check_out_time__range=[time_start, time_end])).values_list('room__id')
+            all_rooms = RoomDetails.objects.filter(max_person__lte=max_person).exclude(id__in=books_room)
+            pass
+    else:
+        form = SearchRoomsEmty()
+    context = {"menu": "home", "hotels": hotels, 'search_form': form}
     return render(request, "hotels/index.html", context)
 
 
