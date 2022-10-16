@@ -1,8 +1,9 @@
-from email.policy import default
+from datetime import datetime
+
 from django.db import models
+
 from authentication.models import User
 from hotel_manager.models import HotelDetails
-from datetime import datetime
 
 
 class DrinkAndFood(models.Model):
