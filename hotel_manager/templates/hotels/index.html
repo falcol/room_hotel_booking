@@ -12,52 +12,25 @@
                 <div class="col-lg-6">
                     <div class="hero-text">
                         <h1>Website đặt phòng khách sạn</h1>
-                        <p>
-                            Chào mừng bạn đến với website của chúng tôi
-                        </p>
+                        <p>Chào mừng bạn đến với website của chúng tôi</p>
                         <a href="#" class="primary-btn">Khám phá ngay</a>
                     </div>
                 </div>
                 <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1">
                     <div class="booking-form">
                         <h3>Đặt phòng khách sạn</h3>
-                        <form action="" method="post">
+                        <form method="post">
                             {% csrf_token %}
-                            <div class="check-date">
-                                <label for="date-in">Thời gian vào:</label>
-                                <input type="text" class="date-input" id="date-in" />
-                                <i class="icon_calendar"></i>
-                            </div>
-                            <div class="check-date">
-                                <label for="date-out">Thời gian ra:</label>
-                                <input type="text" class="date-input" id="date-out" />
-                                <i class="icon_calendar"></i>
-                            </div>
-                            <div class="select-option">
-                                <label for="guest">Khách:</label>
-                                <select id="guest">
-                                    <option value="">
-                                        2 Người
-                                    </option>
-                                    <option value="">
-                                        4 Người
-                                    </option>
-                                    <option value="">
-                                        6 Người
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="select-option">
-                                <label for="room">Phòng:</label>
-                                <select id="room">
-                                    <option value="">
-                                        1 Phòng
-                                    </option>
-                                    <option value="">
-                                        2 Phòng
-                                    </option>
-                                </select>
-                            </div>
+                            {% for field in search_form %}
+                                <div class="form-group">
+                                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    <input type="{{ field.field.widget.input_type }}"
+                                           name="{{ field.name }}"
+                                           class="{{ field.field.widget.attrs.class }}"
+                                           value="{{ field.value }}"/>
+                                    {% for error in field.errors %}<p style="color: red; position: absolute">{{ error }}</p>{% endfor %}
+                                </div>
+                            {% endfor %}
                             <button type="submit">Kiểm tra khách sạn</button>
                         </form>
                     </div>
@@ -86,12 +59,11 @@
                             <div class="row">
                                 {% for  hotel in hotels %}
                                     <div class="col-lg-4 col-md-6">
-                                        <div class="hp-room-item set-bg" data-setbg="{{ hotel.hotel_photos.first.image_hotel.url }}">
+                                        <div class="hp-room-item set-bg"
+                                             data-setbg="{{ hotel.hotel_photos.first.image_hotel.url }}">
                                             <div class="hr-text">
                                                 <h3>Khách sạn</h3>
-                                                <h2>
-                                                    {{ hotel.name }}
-                                                </h2>
+                                                <h2>{{ hotel.name }}</h2>
                                                 <table>
                                                     <tbody>
                                                         <tr>
@@ -120,14 +92,13 @@
                                             </div>
                                         </div>
                                     </div>
-                            {% endfor %}
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
                 </section>
             </div>
-            <div class="col-lg-2">
-            </div>
+            <div class="col-lg-2"></div>
         </div>
     </section>
 {% endblock body %}

@@ -1,7 +1,9 @@
 from typing import Any, Dict
+
 from django import forms
 from phonenumber_field.formfields import PhoneNumberField
-from .models import RoomPriceDetails, DrinkAndFood, BookingDetails, RoomDetails
+
+from .models import BookingDetails, DrinkAndFood, RoomDetails, RoomPriceDetails
 
 
 class RoomPriceDetailsForms(forms.ModelForm):
