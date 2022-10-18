@@ -27,11 +27,13 @@ def home(request):
             max_person = data_search.get('max_person')
 
             books_room = BookingDetails.objects.filter(
-                ~Q(booking_status='DP') & Q(check_in_time__range=[time_start, time_end]) |
-                Q(check_out_time__range=[time_start, time_end])).values_list('room__id')
+                (~Q(booking_status__contains='DP') | ~Q(booking_status__contains="NP")) &
+                (Q(check_in_time__range=[time_start, time_end]) |
+                 Q(check_out_time__range=[time_start, time_end]))).values_list('room__id')
             all_rooms = RoomDetails.objects.filter(room_price__max_person__lte=max_person).exclude(id__in=books_room)
             hotel_ids = all_rooms.values('hotel__id').annotate(room_count=Count('hotel__id')).filter(room_count__gt=1)
             hotels = HotelDetails.objects.filter(pk__in=[item['hotel__id'] for item in hotel_ids])
+            print(hotel_ids)
             pass
     else:
         form = SearchRoomsEmty()
@@ -144,3 +146,14 @@ def my_hotel_book(request, hotel_pk):
     hotel_books = BookingDetails.objects.filter(Q(hotel=hotel_pk) & Q(booking_status="DP"))
     context = {"books": hotel_books}
     return render(request, 'hotels/my_hotel_books.html', context)
+
+
+def guest_check_in(request, book_pk):
+    try:
+        book = BookingDetails.objects.get(pk=book_pk)
+        book.booking_status = "NP"
+        book.room.room_status = "L"
+    except BookingDetails.DoesNotExist:
+        pass
+
+    return redirect(request.path)

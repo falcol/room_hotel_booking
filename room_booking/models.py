@@ -47,7 +47,9 @@ class RoomDetails(models.Model):
 
 
 class BookingDetails(models.Model):
-    BOOKING_STATUS = (('KH', 'Khách hàng hủy'), ('KSH', 'Khách sạn hủy'), ('TP', 'Trả phòng'), ('DP', 'Đặt phòng'))
+    BOOKING_STATUS = (
+        ('KH', 'Khách hàng hủy'), ('KSH', 'Khách sạn hủy'), ('TP', 'Trả phòng'), ('DP', 'Đặt phòng'),
+        ("NP", "Nhận phòng"))
     booking_id = models.AutoField(primary_key=True)
     guest = models.ForeignKey(
         User, to_field='username', on_delete=models.CASCADE, null=True, related_name="guest_bookings")

@@ -1,7 +1,9 @@
 from django.contrib import messages
-from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect, render
+
 from room_booking.models import RoomDetails
+
 from .forms import BookingDetailsForms
 
 # Create your views here.
