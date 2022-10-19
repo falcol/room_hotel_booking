@@ -43,7 +43,7 @@ class RoomDetails(models.Model):
     room_status = models.CharField(choices=ROOM_STATUS, max_length=1, default="E")
 
     def __str__(self):
-        return self.room_name + " " + self.room_status
+        return self.room_name
 
 
 class BookingDetails(models.Model):

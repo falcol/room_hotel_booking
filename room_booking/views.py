@@ -2,9 +2,9 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
-from room_booking.models import RoomDetails
+from room_booking.models import BookingDetails, RoomDetails
 
-from .forms import BookingDetailsForms
+from .forms import BookingCheckOutForms, BookingDetailsForms
 
 # Create your views here.
 
@@ -31,3 +31,15 @@ def create_booking(request, pk):
 
     context = {"form": form, "room_book": room_book}
     return render(request, 'bookings/booking_create.html', context)
+
+
+@login_required(login_url='/signin')
+def boooking_checkout(request, book_pk):
+    try:
+        book = BookingDetails.objects.get(pk=book_pk)
+        # tinh tien
+    except BookingDetails.DoesNotExist:
+        return redirect(request.META.get('HTTP_REFERER'))
+    book_form = BookingCheckOutForms(request.POST, instance=book)
+    if request.method == 'POST':
+        book_form.save()

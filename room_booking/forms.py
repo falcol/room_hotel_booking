@@ -222,12 +222,11 @@ class RoomDetailsForms(forms.ModelForm):
 
 
 class PhotoForms(forms.Form):
-    images = forms.ImageField(label='Hình ảnh',
-                              required=True,
-                              widget=forms.FileInput(attrs={
-                                  'class': 'form-control-file',
-                                  'multiple': True
-                              }))
+    images = forms.ImageField(
+        label='Hình ảnh', required=True, widget=forms.FileInput(attrs={
+            'class': 'form-control-file',
+            'multiple': True
+        }))
 
     def __init__(self, *args, **kwargs):
         self.required = True
@@ -239,21 +238,21 @@ class PhotoForms(forms.Form):
 
 class SearchRoomsEmty(forms.Form):
 
-    datetime_check_in = forms.DateTimeField(label='Thời gian vào',
-                                            widget=(forms.TextInput(attrs={
-                                                'type': 'datetime-local',
-                                                'class': 'form-control'
-                                            })))
-    datetime_check_out = forms.DateTimeField(label='Thời gian ra',
-                                             widget=(forms.TextInput(attrs={
-                                                 'type': 'datetime-local',
-                                                 'class': 'form-control'
-                                             })))
-    max_person = forms.IntegerField(label='Số người ở',
-                                    widget=(forms.TextInput(attrs={
-                                        'type': 'number',
-                                        'class': 'form-control'
-                                    })))
+    datetime_check_in = forms.DateTimeField(
+        label='Thời gian vào', widget=(forms.TextInput(attrs={
+            'type': 'datetime-local',
+            'class': 'form-control'
+        })))
+    datetime_check_out = forms.DateTimeField(
+        label='Thời gian ra', widget=(forms.TextInput(attrs={
+            'type': 'datetime-local',
+            'class': 'form-control'
+        })))
+    max_person = forms.IntegerField(
+        label='Số người ở', widget=(forms.TextInput(attrs={
+            'type': 'number',
+            'class': 'form-control'
+        })))
 
     def clean(self):
         cleaned_data = super().clean()
@@ -266,6 +265,90 @@ class SearchRoomsEmty(forms.Form):
     def __init__(self, *args, **kwargs):
         self.required = True
         super(SearchRoomsEmty, self).__init__(*args, **kwargs)
+
+        for _, field in self.fields.items():
+            field.error_messages.update({'required': f'{field.label} không được bỏ trống'})
+
+
+class BookingCheckOutForms(forms.ModelForm):
+    guest_phone_number = PhoneNumberField(region="VN")
+
+    class Meta:
+        model = BookingDetails
+        fields = (
+            'guest_name',
+            'guest_phone_number',
+            'booking_type',
+            'booking_status',
+            'check_in_time',
+            'check_out_time',
+            'room',
+            'total_guests',
+            'total_cost',
+            'discounted_price',
+        )
+        labels = {
+            'guest': 'Khách hàng',
+            'guest_name': 'Tên khách hàng',
+            'guest_phone_number': 'Số điện thoại',
+            'booking_type': 'Nghỉ loại',
+            'hotel': 'Khách sạn',
+            'booking_status': 'Trạng thái',
+            'check_in_time': 'Thời gian nhận phòng',
+            'check_out_time': 'Thời gian trả phòng',
+            'room': 'Phòng',
+            'total_guests': 'Số người',
+            'drink_and_food': 'Menu',
+            'total_cost': 'Tổng tiền',
+            'discounted_price': 'Giảm giá',
+        }
+
+        widgets = {
+            "guest_name": forms.TextInput(attrs={
+                "class": "form-control",
+                "type": "text",
+            }),
+            "booking_type": forms.Select(attrs={
+                "class": "form-control",
+            }),
+            "check_in_time": forms.TextInput(attrs={
+                "class": "form-control",
+                "type": "datetime-local",
+            }),
+            "check_out_time": forms.TextInput(attrs={
+                "class": "form-control",
+                "type": "datetime-local",
+            }),
+            "total_guests": forms.TextInput(attrs={
+                "class": "form-control",
+                "type": "number",
+            }),
+            'booking_status': forms.Select(attrs={
+                "class": "form-control",
+            }),
+            'total_cost': forms.TextInput(attrs={
+                "class": "form-control",
+                "type": "number",
+            }),
+            'discounted_price': forms.TextInput(attrs={
+                "class": "form-control",
+                "type": "number",
+            }),
+            'room': forms.TextInput(attrs={
+                "class": "form-control",
+                "type": "number",
+            }),
+        }
+
+    def clean(self) -> Dict[str, Any]:
+        cleaned_data = super().clean()
+        if self.is_valid():
+            pass
+        return cleaned_data
+
+    def __init__(self, *args, **kwargs):
+        self.required = True
+        super(BookingDetailsForms, self).__init__(*args, **kwargs)
 
         for _, field in self.fields.items():
             field.error_messages.update({'required': f'{field.label} không được bỏ trống'})
