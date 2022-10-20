@@ -1,3 +1,5 @@
+import math
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
@@ -34,12 +36,26 @@ def create_booking(request, pk):
 
 
 @login_required(login_url='/signin')
-def boooking_checkout(request, book_pk):
+def booking_checkout(request, book_pk):
     try:
         book = BookingDetails.objects.get(pk=book_pk)
-        # tinh tien
+        if book.booking_type == 0:
+            more_hours = math.ceil((book.check_out_time - book.check_in_time).seconds / 3600) - 2
+            book.total_cost = book.room.room_price.price_first_two_hours + (
+                more_hours * book.room.room_price.price_next_hours)
+        if book.booking_type == 1:
+            book.total_cost = book.room.room_price.price_per_night
+        if book.booking_type == 2:
+            book.total_cost = book.room.room_price.price_per_day
+        book.booking_status = "TP"
     except BookingDetails.DoesNotExist:
         return redirect(request.META.get('HTTP_REFERER'))
-    book_form = BookingCheckOutForms(request.POST, instance=book)
-    if request.method == 'POST':
+
+    book_form = BookingCheckOutForms(request.POST or None, instance=book)
+    if book_form.is_valid():
         book_form.save()
+        return redirect("/home")
+
+    context = {"form": book_form}
+
+    return render(request, 'bookings/booking_checkout.html', context)

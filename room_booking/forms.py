@@ -344,11 +344,10 @@ class BookingCheckOutForms(forms.ModelForm):
         cleaned_data = super().clean()
         if self.is_valid():
             pass
-        return cleaned_data
 
     def __init__(self, *args, **kwargs):
         self.required = True
-        super(BookingDetailsForms, self).__init__(*args, **kwargs)
+        super(BookingCheckOutForms, self).__init__(*args, **kwargs)
 
         for _, field in self.fields.items():
             field.error_messages.update({'required': f'{field.label} không được bỏ trống'})
