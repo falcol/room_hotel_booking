@@ -24,7 +24,7 @@
                 {% endfor %}
             {% endif %}
         </select>
-        {% if field.name == 'room_price' %}
+        {% if field.name == 'room_price' and screen == 'hotel' %}
             <div id="room-price">
                 <a href="{% url 'hotel_room_price' hotel_pk=hotel_pk %}">Thêm giá phòng</a>
             </div>

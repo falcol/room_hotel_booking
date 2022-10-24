@@ -194,6 +194,9 @@ class RoomDetailsForms(forms.ModelForm):
             "layout": forms.Textarea(attrs={
                 "class": "form-control",
             }),
+            "introduce": forms.Textarea(attrs={
+                "class": "form-control",
+            }),
             "floor_no": forms.TextInput(attrs={
                 "class": "form-control",
                 "type": "number",

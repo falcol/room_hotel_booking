@@ -27,40 +27,34 @@
                                                 <table>
                                                     <tbody>
                                                         <tr>
-                                                            <td class="r-o">Phòng nghỉ:</td>
                                                             <td>
                                                                 <a href="{% url 'my_hotel_rooms' pk=hotel.pk %}"
                                                                    class="btn text-info primary-btn">Xem phòng khách sạn</a>
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="r-o">Sửa:</td>
                                                             <td>
-                                                                <a href="" class="btn text-warning primary-btn">Thay đổi thông tin khách sạn</a>
+                                                                <a href="{% url 'update_hotel_info' hotel_pk=hotel.pk %}" class="btn text-warning primary-btn">Thay đổi thông tin khách sạn</a>
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="r-o">Thêm phòng:</td>
                                                             <td>
                                                                 <a href="{% url 'hotel_new_room' hotel_pk=hotel.pk %}"
                                                                    class="btn text-success primary-btn">Thêm phòng khách sạn</a>
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="r-o">Thêm loại phòng</td>
                                                             <td>
                                                                 <a href="{% url 'hotel_room_price' hotel_pk=hotel.pk %}"
                                                                    class="btn text-success primary-btn">Thêm loại phòng khách sạn</a>
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="r-o">Xóa</td>
                                                             <td>
                                                                 <a href="" class="btn text-danger primary-btn">Xóa khách sạn</a>
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="r-o">Phòng đặt</td>
                                                             <td>
                                                                 <a href="{% url 'my_hotel_book' hotel_pk=hotel.pk %}" class="btn text-success primary-btn">Xem</a>
                                                             </td>

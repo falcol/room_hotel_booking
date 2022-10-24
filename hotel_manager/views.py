@@ -30,7 +30,7 @@ def home(request):
                 (~Q(booking_status__contains='DP') | ~Q(booking_status__contains="NP")) &
                 (Q(check_in_time__range=[time_start, time_end]) |
                  Q(check_out_time__range=[time_start, time_end]))).values_list('room__id')
-            all_rooms = RoomDetails.objects.filter(room_price__max_person__lte=max_person).exclude(id__in=books_room)
+            all_rooms = RoomDetails.objects.filter(room_price__max_person__gte=max_person).exclude(id__in=books_room)
             hotel_ids = all_rooms.values('hotel__id').annotate(room_count=Count('hotel__id')).filter(room_count__gt=1)
             hotels = HotelDetails.objects.filter(pk__in=[item['hotel__id'] for item in hotel_ids])
             print(hotel_ids)
@@ -86,6 +86,7 @@ def hotel_rooms(request, pk):
     return render(request, 'rooms/rooms_hotel.html', context)
 
 
+@login_required(login_url='/signin')
 def my_hotel_rooms(request, pk):
     room_prices = RoomPriceDetails.objects.filter(hotel__id=pk)
 
@@ -95,6 +96,7 @@ def my_hotel_rooms(request, pk):
     return render(request, 'rooms/my_rooms_hotel.html', context)
 
 
+@login_required(login_url='/signin')
 def create_room_price(request, hotel_pk):
     hotel = HotelDetails.objects.get(pk=hotel_pk)
 
@@ -108,13 +110,12 @@ def create_room_price(request, hotel_pk):
     else:
         form = RoomPriceDetailsForms()
 
-    context = {
-        "form": form,
-    }
+    context = {"form": form, "screen": 'hotel'}
 
     return render(request, 'rooms/create_room_price.html', context)
 
 
+@login_required(login_url='/signin')
 def create_room_hotel(request, hotel_pk):
     room_prices = RoomPriceDetails.objects.filter(hotel__pk=hotel_pk)
 
@@ -142,18 +143,64 @@ def create_room_hotel(request, hotel_pk):
     return render(request, 'rooms/create_room.html', context)
 
 
+@login_required(login_url='/signin')
+def update_room_hotel(request, room_pk):
+    try:
+        room = RoomDetails.objects.get(pk=room_pk)
+        room_prices = RoomPriceDetails.objects.filter(hotel__pk=room.hotel.pk)
+    except RoomDetails.DoesNotExist:
+        pass
+
+    form = RoomDetailsForms(request.POST or None, instance=room)
+    if form.is_valid():
+        form.save()
+        return redirect('my_hotel_rooms', pk=room.hotel.pk)
+
+    context = {"form": form, 'screen': 'room', "room_prices": room_prices}
+
+    return render(request, 'rooms/update_room.html', context)
+
+
+@login_required(login_url='/signin')
+def update_hotel_info(request, hotel_pk):
+    try:
+        hotel = HotelDetails.objects.get(pk=hotel_pk)
+    except HotelDetails.DoesNotExist:
+        pass
+
+    form = HotelCreateForm(request.POST or None, instance=hotel)
+    if form.is_valid():
+        form.save()
+        return redirect("my_hotel")
+    context = {'form': form}
+    return render(request, "hotels/update_hotel.html", context)
+
+
+@login_required(login_url='/signin')
 def my_hotel_book(request, hotel_pk):
     hotel_books = BookingDetails.objects.filter(Q(hotel=hotel_pk) & Q(booking_status="DP"))
     context = {"books": hotel_books}
     return render(request, 'hotels/my_hotel_books.html', context)
 
 
+@login_required(login_url='/signin')
 def guest_check_in(request, book_pk):
     try:
         book = BookingDetails.objects.get(pk=book_pk)
         book.booking_status = "NP"
         book.room.room_status = "L"
     except BookingDetails.DoesNotExist:
+        pass
+
+    return redirect(request.path)
+
+
+@login_required(login_url='/signin')
+def set_room_empty(request, room_id):
+    try:
+        room = RoomDetails.objects.get(pk=room_id)
+        room.room_status = "E"
+    except RoomDetails.DoesNotExist:
         pass
 
     return redirect(request.path)
