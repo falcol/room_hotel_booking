@@ -24,9 +24,13 @@
                 {% endfor %}
             {% endif %}
         </select>
-        {% if field.name == 'room_price' and screen == 'hotel' %}
+        {% if field.name == 'room_price' %}
             <div id="room-price">
-                <a href="{% url 'hotel_room_price' hotel_pk=hotel_pk %}">Thêm giá phòng</a>
+                {% if screen == 'hotel' %}
+                    <a href="{% url 'hotel_room_price' hotel_pk=hotel_pk %}">Thêm giá phòng</a>
+                {% else %}
+                    <a href="{% url 'hotel_room_price' hotel_pk=room.hotel.pk %}">Thêm giá phòng</a>
+                {% endif %}
             </div>
         {% endif %}
     {% elif field.field.widget.input_type in "text email password tel number" %}

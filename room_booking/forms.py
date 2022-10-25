@@ -1,6 +1,7 @@
 from typing import Any, Dict
 
 from django import forms
+from django.db.models import Q
 from phonenumber_field.formfields import PhoneNumberField
 
 from .models import BookingDetails, DrinkAndFood, RoomDetails, RoomPriceDetails
@@ -150,8 +151,27 @@ class BookingDetailsForms(forms.ModelForm):
     def clean(self) -> Dict[str, Any]:
         cleaned_data = super().clean()
         if self.is_valid():
-            pass
-        return cleaned_data
+            try:
+                room_pk = self.instance.room.pk
+                hotel_pk = self.instance.hotel.pk
+            except Exception:
+                hotel_pk = 0
+                room_pk = 0
+                pass
+            check_in_time = cleaned_data.get('check_in_time')
+            check_out_time = cleaned_data.get('check_out_time')
+
+            books_room = BookingDetails.objects.filter(
+                (~Q(booking_status__contains='DP') | ~Q(booking_status__contains="NP")) & Q(hotel__pk=hotel_pk) &
+                ~Q(room__pk=room_pk) & (
+                    Q(check_in_time__range=[check_in_time, check_out_time]) |
+                    Q(check_out_time__range=[check_in_time, check_out_time])))
+            if books_room:
+                self.add_error('check_in_time', 'Thời gian này đang có người ở')
+                self.add_error('check_out_time', 'Thời gian này đang có người ở')
+
+            # if cleaned_data.get('total_guests') > self.instance.room.room_price.max_person:
+            #     self.add_error('total_guests', 'Số người ở vượt quá giới hạn')
 
     def __init__(self, *args, **kwargs):
         self.required = True

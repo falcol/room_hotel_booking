@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.db.models import Count, Q
+from django.db.models import Count, Q, Sum
+from django.db.models.functions import TruncMonth
 from django.shortcuts import redirect, render
 
 from common.vietnam_province import VIETNAM_CITY
@@ -138,7 +139,7 @@ def create_room_hotel(request, hotel_pk):
     else:
         form = RoomDetailsForms()
         photo = PhotoForms()
-    context = {"form": form, "photo_form": photo, "room_prices": room_prices, "hotel_pk": hotel_pk}
+    context = {"form": form, "photo_form": photo, "room_prices": room_prices, "hotel_pk": hotel_pk, "screen": 'hotel'}
 
     return render(request, 'rooms/create_room.html', context)
 
@@ -148,15 +149,17 @@ def update_room_hotel(request, room_pk):
     try:
         room = RoomDetails.objects.get(pk=room_pk)
         room_prices = RoomPriceDetails.objects.filter(hotel__pk=room.hotel.pk)
-    except RoomDetails.DoesNotExist:
+        photo = Photos.objects.filter(room_id=room_pk)
+    except (RoomDetails.DoesNotExist, RoomPriceDetails.DoesNotExist, Photos.DoesNotExist):
         pass
 
     form = RoomDetailsForms(request.POST or None, instance=room)
+    photo_form = PhotoForms(request.POST, request.FILES, instance=photo)
     if form.is_valid():
         form.save()
         return redirect('my_hotel_rooms', pk=room.hotel.pk)
 
-    context = {"form": form, 'screen': 'room', "room_prices": room_prices}
+    context = {"form": form, 'screen': 'room', "room_prices": room_prices, "photo_form": photo_form}
 
     return render(request, 'rooms/update_room.html', context)
 
@@ -178,29 +181,29 @@ def update_hotel_info(request, hotel_pk):
 
 @login_required(login_url='/signin')
 def my_hotel_book(request, hotel_pk):
-    hotel_books = BookingDetails.objects.filter(Q(hotel=hotel_pk) & Q(booking_status="DP"))
+    hotel_books = BookingDetails.objects.filter(Q(hotel=hotel_pk) & (Q(booking_status="DP") | Q(booking_status="NP")))
     context = {"books": hotel_books}
     return render(request, 'hotels/my_hotel_books.html', context)
 
 
 @login_required(login_url='/signin')
-def guest_check_in(request, book_pk):
+def set_room_empty(request, room_pk):
     try:
-        book = BookingDetails.objects.get(pk=book_pk)
-        book.booking_status = "NP"
-        book.room.room_status = "L"
-    except BookingDetails.DoesNotExist:
+        room = RoomDetails.objects.get(pk=room_pk)
+        room.room_status = "E"
+    except RoomDetails.DoesNotExist:
         pass
 
     return redirect(request.path)
 
 
 @login_required(login_url='/signin')
-def set_room_empty(request, room_id):
-    try:
-        room = RoomDetails.objects.get(pk=room_id)
-        room.room_status = "E"
-    except RoomDetails.DoesNotExist:
-        pass
-
-    return redirect(request.path)
+def dashboard(request, hotel_pk):
+    books = BookingDetails.objects.filter(hotel__pk=hotel_pk)
+    books_month = books.annotate(month=TruncMonth('check_in_time')).values('month').annotate(
+        total_cost=Sum('total_cost'), total_book=Count('pk')).order_by()
+    book_all = books.aggregate(Sum('total_cost'), Count('pk'))
+    total_rooms = RoomDetails.objects.filter(hotel__pk=hotel_pk).count()
+    context = {"books_month": books_month, "total_rooms": total_rooms}
+    context.update(book_all)
+    return render(request, 'hotels/dashboard.html', context)

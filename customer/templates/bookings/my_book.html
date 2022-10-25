@@ -18,7 +18,7 @@
                         <div class="hp-room-items">
                             <div class="row">
                                 {% for  book in bookings %}
-                                    <div class="col-lg-4 col-md-6">
+                                    <div class="col-lg-4 col-md-6 mt-3">
                                         <div class="hp-room-item set-bg" data-setbg="{{ book.room.room_photos.first.image_room.url }}">
                                             <div class="hr-text">
                                                 <h3>Khách sạn</h3>
@@ -50,6 +50,12 @@
                                                     </tbody>
                                                 </table>
                                                 <a href="{% url 'update_booking' pk=book.hotel.pk %}?bpk={{ book.booking_id }}" class="primary-btn">Chi tiết phòng</a>
+                                                <form action="{% url 'guest_cancel' book_pk=book.booking_id %}" method="post">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn primary-btn">
+                                                        Hủy phòng
+                                                    </button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>

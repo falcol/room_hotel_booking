@@ -39,9 +39,25 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <a href="#" class="primary-btn mr-3">Sửa</a>
-                                <a href="{% url 'booking_checkout' book_pk=book.pk %}" class="primary-btn mr-3">Trả phòng</a>
-                                <a href="#" class="primary-btn">Hủy phòng</a>
+                                {% if book.booking_status == "DP" %}
+                                    <form action="{% url 'guest_check_in' book_pk=book.pk %}"
+                                          method="post"
+                                          class="mt-2 mb-2">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn primary-btn">Nhận phòng</button>
+                                    </form>
+                                    <form action="{% url 'hotel_guest_cancel' book_pk=book.pk %}"
+                                          method="post"
+                                          class="mt-2 mb-2">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn primary-btn">Hủy phòng</button>
+                                    </form>
+                                {% endif %}
+                                <form action="{% url 'booking_checkout' book_pk=book.pk %}">
+                                    <button type="submit" class="btn primary-btn">
+                                        Trả phòng
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>

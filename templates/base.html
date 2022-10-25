@@ -52,8 +52,8 @@
             <div class="menu-item">
                 <div class="container">
                     <div class="row">
-                        <div class="col-lg-2"></div>
-                        <div class="col-lg-10">
+                        <div class="col-lg-1"></div>
+                        <div class="col-lg-11">
                             <div class="nav-menu">
                                 <nav class="mainmenu">
                                     <ul>
@@ -92,6 +92,17 @@
                                             <li>
                                                 <a href="{% url 'signout' %}">Đăng xuất</a>
                                             </li>
+
+                                            {% if request.user.is_staff %}
+                                                <li>
+                                                    <button type="button" class="btn">
+                                                    <i class="fa fa-bell"></i>
+                                                    Đặt phòng
+                                                        <span id="notify_count" class="badge badge-danger navbar-badge"
+                                                                style="transform: translateX(40%)"></span>
+                                                </button>
+                                                </li>
+                                            {% endif %}
                                         {% else %}
                                             <li>
                                                 <a href="{% url 'signin' %}">Đăng nhập</a>
@@ -213,6 +224,7 @@
                         </div>
                     </div>
                 </div>
+                {% csrf_token %}
             </footer>
             <!-- Footer Section End -->
         </div>
@@ -229,5 +241,30 @@
         <script type="text/javascript" src="{% static 'js/jquery.slicknav.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/owl.carousel.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+        <script type="text/javascript">
+            var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+
+            {% if request.user.is_authenticated %}
+                window.onload = function () {
+                    $.ajax({
+                        url: "{% url 'booking_notify' %}",
+                        type: "GET",
+                        headers:{
+                            "X-CSRFToken": csrftoken
+                        },
+                        data: {user_pk: {{ request.user.pk }}},
+                        dataType: 'json',
+                        success: function (response) {
+                            $("#notify_count").text(response.count)
+                        },
+                        error: function (request, status, error) {
+                            alert(request.responseText);
+                        }
+                    });
+                }
+
+            {% endif %}
+
+        </script>
     </body>
 </html>

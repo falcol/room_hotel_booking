@@ -1,5 +1,4 @@
 from datetime import datetime
-from email.policy import default
 
 from django.db import models
 
@@ -11,6 +10,8 @@ class DrinkAndFood(models.Model):
     hotel_id = models.ForeignKey(HotelDetails, on_delete=models.CASCADE, related_name="hotel_menu")
     item_name = models.CharField(max_length=255, unique=True)
     price = models.FloatField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.item_name
@@ -25,6 +26,8 @@ class RoomPriceDetails(models.Model):
     price_next_hours = models.PositiveIntegerField(default=0)
     price_per_night = models.PositiveIntegerField(default=0)
     max_person = models.PositiveIntegerField(default=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.room_type
@@ -41,6 +44,8 @@ class RoomDetails(models.Model):
     size = models.CharField(max_length=255, blank=True, default="30")
     floor_no = models.PositiveIntegerField(default=0)
     room_status = models.CharField(choices=ROOM_STATUS, max_length=1, default="E")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.room_name
@@ -66,6 +71,9 @@ class BookingDetails(models.Model):
     total_cost = models.FloatField(default=0)
     discounted_price = models.FloatField(default=0)
     booking_date = models.DateTimeField(auto_now_add=True)
+    seen = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.guest_name
@@ -76,6 +84,8 @@ class DrinkAndFoodOrder(models.Model):
     book = models.ForeignKey(BookingDetails, related_name="menu", on_delete=models.DO_NOTHING, default=None)
     total = models.IntegerField(default=0)
     amount = models.FloatField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return self.total
@@ -91,6 +101,8 @@ class Photos(models.Model):
     image_room = models.ImageField(upload_to=f'rooms/{FOLDER_NAME}/', blank=True, null=True)
     image_name = models.CharField(max_length=255, default="image")
     description = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.image_name

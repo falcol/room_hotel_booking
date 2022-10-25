@@ -10,12 +10,13 @@ from room_booking.models import BookingDetails, RoomDetails
 
 @login_required(login_url='/signin')
 def my_book(request):
-    bookings = request.user.guest_bookings.all()
+    bookings = request.user.guest_bookings.filter(booking_status="DP")
 
     context = {"bookings": bookings}
     return render(request, 'bookings/my_book.html', context)
 
 
+@login_required(login_url='/signin')
 def update_booking(request, pk):
     room_book = RoomDetails.objects.get(pk=pk)
     booking_pk = request.GET.get('bpk')
@@ -33,3 +34,18 @@ def update_booking(request, pk):
 
     context = {"form": form, "room_book": room_book}
     return render(request, 'bookings/update_book.html', context)
+
+
+@login_required(login_url='/signin')
+def guest_cancel(request, book_pk):
+    if request.method == 'POST':
+        try:
+            book = BookingDetails.objects.get(pk=book_pk)
+            book.booking_status = "KH"
+            book.room.room_status = "E"
+            book.save()
+            messages.success("Hủy phòng thanh công")
+        except BookingDetails.DoesNotExist:
+            pass
+
+        return redirect('my_book')
