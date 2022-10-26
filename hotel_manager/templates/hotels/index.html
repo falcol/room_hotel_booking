@@ -27,7 +27,7 @@
                                     <input type="{{ field.field.widget.input_type }}"
                                            name="{{ field.name }}"
                                            class="{{ field.field.widget.attrs.class }}"
-                                           value="{{ field.value }}"/>
+                                           value="{{ field.value|check_value_none }}"/>
                                     {% for error in field.errors %}<p style="color: red; position: absolute">{{ error }}</p>{% endfor %}
                                 </div>
                             {% endfor %}
@@ -57,42 +57,46 @@
                     <div class="container-fluid">
                         <div class="hp-room-items">
                             <div class="row">
-                                {% for  hotel in hotels %}
-                                    <div class="col-lg-4 col-md-6">
-                                        <div class="hp-room-item set-bg"
-                                             data-setbg="{{ hotel.hotel_photos.first.image_hotel.url }}">
-                                            <div class="hr-text">
-                                                <h3>Khách sạn</h3>
-                                                <h2>{{ hotel.name }}</h2>
-                                                <table>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td class="r-o">Email:</td>
-                                                            <td>{{ hotel.email }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="r-o">Điện thoại:</td>
-                                                            <td>{{ hotel.contact_no }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="r-o">Địa chỉ:</td>
-                                                            <td>{{ hotel.address }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="r-o">Thành phố:</td>
-                                                            <td>{{ hotel.city }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="r-o">Dịch vụ:</td>
-                                                            <td>{{ hotel.introduce }}</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                                <a href="{% url 'hotel_rooms' pk=hotel.pk %}" class="primary-btn">Chi tiết</a>
+                                {% if hotels %}
+                                    {% for  hotel in hotels %}
+                                        <div class="col-lg-4 col-md-6">
+                                            <div class="hp-room-item set-bg"
+                                                data-setbg="{{ hotel.hotel_photos.first.image_hotel.url }}">
+                                                <div class="hr-text">
+                                                    <h3>Khách sạn</h3>
+                                                    <h2>{{ hotel.name }}</h2>
+                                                    <table>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td class="r-o">Email:</td>
+                                                                <td>{{ hotel.email }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="r-o">Điện thoại:</td>
+                                                                <td>{{ hotel.contact_no }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="r-o">Địa chỉ:</td>
+                                                                <td>{{ hotel.address }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="r-o">Thành phố:</td>
+                                                                <td>{{ hotel.city }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="r-o">Dịch vụ:</td>
+                                                                <td>{{ hotel.introduce }}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    <a href="{% url 'hotel_rooms' pk=hotel.pk %}" class="primary-btn">Chi tiết</a>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                {% endfor %}
+                                    {% endfor %}
+                                {% else %}
+                                <div class="col-lg-4 col-md-6">Không có khách sạn</div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

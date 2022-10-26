@@ -8,4 +8,5 @@ urlpatterns = [
     path('book/notify', views.booking_notify, name='booking_notify'),
     path('book/<int:book_pk>/checkin', views.guest_check_in, name='guest_check_in'),
     path('book/<int:book_pk>/hotel-cancel', views.hotel_guest_cancel, name='hotel_guest_cancel'),
+    path('book/<int:book_pk>/seen-notify', views.redirect_notify, name='redirect_notify'),
 ]

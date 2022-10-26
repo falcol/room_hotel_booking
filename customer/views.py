@@ -43,6 +43,7 @@ def guest_cancel(request, book_pk):
             book = BookingDetails.objects.get(pk=book_pk)
             book.booking_status = "KH"
             book.room.room_status = "E"
+            book.seen = True
             book.save()
             messages.success("Hủy phòng thanh công")
         except BookingDetails.DoesNotExist:

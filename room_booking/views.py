@@ -91,10 +91,10 @@ def guest_check_in(request, book_pk):
             book = BookingDetails.objects.get(pk=book_pk)
             book.booking_status = "NP"
             book.room.room_status = "L"
+            book.seen = True
             book.save()
         except BookingDetails.DoesNotExist:
             pass
-
         return redirect('my_hotel_book', hotel_pk=book.hotel.pk)
 
 
@@ -105,6 +105,7 @@ def hotel_guest_cancel(request, book_pk):
             book = BookingDetails.objects.get(pk=book_pk)
             book.booking_status = "KSH"
             book.room.room_status = "E"
+            book.seen = True
             book.save()
         except BookingDetails.DoesNotExist:
             pass
@@ -115,7 +116,19 @@ def hotel_guest_cancel(request, book_pk):
 def booking_notify(request):
     user_pk = request.GET.get("user_pk")
     hotels = HotelDetails.objects.filter(owner__pk=user_pk).values('pk')
-    books_all = BookingDetails.objects.filter(Q(hotel__pk__in=hotels) & Q(booking_status='DP'))
+    books_all = BookingDetails.objects.filter(Q(hotel__pk__in=hotels) & Q(booking_status='DP') & Q(seen=False))
     count = books_all.count()
-    books = books_all.values("booking_id", "hotel__pk")
+    books = books_all.values("booking_id", "hotel__name", "guest_name")
     return HttpResponse(json.dumps({"count": count, "books": list(books)}))
+
+
+@login_required(login_url='/signin')
+def redirect_notify(request, book_pk):
+    if request.method == 'POST':
+        try:
+            book = BookingDetails.objects.get(pk=book_pk)
+            book.seen = True
+            book.save()
+        except BookingDetails.DoesNotExist:
+            pass
+    return redirect('my_hotel_book', hotel_pk=book.hotel.pk)

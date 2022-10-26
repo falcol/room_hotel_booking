@@ -33,6 +33,9 @@
         <link rel="stylesheet"
               type="text/css"
               href="{% static 'css/slicknav.min.css' %}"/>
+        <link rel="stylesheet"
+              type="text/css"
+              href="{% static 'css/base.css' %}"/>
         <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
         <link href="https://fonts.googleapis.com/css?family=Lora:400,700&display=swap"
               rel="stylesheet"/>
@@ -57,7 +60,7 @@
                             <div class="nav-menu">
                                 <nav class="mainmenu">
                                     <ul>
-                                        <li class=" {% if menu == 'home' %} active {% endif %}">
+                                        <li class=" {% if menu == 'home' %} active{% endif %}">
                                             <a href="{% url 'home' %}">Trang chủ</a>
                                         </li>
                                         <li>
@@ -67,7 +70,7 @@
                                             <a href="#">Khách sạn đã ở</a>
                                         </li>
                                         {% if request.user.is_staff %}
-                                            <li class=" {% if menu == 'hotel' %} active {% endif %}">
+                                            <li class=" {% if menu == 'hotel' %} active{% endif %}">
                                                 {% comment %} if staff {% endcomment %}
                                                 <a href="#">Khách sạn</a>
                                                 <ul class="dropdown">
@@ -92,111 +95,119 @@
                                             <li>
                                                 <a href="{% url 'signout' %}">Đăng xuất</a>
                                             </li>
-
                                             {% if request.user.is_staff %}
                                                 <li>
-                                                    <button type="button" class="btn">
-                                                    <i class="fa fa-bell"></i>
-                                                    Đặt phòng
-                                                        <span id="notify_count" class="badge badge-danger navbar-badge"
-                                                                style="transform: translateX(40%)"></span>
-                                                </button>
-                                                </li>
-                                            {% endif %}
-                                        {% else %}
-                                            <li>
-                                                <a href="{% url 'signin' %}">Đăng nhập</a>
-                                            </li>
-                                            <li>
-                                                <a href="{% url 'signup' %}">Đăng ký</a>
+                                                    <button id="btn-bell" type="button" class="btn">
+                                                        <i class="fa fa-bell"></i>
+                                                        <span class="notify_count badge badge-danger navbar-badge"
+                                                              style="transform: translateX(40%)"></span>
+                                                    </button>
+                                                    <div class="notifications" id="box">
+                                                        <h2>
+                                                        Thông báo - <span class="notify_count"></span>
+                                                    </h2>
+                                                    <div id="notification-items">
+
+                                                    </div>
+                                                </div>
                                             </li>
                                         {% endif %}
-                                    </ul>
-                                </nav>
-                                <div class="nav-right search-switch">
-                                    <i class="icon_search"></i>
-                                </div>
+                                    {% else %}
+                                        <li>
+                                            <a href="{% url 'signin' %}">Đăng nhập</a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'signup' %}">Đăng ký</a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                            <div class="nav-right search-switch">
+                                <i class="icon_search"></i>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </header>
-        {% comment %} End Header {% endcomment %}
-        {% comment %} Alert message {% endcomment %}
-        <div>
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show"
-                         role="alert">
-                        <strong>Thông báo:</strong> {{ message }}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                {% endfor %}
-            {% endif %}
         </div>
-        {% comment %} End alert {% endcomment %}
-        <div class="main">
-            {% block body %}
-            {% endblock body %}
-        </div>
-        <div>
-            {% block footer %}
-            {% endblock footer %}
-            <!-- Footer Section Begin -->
-            <footer class="footer-section">
-                <div class="container">
-                    <div class="footer-text">
-                        <div class="row">
-                            <div class="col-lg-4">
-                                <div class="ft-about">
-                                    <div class="logo">
-                                        <a href="#">
-                                            {% comment %} <img src="img/footer-logo.png" alt=""> {% endcomment %}
-                                        </a>
-                                    </div>
-                                    <p>Chúng tôi truyền cảm hứng và tiếp cận hàng triệu khách du lịch</p>
-                                    <div class="fa-social">
-                                        <a href="#"><i class="fa fa-facebook"></i></a>
-                                        <a href="#"><i class="fa fa-twitter"></i></a>
-                                        <a href="#"><i class="fa fa-tripadvisor"></i></a>
-                                        <a href="#"><i class="fa fa-instagram"></i></a>
-                                        <a href="#"><i class="fa fa-youtube-play"></i></a>
-                                    </div>
+    </header>
+    {% comment %} End Header {% endcomment %}
+    {% comment %} Alert message {% endcomment %}
+    <div>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show"
+                     role="alert">
+                    <strong>Thông báo:</strong> {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    {% comment %} End alert {% endcomment %}
+    <div class="main">
+        {% block body %}
+        {% endblock body %}
+    </div>
+    <div>
+        {% block footer %}
+        {% endblock footer %}
+        <!-- Footer Section Begin -->
+        <footer class="footer-section">
+            <div class="container">
+                <div class="footer-text">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="ft-about">
+                                <div class="logo">
+                                    <a href="#">
+                                        {% comment %} <img src="img/footer-logo.png" alt=""> {% endcomment %}
+                                    </a>
+                                </div>
+                                <p>Chúng tôi truyền cảm hứng và tiếp cận hàng triệu khách du lịch</p>
+                                <div class="fa-social">
+                                    <a href="#"><i class="fa fa-facebook"></i></a>
+                                    <a href="#"><i class="fa fa-twitter"></i></a>
+                                    <a href="#"><i class="fa fa-tripadvisor"></i></a>
+                                    <a href="#"><i class="fa fa-instagram"></i></a>
+                                    <a href="#"><i class="fa fa-youtube-play"></i></a>
                                 </div>
                             </div>
-                            <div class="col-lg-3 offset-lg-1">
-                                <div class="ft-contact">
-                                    <h6>Liên hệ chúng tôi</h6>
-                                    <ul>
-                                        <li>(84) 0000000000</li>
-                                        <li>test@gmail.com</li>
-                                        <li>D13CNPM4 Đại học điện lực</li>
-                                    </ul>
-                                </div>
+                        </div>
+                        <div class="col-lg-3 offset-lg-1">
+                            <div class="ft-contact">
+                                <h6>Liên hệ chúng tôi</h6>
+                                <ul>
+                                    <li>(84) 0000000000</li>
+                                    <li>test@gmail.com</li>
+                                    <li>D13CNPM4 Đại học điện lực</li>
+                                </ul>
                             </div>
-                            <div class="col-lg-3 offset-lg-1">
-                                <div class="ft-newslatter">
-                                    <h6>Gửi ý kiến qua hòm thư</h6>
-                                    <p>hello@gmail.com</p>
-                                    {% comment %} <form action="#" class="fn-form">
+                        </div>
+                        <div class="col-lg-3 offset-lg-1">
+                            <div class="ft-newslatter">
+                                <h6>Gửi ý kiến qua hòm thư</h6>
+                                <p>
+                                    hello@gmail.com
+                                </p>
+                                {% comment %} <form action="#" class="fn-form">
                                         <input type="text" placeholder="Email" />
                                         <button type="submit">
                                             <i class="fa fa-send"></i>
                                         </button>
-                                    </form> {% endcomment %}
-                                </div>
+                                </form> {% endcomment %}
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="copyright-option">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-7">
-                                {% comment %} <ul>
+            </div>
+            <div class="copyright-option">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-7">
+                            {% comment %} <ul>
                                     <li>
                                         <a href="#">Contact</a>
                                     </li>
@@ -209,62 +220,99 @@
                                     <li>
                                         <a href="#">Environmental Policy</a>
                                     </li>
-                                </ul> {% endcomment %}
-                            </div>
-                            <div class="col-lg-5">
-                                <div class="co-text">
-                                    <p>
-                                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                                        Bản quyền &copy;<script>
-    document.write(new Date().getFullYear());
-</script>
-                                    </p>
-                                </div>
+                            </ul> {% endcomment %}
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="co-text">
+                                <p id="license">
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
-                {% csrf_token %}
-            </footer>
-            <!-- Footer Section End -->
-        </div>
-        {% block script %}
-        {% endblock script %}
-        <!-- Js Plugins -->
-        <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/jquery.nice-select.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/jquery.slicknav.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/owl.carousel.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
-        <script type="text/javascript">
+            </div>
+            {% csrf_token %}
+        </footer>
+        <!-- Footer Section End -->
+    </div>
+    <!-- Js Plugins -->
+    <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.nice-select.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.slicknav.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/owl.carousel.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+    <script type="text/javascript">
             var csrftoken = $("[name=csrfmiddlewaretoken]").val();
 
-            {% if request.user.is_authenticated %}
-                window.onload = function () {
+            window.onload = function() {
+                {% if request.user.is_authenticated %}
                     $.ajax({
                         url: "{% url 'booking_notify' %}",
                         type: "GET",
-                        headers:{
+                        headers: {
                             "X-CSRFToken": csrftoken
                         },
-                        data: {user_pk: {{ request.user.pk }}},
-                        dataType: 'json',
-                        success: function (response) {
-                            $("#notify_count").text(response.count)
+                        data: {
+                            user_pk: {{ request.user.pk }}
                         },
-                        error: function (request, status, error) {
+                        dataType: 'json',
+                        success: function(response) {
+                            $(".notify_count").text(response.count)
+                            if (response.count > 0) {
+                                var books = response.books
+                                books.forEach(item => {
+                                    html = `<form action="book/${item.booking_id}/seen-notify" method="post">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn w-100">
+                                                    <div class="notifications-item">
+                                                        <div class="text">
+                                                            <h4>Khách sạn ${item.hotel__name}</h4>
+                                                            <p>Khách hàng: ${item.guest_name} </p>
+                                                        </div>
+                                                    </div>
+                                                </button>
+                                            </form>`
+                                    $("#notification-items").append(html)
+                                })
+                            }
+                            else {
+                                html = "<div>Không có thông báo</div>"
+                                $("#notification-items").append(html)
+                            }
+                        },
+                        error: function(request, status, error) {
                             alert(request.responseText);
                         }
                     });
+                {% endif %}
+
+                $("#license").text(`Bản quyền ${new Date().getFullYear()}`)
+
                 }
 
-            {% endif %}
+            $(document).ready(function() {
+                var down = false;
+                $('#btn-bell').click(function(e) {
+                    var color = $(this).text();
+                    if (down) {
+                        $('#box').css('height', '0px');
+                        $('#box').css('opacity', '0');
+                        down = false;
+                    } else {
+                        $('#box').css('height', 'auto');
+                        $('#box').css('opacity', '1');
+                        down = true;
+                    }
+                });
+            });
 
-        </script>
-    </body>
+    </script>
+    {% block script %}
+    {% endblock script %}
+</body>
 </html>
