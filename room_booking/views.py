@@ -127,7 +127,6 @@ def redirect_notify(request, book_pk):
     if request.method == 'POST':
         try:
             book = BookingDetails.objects.get(pk=book_pk)
-            book.seen = True
             book.save()
         except BookingDetails.DoesNotExist:
             pass

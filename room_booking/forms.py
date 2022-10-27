@@ -4,7 +4,7 @@ from django import forms
 from django.db.models import Q
 from phonenumber_field.formfields import PhoneNumberField
 
-from .models import BookingDetails, DrinkAndFood, RoomDetails, RoomPriceDetails
+from .models import BookingDetails, DrinkAndFood, Photos, RoomDetails, RoomPriceDetails
 
 
 class RoomPriceDetailsForms(forms.ModelForm):
@@ -66,7 +66,7 @@ class RoomPriceDetailsForms(forms.ModelForm):
         super(RoomPriceDetailsForms, self).__init__(*args, **kwargs)
 
         for _, field in self.fields.items():
-            field.error_messages.update({'required': f'{field.label}không được bỏ trống'})
+            field.error_messages.update({'required': f'{field.label} không được bỏ trống'})
 
 
 class DrinkAndFoodForms(forms.ModelForm):
@@ -94,7 +94,7 @@ class DrinkAndFoodForms(forms.ModelForm):
         super(DrinkAndFoodForms, self).__init__(*args, **kwargs)
 
         for _, field in self.fields.items():
-            field.error_messages.update({'required': f'{field.label}không được bỏ trống'})
+            field.error_messages.update({'required': f'{field.label} không được bỏ trống'})
 
 
 class BookingDetailsForms(forms.ModelForm):
@@ -256,7 +256,14 @@ class PhotoForms(forms.Form):
         super(PhotoForms, self).__init__(*args, **kwargs)
 
         for _, field in self.fields.items():
-            field.error_messages.update({'required': f'{field.label}không được bỏ trống'})
+            field.error_messages.update({'required': f'{field.label} không được bỏ trống'})
+
+
+class UpdatePhotoRoom(forms.ModelForm):
+
+    class Meta:
+        model = Photos
+        fields = ['image_room']
 
 
 class SearchRoomsEmty(forms.Form):

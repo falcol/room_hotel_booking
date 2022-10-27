@@ -22,7 +22,7 @@
                     <!-- small box -->
                     <div class="small-box bg-info">
                         <div class="inner">
-                            <h3>{{ total_rooms }}</h3>
+                            <h3>{{ total_rooms|check_number_none }}</h3>
                             <p>Phòng</p>
                         </div>
                         <div class="icon">
@@ -36,7 +36,7 @@
                     <!-- small box -->
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h3>{{ total_cost__sum }} VNĐ</h3>
+                            <h3>{{ total_cost__sum|check_number_none }} VNĐ</h3>
                             <p>Tổng doanh thu</p>
                         </div>
                         <div class="icon">
@@ -50,7 +50,7 @@
                     <!-- small box -->
                     <div class="small-box bg-warning">
                         <div class="inner">
-                            <h3>{{ pk__count }}</h3>
+                            <h3>{{ pk__count|check_number_none }}</h3>
                             <p>Tổng khách thuê</p>
                         </div>
                         <div class="icon">
@@ -64,7 +64,7 @@
                     <!-- small box -->
                     <div class="small-box bg-danger">
                         <div class="inner">
-                            <h3>{{ cost_day }} VNĐ</h3>
+                            <h3>{{ cost_day|check_number_none }} VNĐ</h3>
                             <p>Doanh thu hôm nay</p>
                         </div>
                         <div class="icon">

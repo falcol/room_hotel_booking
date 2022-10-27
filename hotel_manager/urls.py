@@ -15,4 +15,6 @@ urlpatterns = [
     path('hotel/<int:room_pk>/update-room/', views.update_room_hotel, name='update_room_hotel'),
     path('hotel/<int:room_pk>/empty-room/', views.set_room_empty, name='set_room_empty'),
     path('hotel/<int:hotel_pk>/dashboard/', views.dashboard, name='dashboard'),
+    path('hotel/<int:hotel_pk>/room-prices/', views.list_room_price, name='list_room_price'),
+    path('hotel/<int:room_price_pk>/room-price-update/', views.update_room_price, name='update_room_price'),
 ]

@@ -2,9 +2,8 @@
 {% load static %}
 {% load template_support %}
 {% load crispy_forms_tags %}
-
 {% block title %}
-    Cập nhập khách sạn
+    Sửa giá phòng {{ room_price_name }}
 {% endblock title %}
 {% block body %}
     <section class="bg-image create-hotel-section pt-4 pb-4"
@@ -15,17 +14,14 @@
                     <div class="col-12 col-md-9 col-lg-7 col-xl-6">
                         <div class="card" style="border-radius: 15px;">
                             <div class="card-body p-5">
-                                <h2 class="text-uppercase text-center mb-5">Cập nhập thông tin khách sạn</h2>
+                                <h2 class="text-uppercase text-center mb-5">Sửa giá phòng {{ room_price_name }}</h2>
                                 <form action="" method="post" enctype="multipart/form-data">
                                     {% csrf_token %}
                                     {% for field in form %}
                                         {% include 'field.html' %}
                                     {% endfor %}
-                                    <div class="form-group">
-                                        {{ photo_form }}
-                                    </div>
                                     <div class="pt-2 pb-2 pr-5 justify-content-end align-items-end d-flex">
-                                        <button class="btn btn-outline-primary btn-lg" type="submit">Cập nhập</button>
+                                        <button class="btn btn-outline-primary btn-lg" type="submit">Chỉnh sửa</button>
                                     </div>
                                 </form>
                             </div>
@@ -38,6 +34,8 @@
 {% endblock body %}
 {% block footer %}
     <style type="text/css">
-
+        .nice-select, .nice-select > ul {
+            width: 100% !important;
+        }
     </style>
 {% endblock footer %}

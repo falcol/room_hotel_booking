@@ -21,7 +21,10 @@
                                     {% for field in form %}
                                         {% include 'field.html' %}
                                     {% endfor %}
-                                    <div class="form-group mb-4">{{ photo_form }}</div>
+
+                                    {% for form in photo_form %}
+                                        <div class="form-group mb-4">{{ form }}</div>
+                                    {% endfor %}
                                     <div class="pt-2 pb-2 pr-5 justify-content-end align-items-end d-flex">
                                         <button class="btn btn-outline-primary btn-lg" type="submit">Cập nhập</button>
                                     </div>

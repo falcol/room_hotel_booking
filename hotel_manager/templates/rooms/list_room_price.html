@@ -1,0 +1,58 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% load template_support %}
+{% load crispy_forms_tags %}
+{% block title %}
+    Danh sách loại phòng
+{% endblock title %}
+{% block header %}
+    <link rel="stylesheet"
+          type="text/css"
+          href="{% static 'css/adminlte.min.css' %}"/>
+    <link rel="stylesheet"
+          type="text/css"
+          href="{% static 'css/jquery.dataTables.min.css' %}"/>
+{% endblock header %}
+{% block body %}
+    <section class="hp-room-section pt-5 pb-5">
+    <div class="section-title">
+        <h2>Danh sách loại phòng của khách sạn</h2>
+    </div>
+    <div class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8">
+            <section class="hp-room-section">
+                <div class="container-fluid">
+                    <div class="hp-room-items">
+                        <div class="row">
+                            {% for room_price in room_prices %}
+                                <div class="col-lg-3 col-6">
+                                    <!-- small box -->
+                                    <div class="small-box bg-info">
+                                        <div class="inner">
+                                            <h3>{{ room_price.room_type }}</h3>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fa fa-bed" aria-hidden="true"></i>
+                                        </div>
+                                        <a href="{% url 'update_room_price' room_price_pk=room_price.pk %}" class="small-box-footer">Chi tiết<i class="fa fa-arrow-circle-right"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="col-lg-2"></div>
+    </div>
+</section>
+{% endblock body %}
+{% block footer %}
+    <style type="text/css">
+        .nice-select, .nice-select > ul {
+            width: 100% !important;
+        }
+    </style>
+{% endblock footer %}

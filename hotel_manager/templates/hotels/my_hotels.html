@@ -51,7 +51,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td>
-                                                                <a href="" class="btn text-danger primary-btn">Xóa khách sạn</a>
+                                                                <a href="{% url 'list_room_price'  hotel_pk=hotel.pk %}" class="btn text-danger primary-btn">Danh sách loại phòng</a>
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -151,6 +151,7 @@
 
         .hp-room-items .hp-room-item .hr-text .primary-btn:after {
             background: #ffffff;
+            opacity: 0.8;
         }
     </style>
 {% endblock footer %}

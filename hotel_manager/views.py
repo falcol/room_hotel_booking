@@ -11,10 +11,11 @@ from room_booking.forms import (
     RoomDetailsForms,
     RoomPriceDetailsForms,
     SearchRoomsEmty,
+    UpdatePhotoRoom,
 )
 from room_booking.models import BookingDetails, Photos, RoomDetails, RoomPriceDetails
 
-from .forms import HotelCreateForm
+from .forms import HotelCreateForm, UpdatePhotoHotel
 from .models import HotelDetails
 
 
@@ -110,13 +111,40 @@ def create_room_price(request, hotel_pk):
             room_price = form.save(commit=False)
             room_price.hotel = hotel
             room_price.save()
-        return redirect('my_hotel')
+
+            return redirect('list_room_price', hotel_pk=hotel_pk)
     else:
         form = RoomPriceDetailsForms()
 
     context = {"form": form, "screen": 'hotel'}
 
     return render(request, 'rooms/create_room_price.html', context)
+
+
+@login_required(login_url='/signin')
+def list_room_price(request, hotel_pk):
+    try:
+        room_prices = RoomPriceDetails.objects.filter(hotel__pk=hotel_pk)
+    except RoomPriceDetails.DoesNotExist:
+        room_prices = []
+    context = {"room_prices": room_prices}
+
+    return render(request, 'rooms/list_room_price.html', context)
+
+
+@login_required(login_url='/signin')
+def update_room_price(request, room_price_pk):
+    room_price = RoomPriceDetails.objects.get(pk=room_price_pk)
+
+    form = RoomPriceDetailsForms(request.POST or None, instance=room_price)
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+
+            return redirect('list_room_price', hotel_pk=room_price.hotel.pk)
+
+    context = {"form": form, "room_price_name": room_price.room_type}
+    return render(request, "rooms/update_room_price.html", context)
 
 
 @login_required(login_url='/signin')
@@ -152,17 +180,20 @@ def update_room_hotel(request, room_pk):
     try:
         room = RoomDetails.objects.get(pk=room_pk)
         room_prices = RoomPriceDetails.objects.filter(hotel__pk=room.hotel.pk)
-        photo = Photos.objects.filter(room_id=room_pk)
+        photo = Photos.objects.filter(room_id=room_pk).first()
     except (RoomDetails.DoesNotExist, RoomPriceDetails.DoesNotExist, Photos.DoesNotExist):
         pass
 
     form = RoomDetailsForms(request.POST or None, instance=room)
-    photo_form = PhotoForms(request.POST, request.FILES, instance=photo)
+    photo_form = UpdatePhotoRoom(request.POST, request.FILES, instance=photo)
+    if photo_form.is_valid():
+        photo_form.save()
+
     if form.is_valid():
         form.save()
         return redirect('my_hotel_rooms', pk=room.hotel.pk)
 
-    context = {"form": form, 'screen': 'room', "room_prices": room_prices, "photo_form": photo_form}
+    context = {"form": form, 'screen': 'room', "room_prices": room_prices, "photo_form": photo_form, "room": room}
 
     return render(request, 'rooms/update_room.html', context)
 
@@ -171,14 +202,19 @@ def update_room_hotel(request, room_pk):
 def update_hotel_info(request, hotel_pk):
     try:
         hotel = HotelDetails.objects.get(pk=hotel_pk)
+        photo = Photos.objects.filter(hotel_id=hotel_pk).first()
     except HotelDetails.DoesNotExist:
         pass
 
     form = HotelCreateForm(request.POST or None, instance=hotel)
+    photo_form = UpdatePhotoHotel(request.POST, request.FILES, instance=photo)
+    if photo_form.is_valid():
+        photo_form.save()
+
     if form.is_valid():
         form.save()
         return redirect("my_hotel")
-    context = {'form': form}
+    context = {'form': form, "photo_form": photo_form}
     return render(request, "hotels/update_hotel.html", context)
 
 

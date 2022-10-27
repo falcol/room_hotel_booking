@@ -50,12 +50,17 @@
                                                     </tbody>
                                                 </table>
                                                 <a href="{% url 'update_booking' pk=book.hotel.pk %}?bpk={{ book.booking_id }}" class="primary-btn">Chi tiết phòng</a>
-                                                <form action="{% url 'guest_cancel' book_pk=book.booking_id %}" method="post">
-                                                    {% csrf_token %}
-                                                    <button type="submit" class="btn primary-btn">
-                                                        Hủy phòng
-                                                    </button>
-                                                </form>
+                                                {% if book.booking_status == "NP" or book.booking_status == "TP" %}
+                                                    <a href="" class="primary-btn text-danger">Đã ở</a>
+                                                {% endif %}
+                                                {% if book.booking_status == "DP" %}
+                                                    <form action="{% url 'guest_cancel' book_pk=book.booking_id %}" method="post">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="btn primary-btn">
+                                                            Hủy phòng
+                                                        </button>
+                                                    </form>
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </div>

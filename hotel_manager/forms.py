@@ -2,7 +2,8 @@ from typing import Any, Dict
 
 from django import forms
 from phonenumber_field.formfields import PhoneNumberField
-from room_booking.models import BookingDetails
+
+from room_booking.models import BookingDetails, Photos
 
 from .models import HotelDetails
 
@@ -153,3 +154,10 @@ class HotelBookUpdate(forms.ModelForm):
 
         for _, field in self.fields.items():
             field.error_messages.update({'required': f'{field.label} không được bỏ trống'})
+
+
+class UpdatePhotoHotel(forms.ModelForm):
+
+    class Meta:
+        model = Photos
+        fields = ['image_hotel']

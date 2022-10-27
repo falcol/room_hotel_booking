@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.shortcuts import redirect, render
 
 from room_booking.forms import BookingDetailsForms
@@ -10,7 +11,7 @@ from room_booking.models import BookingDetails, RoomDetails
 
 @login_required(login_url='/signin')
 def my_book(request):
-    bookings = request.user.guest_bookings.filter(booking_status="DP")
+    bookings = request.user.guest_bookings.filter(Q(booking_status="DP") | Q(booking_status="NP"))
 
     context = {"bookings": bookings}
     return render(request, 'bookings/my_book.html', context)
