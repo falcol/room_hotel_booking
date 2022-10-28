@@ -77,7 +77,7 @@ def booking_checkout(request, book_pk):
     book_form = BookingCheckOutForms(request.POST or None, instance=book)
     if book_form.is_valid():
         book_form.save()
-        return redirect("/home")
+        return redirect("home")
 
     context = {"form": book_form}
 
