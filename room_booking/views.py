@@ -19,6 +19,8 @@ from .forms import BookingCheckOutForms, BookingDetailsForms
 def create_booking(request, pk):
     room_book = RoomDetails.objects.get(pk=pk)
     if request.method == 'POST':
+        request.POST = request.POST.copy()
+        request.POST['room'] = room_book.pk
         form = BookingDetailsForms(request.POST or None)
 
         if form.is_valid():

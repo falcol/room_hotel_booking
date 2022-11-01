@@ -29,6 +29,7 @@ def home(request):
             time_start = data_search.get('datetime_check_in')
             time_end = data_search.get('datetime_check_out')
             max_person = data_search.get('max_person')
+            city = data_search.get('city')
 
             books_room = BookingDetails.objects.filter(
                 (~Q(booking_status__contains='DP') | ~Q(booking_status__contains="NP")) &
@@ -37,12 +38,13 @@ def home(request):
             id_book_rooms = [room["room__id"] for room in books_room]
             all_rooms = RoomDetails.objects.filter(room_price__max_person__gte=max_person).exclude(id__in=id_book_rooms)
             hotel_ids = all_rooms.values('hotel__id').annotate(room_count=Count('hotel__id')).filter(room_count__gte=1)
-            hotels = HotelDetails.objects.filter(pk__in=[item['hotel__id'] for item in hotel_ids])
+            hotels = HotelDetails.objects.filter(
+                Q(pk__in=[item['hotel__id'] for item in hotel_ids]) & Q(city__icontains=city))
             print(hotel_ids)
             pass
     else:
         form = SearchRoomsEmty()
-    context = {"menu": "home", "hotels": hotels, 'search_form': form}
+    context = {"menu": "home", "hotels": hotels, 'search_form': form, "vietnam_city": VIETNAM_CITY}
     return render(request, "hotels/index.html", context)
 
 

@@ -119,3 +119,11 @@
         }
     </style>
 {% endblock footer %}
+{% block script %}
+    <script type="text/javascript">
+        var countries = {{ vietnam_city|safe }}
+        $("input[name='city']").autocomplete({
+            source: countries
+        });
+    </script>
+{% endblock script %}

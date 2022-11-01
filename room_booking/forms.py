@@ -103,6 +103,7 @@ class BookingDetailsForms(forms.ModelForm):
     class Meta:
         model = BookingDetails
         fields = (
+            'room',
             'guest_name',
             'guest_phone_number',
             'booking_type',
@@ -127,6 +128,9 @@ class BookingDetailsForms(forms.ModelForm):
         }
 
         widgets = {
+            "room": forms.Select(attrs={
+                "class": "form-control d-none",
+            }),
             "guest_name": forms.TextInput(attrs={
                 "class": "form-control",
                 "type": "text",
@@ -155,8 +159,9 @@ class BookingDetailsForms(forms.ModelForm):
                 room_pk = self.instance.room.pk
                 hotel_pk = self.instance.hotel.pk
             except Exception:
-                hotel_pk = 0
-                room_pk = 0
+                hotel_pk = cleaned_data.get("room").hotel.pk
+                room_pk = cleaned_data.get("room").pk
+                max_person = cleaned_data.get("room").room_price.max_person
                 pass
             check_in_time = cleaned_data.get('check_in_time')
             check_out_time = cleaned_data.get('check_out_time')
@@ -170,14 +175,17 @@ class BookingDetailsForms(forms.ModelForm):
                 self.add_error('check_in_time', 'Thời gian này đang có người ở')
                 self.add_error('check_out_time', 'Thời gian này đang có người ở')
 
-            # if cleaned_data.get('total_guests') > self.instance.room.room_price.max_person:
-            #     self.add_error('total_guests', 'Số người ở vượt quá giới hạn')
+            if cleaned_data.get('total_guests') > max_person:
+                self.add_error('total_guests', 'Số người ở vượt quá giới hạn')
 
     def __init__(self, *args, **kwargs):
         self.required = True
         super(BookingDetailsForms, self).__init__(*args, **kwargs)
 
         for _, field in self.fields.items():
+            if _ == 'room':
+                field.required = False
+            field.required = True
             field.error_messages.update({'required': f'{field.label} không được bỏ trống'})
 
 
@@ -268,6 +276,11 @@ class UpdatePhotoRoom(forms.ModelForm):
 
 class SearchRoomsEmty(forms.Form):
 
+    city = forms.CharField(
+        label='Thành phố', widget=(forms.TextInput(attrs={
+            'type': 'text',
+            'class': 'form-control',
+        })))
     datetime_check_in = forms.DateTimeField(
         label='Thời gian vào', widget=(forms.TextInput(attrs={
             'type': 'datetime-local',
