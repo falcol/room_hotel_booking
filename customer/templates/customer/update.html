@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+{% load template_support %}
+{% load crispy_forms_tags %}
+{% block title %}
+    Cập nhập thông tin người dùng
+{% endblock title %}
+{% block body %}
+    <section class="bg-image create-hotel-section pt-4 pb-4"
+             style="background-image: url('https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp');">
+        <div class="gradient-custom-4">
+            <div class="container-fluid">
+                <div class="row justify-content-center align-items-center h-100">
+                    <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+                        <div class="card" style="border-radius: 15px;">
+                            <div class="card-body p-5">
+                                <h2 class="text-uppercase text-center mb-5">Cập nhập thông tin của {{ request.user.username }}</h2>
+                                <form action="" method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    {% for field in user_form %}
+                                        {% include 'field.html' %}
+                                    {% endfor %}
+                                    {% for field in detail_form %}
+                                        {% include 'field.html' %}
+                                    {% endfor %}
+                                    <div class="pt-2 pb-2 pr-5 justify-content-end align-items-end d-flex">
+                                        <button class="btn btn-outline-primary btn-lg" type="submit">Cập nhập</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock body %}
+{% block script %}
+    <style type="text/css"></style>
+    <script type="text/javascript">
+        var countries = {{ vietnam_city|safe }}
+        $("#id_city").autocomplete({
+            source: countries
+        });
+    </script>
+{% endblock script %}

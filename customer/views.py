@@ -6,6 +6,8 @@ from django.shortcuts import redirect, render
 from room_booking.forms import BookingDetailsForms
 from room_booking.models import BookingDetails, RoomDetails
 
+from .forms import CustomerDetailsForm, UserInfoForm
+
 # Create your views here.
 
 
@@ -46,8 +48,27 @@ def guest_cancel(request, book_pk):
             book.room.room_status = "E"
             book.seen = True
             book.save()
-            messages.success("Hủy phòng thanh công")
+            messages.success(request, "Hủy phòng thanh công")
         except BookingDetails.DoesNotExist:
             pass
 
         return redirect('my_book')
+
+
+@login_required(login_url='/signin')
+def my_profile(request):
+    user_form = UserInfoForm(request.POST or None, instance=request.user)
+    detail_form = CustomerDetailsForm(request.POST or None, instance=request.user.info.first())
+
+    if request.method == "POST":
+
+        if user_form.is_valid() and detail_form.is_valid():
+            user_form.save()
+            detail_form.save()
+
+            messages.success(request, "Cập nhập thông tin thành công")
+            return redirect("home")
+
+    context = {"user_form": user_form, "detail_form": detail_form}
+
+    return render(request, "customer/update.html", context)

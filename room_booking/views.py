@@ -120,7 +120,7 @@ def booking_notify(request):
     hotels = HotelDetails.objects.filter(owner__pk=user_pk).values('pk')
     books_all = BookingDetails.objects.filter(Q(hotel__pk__in=hotels) & Q(booking_status='DP') & Q(seen=False))
     count = books_all.count()
-    books = books_all.values("booking_id", "hotel__name", "guest_name")
+    books = books_all.values("booking_id", "hotel__name", "guest_name", "hotel__hotel_photos__image_hotel")
     return HttpResponse(json.dumps({"count": count, "books": list(books)}))
 
 

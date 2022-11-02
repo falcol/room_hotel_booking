@@ -33,9 +33,7 @@
         <link rel="stylesheet"
               type="text/css"
               href="{% static 'css/slicknav.min.css' %}"/>
-        <link rel="stylesheet"
-              type="text/css"
-              href="{% static 'css/base.css' %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}"/>
         <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
         <link rel="stylesheet" type="text/css" href="{% static 'css/toastr.css' %}"/>
         <link href="https://fonts.googleapis.com/css?family=Lora:400,700&display=swap"
@@ -44,7 +42,7 @@
               rel="stylesheet"/>
         <title>
             {% block title %}
-                My amazing site
+                Đặt phòng khách sạn
             {% endblock title %}
         </title>
         {% block header %}
@@ -124,7 +122,9 @@
                                 </ul>
                             </nav>
                             <div class="nav-right search-switch">
-                                <i class="icon_search"></i>
+                                <a href="{% url 'update_profile' %}" type="button" class="btn">
+                                    <i class="fa fa-user" aria-hidden="true"></i>Thông tin
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -167,14 +167,20 @@
                                 <h6>Liên hệ chúng tôi</h6>
                                 <ul>
                                     <li>(84) 0000000000</li>
-                                    <li>test@gmail.com</li>
-                                    <li>D13CNPM4 Đại học điện lực</li>
+                                    <li>
+                                        test@gmail.com
+                                    </li>
+                                    <li>
+                                        D13CNPM4 Đại học điện lực
+                                    </li>
                                 </ul>
                             </div>
                         </div>
                         <div class="col-lg-3 offset-lg-1">
                             <div class="ft-newslatter">
-                                <h6>Gửi ý kiến qua hòm thư</h6>
+                                <h6>
+                                    Gửi ý kiến qua hòm thư
+                                </h6>
                                 <p>
                                     hello@gmail.com
                                 </p>
@@ -233,7 +239,6 @@
     <script type="text/javascript" src="{% static 'js/owl.carousel.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/toastr.min.js' %}"></script>
-
     {% if messages %}
         {% for message in messages %}
             <script type=text/javascript>
@@ -253,10 +258,9 @@
                 "hideMethod": "fadeOut"
             }
             toastr.{{ message.tags }}('{{ message }}')
-        </script>
+            </script>
         {% endfor %}
     {% endif %}
-
     <script type="text/javascript">
             var csrftoken = $("[name=csrfmiddlewaretoken]").val();
 
@@ -281,6 +285,7 @@
                                                 {% csrf_token %}
                                                 <button type="submit" class="btn w-100">
                                                     <div class="notifications-item">
+                                                        <img class="avatar" src="/media/${item.hotel__hotel_photos__image_hotel}">
                                                         <div class="text">
                                                             <h4>Khách sạn ${item.hotel__name}</h4>
                                                             <p>Khách hàng: ${item.guest_name} </p>

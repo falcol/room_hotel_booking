@@ -11,6 +11,8 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 
+from customer.models import CustomerDetails
+
 from .forms import UserRegisterForm
 from .models import User
 from .tokens import generate_token
@@ -93,6 +95,8 @@ def activate(request, uidb64, token):
         myuser.is_active = True
         # user.profile.signup_confirmation = True
         myuser.save()
+        detail = CustomerDetails.objects.create(customer_id=myuser)
+        detail.save()
         login(request, myuser)
         messages.success(request, "Tài khoản của bạn đã được kích hoạt!!")
         return redirect('home')
