@@ -2,6 +2,8 @@ from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
 from authentication.models import User
+from hotel_manager.models import HotelDetails
+from room_booking.models import RoomDetails
 
 
 class CustomerDetails(models.Model):
@@ -15,3 +17,15 @@ class CustomerDetails(models.Model):
 
     def __str__(self):
         return str(self.phone_number)
+
+
+class Comments(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
+    hotel = models.ForeignKey(HotelDetails, on_delete=models.CASCADE, related_name="comments")
+    room = models.ForeignKey(RoomDetails, on_delete=models.CASCADE, related_name="comments")
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self) -> str:
+        return self.comment

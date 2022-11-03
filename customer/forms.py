@@ -15,14 +15,13 @@ class CustomerDetailsForm(forms.ModelForm):
         model = CustomerDetails
         fields = (
             'phone_number',
-            'address',
             'city',
             'country',
         )
         labels = {
             "phone_number": "Số điện thoại",
             "address": "Địa chỉ",
-            "city": "Thuộc thành phố",
+            "city": "Hiện tại đang ở thành phố",
             "country": "Quốc gia"
         }
 

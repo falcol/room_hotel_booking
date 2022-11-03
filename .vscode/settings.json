@@ -1,7 +1,7 @@
 {
     "python.formatting.provider": "yapf",
     "python.formatting.yapfArgs": [
-        "--style={based_on_style: google, column_limit: 120, indent_width: 4,blank_line_before_nested_class_or_def: true,split_before_expression_after_opening_paren: true,split_before_logical_operator: true,split_before_first_argument: true,split_before_arithmetic_operator: true,spaces_before_comment: 4}"
+        "--style={based_on_style: google, column_limit: 120, indent_width: 4,blank_line_before_nested_class_or_def: true,split_before_expression_after_opening_paren: true,split_before_logical_operator: true,split_before_first_argument: true,split_before_arithmetic_operator: true,spaces_before_comment: 4, SPLIT_BEFORE_BITWISE_OPERATOR: true}"
     ],
     "editor.rulers": [
         120

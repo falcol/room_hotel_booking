@@ -99,7 +99,7 @@ def activate(request, uidb64, token):
         detail.save()
         login(request, myuser)
         messages.success(request, "Tài khoản của bạn đã được kích hoạt!!")
-        return redirect('home')
+        return redirect('update_profile')
     else:
         return render(request, 'activation_failed.html')
 
