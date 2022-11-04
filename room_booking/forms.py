@@ -98,7 +98,7 @@ class DrinkAndFoodForms(forms.ModelForm):
 
 
 class BookingDetailsForms(forms.ModelForm):
-    guest_phone_number = PhoneNumberField(region="VN")
+    guest_phone_number = PhoneNumberField(label="Số điện thoại", region="VN")
 
     class Meta:
         model = BookingDetails
@@ -167,10 +167,12 @@ class BookingDetailsForms(forms.ModelForm):
             check_out_time = cleaned_data.get('check_out_time')
 
             books_room = BookingDetails.objects.filter(
-                (~Q(booking_status__contains='DP') | ~Q(booking_status__contains="NP")) & Q(hotel__pk=hotel_pk) &
-                ~Q(room__pk=room_pk) & (
-                    Q(check_in_time__range=[check_in_time, check_out_time]) |
-                    Q(check_out_time__range=[check_in_time, check_out_time])))
+                (~Q(booking_status__contains='DP') | ~Q(booking_status__contains="NP")) & Q(hotel__pk=hotel_pk)
+                & ~Q(room__pk=room_pk) & (
+                    Q(check_in_time__range=[check_in_time, check_out_time])
+                    | Q(check_out_time__range=[check_in_time, check_out_time])
+                )
+            )
             if books_room:
                 self.add_error('check_in_time', 'Thời gian này đang có người ở')
                 self.add_error('check_out_time', 'Thời gian này đang có người ở')
@@ -257,7 +259,8 @@ class PhotoForms(forms.Form):
         label='Hình ảnh', required=True, widget=forms.FileInput(attrs={
             'class': 'form-control-file',
             'multiple': True
-        }))
+        })
+    )
 
     def __init__(self, *args, **kwargs):
         self.required = True
@@ -280,22 +283,26 @@ class SearchRoomsEmty(forms.Form):
         label='Thành phố', widget=(forms.TextInput(attrs={
             'type': 'text',
             'class': 'form-control',
-        })))
+        }))
+    )
     datetime_check_in = forms.DateTimeField(
         label='Thời gian vào', widget=(forms.TextInput(attrs={
             'type': 'datetime-local',
             'class': 'form-control'
-        })))
+        }))
+    )
     datetime_check_out = forms.DateTimeField(
         label='Thời gian ra', widget=(forms.TextInput(attrs={
             'type': 'datetime-local',
             'class': 'form-control'
-        })))
+        }))
+    )
     max_person = forms.IntegerField(
         label='Số người ở', widget=(forms.TextInput(attrs={
             'type': 'number',
             'class': 'form-control'
-        })))
+        }))
+    )
 
     def clean(self):
         cleaned_data = super().clean()
@@ -314,7 +321,7 @@ class SearchRoomsEmty(forms.Form):
 
 
 class BookingCheckOutForms(forms.ModelForm):
-    guest_phone_number = PhoneNumberField(region="VN")
+    guest_phone_number = PhoneNumberField(label="Số điện thoại", region="VN")
 
     class Meta:
         model = BookingDetails

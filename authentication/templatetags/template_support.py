@@ -47,4 +47,4 @@ def format_datetime_local(date):
         date = parse(str(date))
         result = datetime.strftime(date, '%Y-%m-%d %H:%M:%S')
         return result
-    return None
+    return ""

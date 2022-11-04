@@ -92,7 +92,7 @@ class HotelUpdateForm(forms.ModelForm):
 
 
 class HotelBookUpdate(forms.ModelForm):
-    guest_phone_number = PhoneNumberField(region="VN")
+    guest_phone_number = PhoneNumberField(label="Số điện thoại", region="VN")
 
     class Meta:
         model = BookingDetails

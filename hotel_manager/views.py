@@ -34,12 +34,14 @@ def home(request):
             books_room = BookingDetails.objects.filter(
                 (~Q(booking_status__contains='DP') | ~Q(booking_status__contains="NP"))
                 & (Q(check_in_time__range=[time_start, time_end])
-                   | Q(check_out_time__range=[time_start, time_end]))).values('room__id')
+                   | Q(check_out_time__range=[time_start, time_end]))
+            ).values('room__id')
             id_book_rooms = [room["room__id"] for room in books_room]
             all_rooms = RoomDetails.objects.filter(room_price__max_person__gte=max_person).exclude(id__in=id_book_rooms)
             hotel_ids = all_rooms.values('hotel__id').annotate(room_count=Count('hotel__id')).filter(room_count__gte=1)
             hotels = HotelDetails.objects.filter(
-                Q(pk__in=[item['hotel__id'] for item in hotel_ids]) & Q(city__icontains=city))
+                Q(pk__in=[item['hotel__id'] for item in hotel_ids]) & Q(city__icontains=city)
+            )
             print(hotel_ids)
             pass
     else:
@@ -242,14 +244,16 @@ def set_room_empty(request, room_pk):
 def dashboard(request, hotel_pk):
     books = BookingDetails.objects.filter(hotel__pk=hotel_pk, booking_status="TP")
     books_month = books.annotate(month=TruncMonth('check_in_time')).values('month').annotate(
-        total_cost=Sum('total_cost'), total_book=Count('pk')).order_by()
+        total_cost=Sum('total_cost'), total_book=Count('pk')
+    ).order_by()
     book_all = books.aggregate(Sum('total_cost'), Count('pk'))
     cost_day = BookingDetails.objects.filter(
-        hotel__pk=hotel_pk, booking_status="TP",
-        created_at__date=datetime.date(datetime.now())).aggregate(Sum('total_cost'))['total_cost__sum']
+        hotel__pk=hotel_pk, booking_status="TP", created_at__date=datetime.date(datetime.now())
+    ).aggregate(Sum('total_cost'))['total_cost__sum']
     total_rooms = RoomDetails.objects.filter(hotel__pk=hotel_pk).count()
     books_year = books.annotate(year=TruncYear('check_in_time')).values('year').annotate(
-        total_cost=Sum('total_cost'), total_book=Count('pk')).order_by()
+        total_cost=Sum('total_cost'), total_book=Count('pk')
+    ).order_by()
 
     context = {"books_month": books_month, "total_rooms": total_rooms, "cost_day": cost_day, "books_year": books_year}
     context.update(book_all)

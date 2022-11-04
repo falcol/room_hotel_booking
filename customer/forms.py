@@ -9,7 +9,7 @@ from .models import CustomerDetails
 
 
 class CustomerDetailsForm(forms.ModelForm):
-    phone_number = PhoneNumberField(region="VN")
+    phone_number = PhoneNumberField(label="Số điện thoại", region="VN")
 
     class Meta:
         model = CustomerDetails

@@ -12,6 +12,7 @@ class HotelDetails(models.Model):
     address = models.CharField(max_length=400, blank=True, unique=True)
     city = models.CharField(max_length=255, blank=True)
     introduce = models.TextField(blank=True)
+    rating_star = models.FloatField(blank=True, null=True)
     latitude = models.CharField(blank=True, max_length=255)
     logtitude = models.CharField(blank=True, max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)

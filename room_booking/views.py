@@ -67,7 +67,8 @@ def booking_checkout(request, book_pk):
         if book.booking_type == 0:
             more_hours = math.ceil((book.check_out_time - book.check_in_time).seconds / 3600) - 2
             book.total_cost = book.room.room_price.price_first_two_hours + (
-                more_hours * book.room.room_price.price_next_hours)
+                more_hours * book.room.room_price.price_next_hours
+            )
         if book.booking_type == 1:
             book.total_cost = book.room.room_price.price_per_night
         if book.booking_type == 2:

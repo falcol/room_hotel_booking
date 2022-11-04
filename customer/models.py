@@ -29,3 +29,15 @@ class Comments(models.Model):
 
     def __str__(self) -> str:
         return self.comment
+
+
+class RatingStars(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="rating")
+    hotel = models.ForeignKey(HotelDetails, on_delete=models.CASCADE, related_name="rating")
+    room = models.ForeignKey(RoomDetails, on_delete=models.CASCADE, related_name="rating")
+    rating = models.FloatField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self) -> str:
+        return str(self.rating)

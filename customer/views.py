@@ -2,7 +2,7 @@ import json
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
+from django.db.models import Avg, Q
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
@@ -12,7 +12,7 @@ from room_booking.forms import BookingDetailsForms
 from room_booking.models import BookingDetails, RoomDetails
 
 from .forms import CustomerDetailsForm, UserInfoForm
-from .models import Comments
+from .models import Comments, RatingStars
 
 # Create your views here.
 
@@ -94,24 +94,64 @@ def create_comment(request):
                 response = {
                     "comment": cmt,
                     "c_date": comment.created_at.strftime("%d/%m/%Y"),
-                    "user": comment.user.name,
+                    "user": comment.user.username or comment.user.name,
                 }
 
                 return HttpResponse(json.dumps(response))
-            except Exception:
+            except Exception as e:
                 return HttpResponse(json.dumps({
-                    "comments": {},
+                    "comments": None,
+                    "error": e.args,
                 }))
 
     return HttpResponse(json.dumps({
-        "comments": {},
+        "comments": None,
+        "error": "Method not allowed",
+    }))
+
+
+def create_rating(request):
+    if request.method == 'POST':
+        room_pk = request.POST.get("room_pk")
+        rating = request.POST.get('rating')
+        if room_pk and rating:
+            try:
+                room = RoomDetails.objects.get(pk=room_pk)
+                obj, create = RatingStars.objects.update_or_create(
+                    room=room, hotel=room.hotel, user=request.user, defaults={"rating": float(rating)}
+                )
+                if create:
+                    obj.save()
+
+                room.rating_star = float(rating)
+                room.save()
+
+                hotel_star = RatingStars.objects.filter(hotel=room.hotel).aggregate(Avg("rating"))
+                room.hotel.rating_star = hotel_star['rating__avg']
+                room.hotel.save()
+
+                response = {
+                    "rating": rating,
+                }
+
+                return HttpResponse(json.dumps(response))
+            except Exception as e:
+                return HttpResponse(json.dumps({
+                    "rating": None,
+                    "error": e.args,
+                }))
+
+    return HttpResponse(json.dumps({
+        "rating": None,
+        "error": "Method not allowed",
     }))
 
 
 def load_comments(request):
     room_pk = request.GET.get("room_pk")
     comments = Comments.objects.filter(room__pk=room_pk).order_by("-pk").values(
-        "comment", "created_at__year", "created_at__month", "created_at__day", "user__username", "user__name")
+        "comment", "created_at__year", "created_at__month", "created_at__day", "user__username", "user__name"
+    )
     page_number = request.GET.get("page", 1)
     comments = paginator_list_function(comments, page_number)
 
@@ -129,5 +169,8 @@ def load_comments(request):
                 "pages": comments.paginator.num_pages,
                 "previous": previous_page,
                 "next": next_page,
-                "this_page": comments.number
-            }))
+                "this_page": comments.number,
+                "per_page": comments.paginator.per_page,
+            }
+        )
+    )
