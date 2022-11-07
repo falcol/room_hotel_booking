@@ -17,4 +17,7 @@ urlpatterns = [
     path('hotel/<int:hotel_pk>/dashboard/', views.dashboard, name='dashboard'),
     path('hotel/<int:hotel_pk>/room-prices/', views.list_room_price, name='list_room_price'),
     path('hotel/<int:room_price_pk>/room-price-update/', views.update_room_price, name='update_room_price'),
+    path('hotel/<int:hotel_pk>/menus/', views.menu_food_drink, name='menu_food_drink'),
+    path('hotel/<int:hotel_pk>/menu-create/', views.create_menu, name='create_menu'),
+    path('hotel/<int:menu_pk>/menu-update/', views.update_menu, name='update_menu'),
 ]

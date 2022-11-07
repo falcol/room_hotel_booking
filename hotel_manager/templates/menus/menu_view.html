@@ -2,17 +2,50 @@
 {% load static %}
 {% load template_support %}
 {% load crispy_forms_tags %}
-
 {% block title %}
     Danh sách đồ ăn thức uống
 {% endblock title %}
 {% block body %}
-    <div class="row" style="background-color: black">
-
-    </div>
+    <section class="hp-room-section pt-5 pb-5">
+        <div class="section-title">
+            <h2>Menu khách sạn {{ hotel.name }}</h2>
+        </div>
+        <div class="row">
+            <div class="col-lg-2"></div>
+            <div class="col-lg-8">
+                <section class="hp-room-section">
+                    <div class="container-fluid">
+                        <div class="hp-room-items">
+                            <div class="row">
+                                <div class="col-lg-12"><a href="{% url 'create_menu' hotel_pk=hotel_pk %}" class="btn btn-primary">Thêm đồ ăn/nước uống</a></div>
+                                <div class="col-lg-12 row mt-3">
+                                    {% if menus %}
+                                        {% for  menu in menus %}
+                                            <div class="col-lg-3 col-md-6">
+                                                <div class="card" style="width: 18rem;">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">Tên: {{ menu.item_name }}</h5>
+                                                        <h6 class="card-subtitle mb-2 text-muted">Giá tiền: {{ menu.price }}</h6>
+                                                        <p class="card-text">Số lượng: {{ menu.total }}</p>
+                                                        <a href="{% url 'update_menu' menu_pk=menu.pk %}" class="btn text-warning">Cập nhập</a>
+                                                        <a href="#" class="btn text-danger">Xóa</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    {% else %}
+                                        <h2 class="mt-5">Không có danh sách menu đồ ăn/nước uống</h2>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="col-lg-2"></div>
+        </div>
+    </section>
 {% endblock body %}
 {% block footer %}
-    <style type="text/css">
-
-    </style>
+    <style type="text/css"></style>
 {% endblock footer %}

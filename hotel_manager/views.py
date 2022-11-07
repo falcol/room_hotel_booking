@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Count, Q, Sum
 from django.db.models.functions import TruncMonth, TruncYear
@@ -13,9 +14,15 @@ from room_booking.forms import (
     SearchRoomsEmty,
     UpdatePhotoRoom,
 )
-from room_booking.models import BookingDetails, Photos, RoomDetails, RoomPriceDetails
+from room_booking.models import (
+    BookingDetails,
+    DrinkAndFood,
+    Photos,
+    RoomDetails,
+    RoomPriceDetails,
+)
 
-from .forms import HotelCreateForm, UpdatePhotoHotel
+from .forms import CreateUpdateMenu, HotelCreateForm, UpdatePhotoHotel
 from .models import HotelDetails
 
 
@@ -86,6 +93,7 @@ def my_hotels(request):
     return render(request, 'hotels/my_hotels.html', context)
 
 
+@login_required(login_url='/signin')
 def hotel_rooms(request, pk):
     room_prices = RoomPriceDetails.objects.filter(hotel__id=pk)
 
@@ -258,3 +266,52 @@ def dashboard(request, hotel_pk):
     context = {"books_month": books_month, "total_rooms": total_rooms, "cost_day": cost_day, "books_year": books_year}
     context.update(book_all)
     return render(request, 'hotels/dashboard.html', context)
+
+
+@login_required(login_url='/signin')
+def menu_food_drink(request, hotel_pk):
+    menus = DrinkAndFood.objects.filter(hotel_id__pk=hotel_pk).order_by('item_name')
+    hotel = HotelDetails.objects.get(pk=hotel_pk)
+    context = {"menus": menus, "hotel_pk": hotel_pk, "hotel": hotel}
+    return render(request, 'menus/menu_view.html', context=context)
+
+
+@login_required(login_url='/signin')
+def create_menu(request, hotel_pk):
+    try:
+        hotel = HotelDetails.objects.get(pk=hotel_pk)
+    except HotelDetails.DoesNotExist:
+        hotel = None
+        messages.error(request, "Khách sạn không tồn tại")
+        return redirect(request.path)
+
+    form = CreateUpdateMenu(request.POST or None)
+
+    if request.method == 'POST':
+        if form.is_valid() and hotel:
+            menu = form.save(commit=False)
+            menu.hotel_id = hotel
+            menu.save()
+            messages.success(request, "Thêm mới menu thành công")
+
+            return redirect('menu_food_drink', hotel_pk=hotel_pk)
+
+    context = {"form": form, "method": "create"}
+
+    return render(request, 'menus/menu_create_update.html', context=context)
+
+
+@login_required(login_url='/signin')
+def update_menu(request, menu_pk):
+    menu = DrinkAndFood.objects.get(pk=menu_pk)
+
+    form = CreateUpdateMenu(request.POST or None, instance=menu)
+
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            return redirect('menu_food_drink', hotel_pk=menu.hotel_id.pk)
+
+    context = {"form": form, "method": "update"}
+
+    return render(request, 'menus/menu_create_update.html', context=context)

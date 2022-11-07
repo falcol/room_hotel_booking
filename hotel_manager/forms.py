@@ -3,7 +3,7 @@ from typing import Any, Dict
 from django import forms
 from phonenumber_field.formfields import PhoneNumberField
 
-from room_booking.models import BookingDetails, Photos
+from room_booking.models import BookingDetails, DrinkAndFood, Photos
 
 from .models import HotelDetails
 
@@ -161,3 +161,16 @@ class UpdatePhotoHotel(forms.ModelForm):
     class Meta:
         model = Photos
         fields = ['image_hotel']
+
+
+class CreateUpdateMenu(forms.ModelForm):
+
+    class Meta:
+        model = DrinkAndFood
+        fields = ('item_name', 'price', 'total')
+
+        labels = {
+            'item_name': 'Tên đồ ăn/nước uống',
+            'total': 'Số lượng',
+            'price': 'Giá tiền(Nghìn VNĐ)',
+        }

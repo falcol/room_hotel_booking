@@ -9,6 +9,7 @@ from hotel_manager.models import HotelDetails
 class DrinkAndFood(models.Model):
     hotel_id = models.ForeignKey(HotelDetails, on_delete=models.CASCADE, related_name="hotel_menu")
     item_name = models.CharField(max_length=255, unique=True)
+    total = models.IntegerField(default=0)
     price = models.FloatField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
