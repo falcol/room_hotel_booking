@@ -36,7 +36,7 @@
                     <!-- small box -->
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h3>{{ total_cost__sum|check_number_none }} VNĐ</h3>
+                            <h3>{{ total_cost__sum|check_number_none|currency }} VNĐ</h3>
                             <p>Tổng doanh thu</p>
                         </div>
                         <div class="icon">
@@ -64,7 +64,7 @@
                     <!-- small box -->
                     <div class="small-box bg-danger">
                         <div class="inner">
-                            <h3>{{ cost_day|check_number_none }} VNĐ</h3>
+                            <h3>{{ cost_day|check_number_none|currency }} VNĐ</h3>
                             <p>Doanh thu hôm nay</p>
                         </div>
                         <div class="icon">
@@ -93,7 +93,7 @@
                                     <tr>
                                         <td>{{ book.month|date:"d/m/Y" }}</td>
                                         <td>{{ book.total_book }}</td>
-                                        <td>{{ book.total_cost }} VNĐ</td>
+                                        <td>{{ book.total_cost|currency }} VNĐ</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -118,7 +118,7 @@
                                     <tr>
                                         <td>{{ book.year|date:"Y" }}</td>
                                         <td>{{ book.total_book }}</td>
-                                        <td>{{ book.total_cost }} VNĐ</td>
+                                        <td>{{ book.total_cost|currency }} VNĐ</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>

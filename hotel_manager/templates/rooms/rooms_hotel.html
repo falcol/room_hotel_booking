@@ -34,7 +34,7 @@
                         <img src="{{ room.room_photos.first.image_room.url }}" alt="{{ room.room_photos.first.image_name }}" height="" width="" />
                         <div class="ri-text">
                             <h4>{{ room.room_name }}/{{ room.room_price.room_type }}</h4>
-                            <h3>{{ room.room_price.price_per_night }}<span>/1 đêm</span></h3>
+                            <h3>{{ room.room_price.price_per_night|currency }}<span>/1 đêm</span></h3>
                             <table>
                                 <tbody>
                                     <tr>

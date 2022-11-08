@@ -7,7 +7,12 @@ from hotel_manager.models import HotelDetails
 
 
 class DrinkAndFood(models.Model):
+    MENU_TYPE = (
+        (0, "Đồ ăn"),
+        (1, "Nước uống"),
+    )
     hotel_id = models.ForeignKey(HotelDetails, on_delete=models.CASCADE, related_name="hotel_menu")
+    menu_type = models.IntegerField(choices=MENU_TYPE, max_length=1, default=0)
     item_name = models.CharField(max_length=255, unique=True)
     total = models.IntegerField(default=0)
     price = models.FloatField(default=0)

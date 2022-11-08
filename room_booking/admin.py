@@ -1,6 +1,13 @@
 from django.contrib import admin
-from .models import (RoomDetails, RoomPriceDetails, DrinkAndFood, BookingDetails, Photos, DrinkAndFoodOrder)
-from .forms import RoomPriceDetailsForms, DrinkAndFoodForms, BookingDetailsForms
+
+from .models import (
+    BookingDetails,
+    DrinkAndFood,
+    DrinkAndFoodOrder,
+    Photos,
+    RoomDetails,
+    RoomPriceDetails,
+)
 
 
 # Register your models here.
@@ -26,7 +33,7 @@ class RoomPriceAdmin(admin.ModelAdmin):
 
 @admin.register(DrinkAndFood)
 class DrinkAndFoodAdmin(admin.ModelAdmin):
-    form = DrinkAndFoodForms
+    # form = DrinkAndFoodForms
     pass
 
 

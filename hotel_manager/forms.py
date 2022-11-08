@@ -167,9 +167,10 @@ class CreateUpdateMenu(forms.ModelForm):
 
     class Meta:
         model = DrinkAndFood
-        fields = ('item_name', 'price', 'total')
+        fields = ('menu_type', 'item_name', 'price', 'total')
 
         labels = {
+            'menu_type': 'Loại',
             'item_name': 'Tên đồ ăn/nước uống',
             'total': 'Số lượng',
             'price': 'Giá tiền(Nghìn VNĐ)',

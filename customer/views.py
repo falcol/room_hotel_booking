@@ -9,7 +9,12 @@ from django.shortcuts import redirect, render
 from common.vietnam_province import VIETNAM_CITY
 from middleware.paginator import paginator_list_function
 from room_booking.forms import BookingDetailsForms
-from room_booking.models import BookingDetails, RoomDetails
+from room_booking.models import (
+    BookingDetails,
+    DrinkAndFood,
+    DrinkAndFoodOrder,
+    RoomDetails,
+)
 
 from .forms import CustomerDetailsForm, UserInfoForm
 from .models import Comments, RatingStars
@@ -174,3 +179,35 @@ def load_comments(request):
             }
         )
     )
+
+
+@login_required(login_url='/signin')
+def get_menu(request, hotel_pk):
+    menus = DrinkAndFood.objects.filter(hotel_pk__pk=hotel_pk).order_by("item_name")
+    context = {"menus": menus}
+    return render(request, "menu/list_order.html", context)
+
+
+def order_menu(request, book_pk):
+    if request.method == "POST":
+        menu_id = request.POST.get("menu_id")
+        total = request.POST.get("total")
+        if menu_id:
+            try:
+                menu = DrinkAndFood.objects.get(pk=menu_id)
+                book = BookingDetails.objects.get(pk=book_pk)
+                new_order, _ = DrinkAndFoodOrder.objects.update_or_create(drink_and_food=menu, book=book)
+
+                new_order.total = int(total)
+                new_order.amount = menu.price * int(total)
+                new_order.save()
+
+                response = {"sucess": True}
+
+                return HttpResponse(json.dumps(response))
+
+            except DrinkAndFood.DoesNotExist:
+                return None
+        pass
+
+    return None

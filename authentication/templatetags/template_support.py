@@ -48,3 +48,16 @@ def format_datetime_local(date):
         result = datetime.strftime(date, '%Y-%m-%d %H:%M:%S')
         return result
     return ""
+
+
+@register.filter
+def currency(money):
+    thousands_separator = "."
+    fractional_separator = ","
+    amount = "{:,.2f}".format(money)
+    if thousands_separator == ".":
+        main_currency, fractional_currency = amount.split(".")[0], amount.split(".")[1]
+        new_main_currency = main_currency.replace(",", ".")
+        amount = new_main_currency + fractional_separator + fractional_currency
+
+    return amount
