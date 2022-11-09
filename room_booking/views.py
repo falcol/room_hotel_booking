@@ -94,6 +94,7 @@ def guest_check_in(request, book_pk):
             book = BookingDetails.objects.get(pk=book_pk)
             book.booking_status = "NP"
             book.room.room_status = "L"
+            book.room.save()
             book.seen = True
             book.save()
         except BookingDetails.DoesNotExist:
@@ -108,6 +109,7 @@ def hotel_guest_cancel(request, book_pk):
             book = BookingDetails.objects.get(pk=book_pk)
             book.booking_status = "KSH"
             book.room.room_status = "E"
+            book.room.save()
             book.seen = True
             book.save()
         except BookingDetails.DoesNotExist:
@@ -130,7 +132,6 @@ def redirect_notify(request, book_pk):
     if request.method == 'POST':
         try:
             book = BookingDetails.objects.get(pk=book_pk)
-            book.save()
         except BookingDetails.DoesNotExist:
             pass
     return redirect('my_hotel_book', hotel_pk=book.hotel.pk)

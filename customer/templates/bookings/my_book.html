@@ -52,7 +52,7 @@
                                                 <a href="{% url 'update_booking' pk=book.hotel.pk %}?bpk={{ book.booking_id }}" class="primary-btn">Chi tiết phòng</a>
                                                 {% if book.booking_status == "NP" %}
                                                     <a class="primary-btn text-danger">Đang ở</a>
-                                                    <a href="" class="btn">Đồ ăn/uống</a>
+                                                    <a href="{% url 'get_menu' hotel_pk=book.hotel.pk %}" class="primary-btn">Đồ ăn/uống</a>
                                                 {% endif %}
                                                 {% if book.booking_status == "TP" %}
                                                      <a href="" class="primary-btn text-danger">Đã ở</a>

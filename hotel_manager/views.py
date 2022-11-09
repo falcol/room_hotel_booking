@@ -242,6 +242,7 @@ def set_room_empty(request, room_pk):
     try:
         room = RoomDetails.objects.get(pk=room_pk)
         room.room_status = "E"
+        room.save()
     except RoomDetails.DoesNotExist:
         pass
 

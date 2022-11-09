@@ -183,9 +183,9 @@ def load_comments(request):
 
 @login_required(login_url='/signin')
 def get_menu(request, hotel_pk):
-    menus = DrinkAndFood.objects.filter(hotel_pk__pk=hotel_pk).order_by("item_name")
+    menus = DrinkAndFood.objects.filter(hotel_id__pk=hotel_pk).order_by("item_name")
     context = {"menus": menus}
-    return render(request, "menu/list_order.html", context)
+    return render(request, "menu/list_menu_order.html", context)
 
 
 def order_menu(request, book_pk):
@@ -198,16 +198,26 @@ def order_menu(request, book_pk):
                 book = BookingDetails.objects.get(pk=book_pk)
                 new_order, _ = DrinkAndFoodOrder.objects.update_or_create(drink_and_food=menu, book=book)
 
-                new_order.total = int(total)
-                new_order.amount = menu.price * int(total)
-                new_order.save()
+                if menu.total > new_order.total:
+                    menu.total = menu.total - new_order.total
+                    menu.save()
 
-                response = {"sucess": True}
+                    new_order.total = int(total)
+                    new_order.amount = menu.price * int(total)
+                    new_order.save()
+                    response = {"success": True, "message": f"Đặt thành công {total} {menu.item_name}"}
+                    return HttpResponse(json.dumps(response))
 
-                return HttpResponse(json.dumps(response))
+                return HttpResponse(json.dumps({"success": False, "message": "Số lượng không đủ"}))
 
             except DrinkAndFood.DoesNotExist:
                 return None
         pass
 
     return None
+
+
+def list_orders(request, book_pk):
+    orders = DrinkAndFoodOrder.objects.filter(book__pk=book_pk)
+    context = {"orders": orders}
+    return render(request, "menu/list_order.html", context)

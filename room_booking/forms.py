@@ -158,6 +158,7 @@ class BookingDetailsForms(forms.ModelForm):
             try:
                 room_pk = self.instance.room.pk
                 hotel_pk = self.instance.hotel.pk
+                max_person = self.instance.max_person
             except Exception:
                 hotel_pk = cleaned_data.get("room").hotel.pk
                 room_pk = cleaned_data.get("room").pk
