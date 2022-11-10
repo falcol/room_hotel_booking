@@ -25,10 +25,9 @@
                                                     <div class="card-body">
                                                         <h5 class="card-title">Tên: {{ menu.item_name }}</h5>
                                                         <h6 class="card-subtitle mb-2 text-muted">Giá tiền: {{ menu.price|currency }} VNĐ</h6>
-                                                        <p class="card-text">Số lượng: {{ menu.total }}</p>
+                                                        <p id="total_{{ menu.id }}" class="card-text">Số lượng: {{ menu.total }}</p>
                                                         <input class="form-control" type="number" id="food_drink_{{ menu.id }}"/>
-                                                        <a href="#" class="btn text-warning">Hủy mua</a>
-                                                        <a href="#" class="btn text-danger">Mua</a>
+                                                        <a onclick="buyFood('{{ menu.id }}')" class="btn text-danger">Mua</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -49,3 +48,35 @@
 {% block footer %}
     <style type="text/css"></style>
 {% endblock footer %}
+
+{% block script %}
+    <script type="text/javascript">
+        function buyFood(menu_id) {
+            $.ajax({
+                url: "{% url 'order_menu' %}",
+                type: "POST",
+                headers: {
+                    "X-CSRFToken": '{{ csrf_token }}'
+                },
+                data: {
+                    menu_id: menu_id,
+                    book_pk: {{ book_pk }},
+                    total: $(`#food_drink_${menu_id}`).val()
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        $(`#total_${menu_id}`).text(`Số lượng: ${response.total}`)
+                        $(`#food_drink_${menu_id}`).val("")
+                        toastr.success(response.message)
+                    } else {
+                        toastr.error(response.message)
+                    }
+                },
+                error: function(request, status, error) {
+                    alert(request.responseText);
+                }
+            });
+        }
+    </script>
+{% endblock script %}

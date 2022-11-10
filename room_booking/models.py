@@ -98,7 +98,7 @@ class DrinkAndFoodOrder(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
-        return self.total
+        return str(self.drink_and_food)
 
 
 class Photos(models.Model):

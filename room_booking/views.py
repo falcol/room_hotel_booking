@@ -3,12 +3,12 @@ import math
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
 from hotel_manager.models import HotelDetails
-from room_booking.models import BookingDetails, RoomDetails
+from room_booking.models import BookingDetails, DrinkAndFoodOrder, RoomDetails
 
 from .forms import BookingCheckOutForms, BookingDetailsForms
 
@@ -73,6 +73,12 @@ def booking_checkout(request, book_pk):
             book.total_cost = book.room.room_price.price_per_night
         if book.booking_type == 2:
             book.total_cost = book.room.room_price.price_per_day
+
+        try:
+            menu = DrinkAndFoodOrder.objects.filter(book=book).aggregate(Sum('amount'))
+            book.total_cost = book.total_cost + menu['amount__sum']
+        except TypeError:
+            pass
         book.booking_status = "TP"
     except BookingDetails.DoesNotExist:
         return redirect(request.META.get('HTTP_REFERER'))

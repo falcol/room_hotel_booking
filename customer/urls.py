@@ -10,6 +10,6 @@ urlpatterns = [
     path('customer/create_comment', views.create_comment, name='create_comment'),
     path('customer/create_rating', views.create_rating, name='create_rating'),
     path('customer/load_comments', views.load_comments, name='load_comments'),
-    path('customer/<int:hotel_pk>/get_menu', views.get_menu, name='get_menu'),
-    path('customer/<int:book_pk>/order', views.order_menu, name='order_menu'),
+    path('customer/<int:book_pk>/get_menu', views.get_menu, name='get_menu'),
+    path('customer/order', views.order_menu, name='order_menu'),
 ]

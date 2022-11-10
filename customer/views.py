@@ -182,16 +182,18 @@ def load_comments(request):
 
 
 @login_required(login_url='/signin')
-def get_menu(request, hotel_pk):
+def get_menu(request, book_pk):
+    hotel_pk = BookingDetails.objects.get(booking_id=book_pk).hotel.pk
     menus = DrinkAndFood.objects.filter(hotel_id__pk=hotel_pk).order_by("item_name")
-    context = {"menus": menus}
+    context = {"menus": menus, "book_pk": book_pk}
     return render(request, "menu/list_menu_order.html", context)
 
 
-def order_menu(request, book_pk):
+def order_menu(request):
     if request.method == "POST":
         menu_id = request.POST.get("menu_id")
         total = request.POST.get("total")
+        book_pk = request.POST.get("book_pk")
         if menu_id:
             try:
                 menu = DrinkAndFood.objects.get(pk=menu_id)
@@ -202,19 +204,23 @@ def order_menu(request, book_pk):
                     menu.total = menu.total - new_order.total
                     menu.save()
 
-                    new_order.total = int(total)
-                    new_order.amount = menu.price * int(total)
+                    new_order.total = new_order.total + int(total)
+                    new_order.amount = new_order.amount + (menu.price * int(total))
                     new_order.save()
-                    response = {"success": True, "message": f"Đặt thành công {total} {menu.item_name}"}
+                    response = {
+                        "success": True,
+                        "total": menu.total,
+                        "message": f"Đặt thành công {total} {menu.item_name}"
+                    }
                     return HttpResponse(json.dumps(response))
 
                 return HttpResponse(json.dumps({"success": False, "message": "Số lượng không đủ"}))
 
             except DrinkAndFood.DoesNotExist:
-                return None
+                return HttpResponse(json.dumps({"success": False, "message": "Không có đồ ăn/nước uống này"}))
         pass
 
-    return None
+    return HttpResponse(json.dumps({"success": False, "message": "Sai method"}))
 
 
 def list_orders(request, book_pk):
