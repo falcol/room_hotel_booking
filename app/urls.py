@@ -24,6 +24,7 @@ urlpatterns = [
     path("", include('customer.urls')),
     path("", include('hotel_manager.urls')),
     path("", include('room_booking.urls')),
+    path("pay/", include('payment.urls')),
     path("__reload__/", include("django_browser_reload.urls")),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

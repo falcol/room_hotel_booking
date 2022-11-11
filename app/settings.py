@@ -115,7 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Saigon"
 
 USE_I18N = True
 
@@ -153,3 +153,10 @@ EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = 'authentication.User'
+
+# VNPAY CONFIG
+VNPAY_RETURN_URL = config("VNPAY_RETURN_URL")    # get from config
+VNPAY_PAYMENT_URL = config("VNPAY_PAYMENT_URL")    # get from config
+VNPAY_API_URL = config("VNPAY_API_URL")
+VNPAY_TMN_CODE = config("VNPAY_TMN_CODE")    # Website ID in VNPAY System, get from config
+VNPAY_HASH_SECRET_KEY = config("VNPAY_HASH_SECRET_KEY")    # Secret key for create checksum,get from config
