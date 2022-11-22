@@ -4,6 +4,7 @@ from django.db import models
 
 from authentication.models import User
 from hotel_manager.models import HotelDetails
+from payment.models import Payment
 
 
 class DrinkAndFood(models.Model):
@@ -82,6 +83,10 @@ class BookingDetails(models.Model):
     discounted_price = models.FloatField(default=0)
     booking_date = models.DateTimeField(auto_now_add=True)
     seen = models.BooleanField(default=False)
+    is_pay = models.BooleanField(default=False)
+    pay_online = models.OneToOneField(
+        Payment, on_delete=models.DO_NOTHING, related_name="pay_online", null=True, blank=True
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
