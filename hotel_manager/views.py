@@ -316,3 +316,8 @@ def update_menu(request, menu_pk):
     context = {"form": form, "method": "update"}
 
     return render(request, 'menus/menu_create_update.html', context=context)
+
+
+@login_required(login_url='/signin')
+def book_hander_in_hotel(request, hotel_pk):
+    pass

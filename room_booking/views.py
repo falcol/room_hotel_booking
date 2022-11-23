@@ -21,6 +21,7 @@ def create_booking(request, pk):
     if request.method == 'POST':
         request.POST = request.POST.copy()
         request.POST['room'] = room_book.pk
+        request.POST['pre_order'] = True
         form = BookingDetailsForms(request.POST or None)
 
         if form.is_valid():

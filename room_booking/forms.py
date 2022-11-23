@@ -103,13 +103,8 @@ class BookingDetailsForms(forms.ModelForm):
     class Meta:
         model = BookingDetails
         fields = (
-            'room',
-            'guest_name',
-            'guest_phone_number',
-            'booking_type',
-            'check_in_time',
-            'check_out_time',
-            'total_guests',
+            'room', 'guest_name', 'guest_phone_number', 'booking_type', 'check_in_time', 'check_out_time',
+            'total_guests', 'pre_order'
         )
         labels = {
             'guest': 'Khách hàng',
@@ -150,6 +145,9 @@ class BookingDetailsForms(forms.ModelForm):
                 "class": "form-control",
                 "type": "number",
             }),
+            "pre_order": forms.CheckboxInput(attrs={
+                "class": "form-control d-none",
+            })
         }
 
     def clean(self) -> Dict[str, Any]:

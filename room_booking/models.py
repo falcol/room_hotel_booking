@@ -83,6 +83,7 @@ class BookingDetails(models.Model):
     discounted_price = models.FloatField(default=0)
     booking_date = models.DateTimeField(auto_now_add=True)
     seen = models.BooleanField(default=False)
+    pre_order = models.BooleanField(default=False)
     is_pay = models.BooleanField(default=False)
     pay_online = models.OneToOneField(
         Payment, on_delete=models.DO_NOTHING, related_name="pay_online", null=True, blank=True
