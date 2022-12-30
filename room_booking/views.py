@@ -31,8 +31,11 @@ def create_booking(request, pk):
             booking.room = room_book
 
             booking.save()
-            messages.success(request, "Đặt phòng thành công")
-            return redirect('home')
+            if request.user == room_book.hotel.owner:
+                messages.success(request, "Đặt phòng thành công")
+                return redirect('home')
+            else:
+                return redirect("payment")
     else:
         form = BookingDetailsForms()
 
