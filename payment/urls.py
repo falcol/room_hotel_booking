@@ -13,15 +13,15 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.urls import re_path
+from django.urls import path, re_path
 
 from . import views
 
 urlpatterns = [
     re_path(r'^index$', views.index, name='index'),
-    re_path(r'^payment$', views.payment, name='payment'),
+    path('payment/<int:book_pk>', views.payment, name='payment'),
     re_path(r'^payment_ipn$', views.payment_ipn, name='payment_ipn'),
     re_path(r'^payment_return$', views.payment_return, name='payment_return'),
     re_path(r'^query$', views.query, name='query'),
-    re_path(r'^refund$', views.refund, name='refund'),
+    re_path('refund/<int:book_pk>', views.refund, name='payment_refund'),
 ]

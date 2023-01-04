@@ -3,25 +3,34 @@
 
     <h3>{{ title }}</h3>
     <div class="table-responsive">
-        <form action="{% url "payment" %}" id="create_form" method="post">
+        <form action="{% url "payment" book_pk=book_pk %}" id="create_form" method="post">
+            {% if check_status == "booking" %}
+                <div class="form-group">
+                    <span class="text-danger">Nếu bạn đặt phòng phải đặt cọc ít nhất 200.000 nghìn đồng</span>
+                    <span class="text-danger">Hủy đặt bạn sẽ phải trả phí 10%</span>
+                </div>
+            {% endif %}
             <div class="form-group">
                 <label for="language">Loại hàng hóa </label>
                 <select name="order_type" id="order_type" class="form-control">
                     <option value="topup">Nạp tiền điện thoại</option>
-                    <option value="billpayment">Thanh toán hóa đơn</option>
+                    <option selected value="billpayment">Thanh toán hóa đơn</option>
                     <option value="fashion">Thời trang</option>
                     <option value="other">Khác - Xem thêm tại VNPAY</option>
                 </select>
+                {% for error in form.order_type.errors %}<p style="color: red">{{ error }}</p>{% endfor %}
             </div>
             <div class="form-group">
                 <label for="order_id">Mã hóa đơn</label>
                 <input class="form-control" id="order_id"
                        name="order_id" type="text" value="{% now "YmdHis" %}"/>
+                {% for error in form.order_id.errors %}<p style="color: red">{{ error }}</p>{% endfor %}
             </div>
             <div class="form-group">
                 <label for="amount">Số tiền</label>
                 <input class="form-control" id="amount"
-                       name="amount" type="number" value="10000"/>
+                       name="amount" type="number" value="{% if check_status == 'booking' %}200000{% endif %} "/>
+                {% for error in form.amount.errors %}<p style="color: red">{{ error }}</p>{% endfor %}
             </div>
             <div class="form-group">
                 <label for="order_desc">Nội dung thanh toán</label>
@@ -31,7 +40,7 @@
                 <label for="bank_code">Ngân hàng</label>
                 <select name="bank_code" id="bank_code" class="form-control">
                     <option value="">Không chọn</option>
-                    <option value="NCB"> Ngan hang NCB</option>
+                    <option selected value="NCB"> Ngan hang NCB</option>
                     <option value="AGRIBANK"> Ngan hang Agribank</option>
                     <option value="SCB"> Ngan hang SCB</option>
                     <option value="SACOMBANK">Ngan hang SacomBank</option>
@@ -54,6 +63,7 @@
                     <option value="IVB"> Ngan hang IVB</option>
                     <option value="VISA"> Thanh toan qua VISA/MASTER</option>
                 </select>
+                {% for error in form.bank_code.errors %}<p style="color: red">{{ error }}</p>{% endfor %}
             </div>
             <div class="form-group">
                 <label for="language">Ngôn ngữ</label>

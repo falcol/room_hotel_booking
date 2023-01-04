@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -55,11 +56,15 @@ def guest_cancel(request, book_pk):
     if request.method == 'POST':
         try:
             book = BookingDetails.objects.get(pk=book_pk)
-            book.booking_status = "KH"
-            book.room.room_status = "E"
-            book.seen = True
-            book.save()
-            messages.success(request, "Hủy phòng thanh công")
+            if datetime.now() < book.check_in_time:
+                book.booking_status = "KH"
+                book.room.room_status = "E"
+                book.seen = True
+                book.save()
+                messages.success(request, "Hủy phòng thành công")
+            else:
+                request.session["refund_status"] = "guest"
+                return redirect("payment_refund", book_pk=book_pk)
         except BookingDetails.DoesNotExist:
             pass
 
@@ -227,3 +232,10 @@ def list_orders(request, book_pk):
     orders = DrinkAndFoodOrder.objects.filter(book__pk=book_pk)
     context = {"orders": orders}
     return render(request, "menu/list_order.html", context)
+
+
+def pay_online(request, book_pk):
+    if request.method == "POST":
+        request.session['payment_status'] = 'paid'
+        return redirect("payment", book_pk=book_pk)
+    pass

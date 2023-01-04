@@ -12,4 +12,5 @@ urlpatterns = [
     path('customer/load_comments', views.load_comments, name='load_comments'),
     path('customer/<int:book_pk>/get_menu', views.get_menu, name='get_menu'),
     path('customer/order', views.order_menu, name='order_menu'),
+    path('customer/<int:book_pk>/pay_online', views.pay_online, name='pay_online'),
 ]

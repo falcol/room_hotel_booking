@@ -53,11 +53,13 @@
                                         <button type="submit" class="btn primary-btn">Hủy phòng</button>
                                     </form>
                                 {% endif %}
-                                <form action="{% url 'booking_checkout' book_pk=book.pk %}">
-                                    <button type="submit" class="btn primary-btn">
-                                        Trả phòng
-                                    </button>
-                                </form>
+                                {% if book.booking_status == "NP"  %}
+                                    <form action="{% url 'booking_checkout' book_pk=book.pk %}">
+                                        <button type="submit" class="btn primary-btn">
+                                            Trả phòng
+                                        </button>
+                                    </form>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

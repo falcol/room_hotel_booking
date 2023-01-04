@@ -5,10 +5,14 @@
         <div class="panel-heading">{{ title }}</div>
         <div class="table-responsive">
             <ul class="list-group">
-                <i class="list-group-item"><a href="{% url "payment" %}">Demo Thanh toán</a></i>
+                {% if book_pk == None %}
+                    <i class="list-group-item"><a href="{% url "payment" book_pk=1 %}">Demo Thanh toán</a></i>
+                {% else %}
+                    <i class="list-group-item"><a href="{% url "payment" book_pk=book_pk %}">Demo Thanh toán</a></i>
+                {% endif %}
                 <i class="list-group-item"><a href="{% url "query" %}">Demo Query (Kiểm tra kết quả Giao dịch tại
                     VNPAY)</a></i>
-                <i class="list-group-item"><a href="{% url "refund" %}">Demo Refund (Gửi yêu cầu hoàn tiền cho giao
+                <i class="list-group-item"><a href="{% url "payment_refund" %}">Demo Refund (Gửi yêu cầu hoàn tiền cho giao
                     dịch)</a></i>
             </ul>
         </div>

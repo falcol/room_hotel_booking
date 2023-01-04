@@ -4,31 +4,36 @@
     <h3>{{ title }}</h3>
     <div class="table-responsive">
         <form action="{% url "query" %}" id="create_form" method="post">
-
+            <input name="book_pk" value="{{ book.booking_id }}" type="text" hidden />
+            {% if check_owner == False %}
+                <div class="form-group">
+                    <span>Bạn phải trả phí 10% vì đã hủy phòng</span>
+                </div>
+            {% endif %}
             <div class="form-group">
                 <label for="order_id">Mã hóa đơn</label>
                 <input class="form-control" id="order_id"
-                       name="order_id" type="text"/>
+                       name="order_id" value="{{ book.pay_online.order_id }}" type="text" {% if check_owner == False %}readonly{% endif %}/>
             </div>
             <div class="form-group">
                 <label for="order_id">Số tiền hoàn trả</label>
                 <input class="form-control" id="amount"
-                       name="amount" type="text"/>
+                       name="amount" value="{% if check_owner == False %}{{ money_refund }}{% endif %}" type="text" {% if check_owner == False %}readonly{% endif %} />
             </div>
             <div class="form-group">
                 <label for="order_id">Nội dung/lý do hoàn trả</label>
                 <input class="form-control" id="order_desc"
-                       name="order_desc" type="text"/>
+                       name="order_desc" value="{{ book.pay_online.order_desc }}" type="text"/>
             </div>
             <div class="form-group">
                 <label for="order_id">Thời gian Thanh toán</label>
                 <input class="form-control" id="trans_date"
-                       name="trans_date" type="text"/>
+                       name="trans_date" value="{{ book.pay_online.trans_date }}" type="text" {% if check_owner == False %}readonly{% endif %}/>
             </div>
             <div class="form-group">
                 <label for="order_id">Ngày GD</label>
                 <input class="form-control" id="trans_date"
-                       name="trans_date" type="text"/>
+                       name="trans_date" value="{{ book.pay_online.trans_date }}" type="text" {% if check_owner == False %}readonly{% endif %}/>
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Query</button>

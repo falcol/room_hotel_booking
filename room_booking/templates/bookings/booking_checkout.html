@@ -14,12 +14,24 @@
                     <div class="col-12 col-md-9 col-lg-7 col-xl-6">
                         <div class="card" style="border-radius: 15px;">
                             <div class="card-body p-5">
-                                <h2 class="text-uppercase text-center mb-5">Trả phòng</h2>
+                                <h2 class="text-uppercase text-center mb-5">Trả phòng: {{ room_name }}</h2>
                                 <form action="" method="post" enctype="multipart/form-data">
                                     {% csrf_token %}
                                     {% for field in form %}
-                                        {% include 'field.html' %}
+                                        {% if field.name == 'refund' %}
+                                            {% if pay_online != None %}
+                                                {% include 'field.html' %}
+                                            {% endif %}
+                                        {% else %}
+                                            {% include 'field.html' %}
+                                        {% endif %}
                                     {% endfor %}
+                                    {% if pay_online != None %}
+                                        <div class="form-group mb-4">Tiền đã đặt {{ pay_online }} VNĐ</div>
+                                        {% endif %}
+                                    {% if menu %}
+                                        <div class="form-group mb-4">Tiền đồ ăn/nước uống là {{ menu }} VNĐ</div>
+                                    {% endif %}
                                     <div class="form-group mb-4">{{ file_form }}</div>
                                     <div class="pt-2 pb-2 pr-5 justify-content-end align-items-end d-flex">
                                         <button class="btn btn-outline-primary btn-lg" type="submit">Trả phòng</button>

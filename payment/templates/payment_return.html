@@ -3,18 +3,22 @@
     <div class="panel panel-default">
         <div class="panel-heading">{{ title }}: {{ result }}</div>
         <div class="panel-body">
-            <p>order_id:{{ order_id }}</p>
-            <p>amount:{{ amount }}</p>
-            <p>order_desc:{{ order_desc }}</p>
-            <p>vnp_TransactionNo:{{ vnp_TransactionNo }}</p>
+            <p>Mã hóa đơn: {{ order_id }}</p>
+            <p>Tiền thanh toán: {{ amount }}</p>
+            <p>Nội dung thanh toán:{{ order_desc }}</p>
+            <p>vnp_TransactionNo: {{ vnp_TransactionNo }}</p>
+            <p>Mã đặt phòng: {{ book_pk }}</p>
             {% if vnp_ResponseCode == '00' %}
-                <p>vnp_ResponseCode: {{ vnp_ResponseCode }} - Thành công</p>
+                <p>Trạng thái trả tiền: {{ vnp_ResponseCode }} - Thành công</p>
             {% else %}
-                <p>vnp_ResponseCode: {{ vnp_ResponseCode }} - Lỗi</p>
+                <p>Trạng thái trả tiền: {{ vnp_ResponseCode }} - Lỗi</p>
             {% endif %}
             {% if msg %}
                 <p class="alert-warning"> {{ msg }}</p>
             {% endif %}
+        </div>
+        <div>
+            <a href="{% url 'home' %}" class="btn btn-primary">Trang chủ</a>
         </div>
     </div>
 {% endblock %}

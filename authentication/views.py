@@ -24,8 +24,8 @@ def signup(request):
     if request.user.is_authenticated:
         return redirect('home')
 
+    form = UserRegisterForm(request.POST or None)
     if request.method == "POST":
-        form = UserRegisterForm(request.POST)
 
         if form.is_valid():
             form.save()
@@ -59,7 +59,8 @@ def signup(request):
                         'domain': current_site.domain,
                         'uid': urlsafe_base64_encode(force_bytes(myuser.pk)),
                         'token': generate_token.make_token(myuser)
-                    })
+                    }
+                )
                 email = EmailMessage(
                     email_subject,
                     message2,
@@ -76,8 +77,6 @@ def signup(request):
                 print("Send mail failed")
 
             return redirect('signin')
-    else:
-        form = UserRegisterForm()
 
     context = {'register_form': form}
 

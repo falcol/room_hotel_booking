@@ -52,6 +52,12 @@
                                                 {% if book.booking_status == "NP" %}
                                                 <a class="primary-btn text-danger">Đang ở</a>
                                                 <a href="{% url 'get_menu' book_pk=book.booking_id %}" class="primary-btn">Đồ ăn/uống</a>
+                                                <form action="{% url 'pay_online' book_pk=book.booking_id %}" method="post">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn primary-btn">
+                                                        Thanh toán
+                                                    </button>
+                                                </form>
                                                 {% endif %}
                                                 {% if book.booking_status == "TP" %}
                                                 <a href="" class="primary-btn text-danger">Đã ở</a>

@@ -103,8 +103,13 @@ class BookingDetailsForms(forms.ModelForm):
     class Meta:
         model = BookingDetails
         fields = (
-            'room', 'guest_name', 'guest_phone_number', 'booking_type', 'check_in_time', 'check_out_time',
-            'total_guests', 'pre_order'
+            'room',
+            'guest_name',
+            'guest_phone_number',
+            'booking_type',
+            'check_in_time',
+            'check_out_time',
+            'total_guests',
         )
         labels = {
             'guest': 'Khách hàng',
@@ -145,9 +150,6 @@ class BookingDetailsForms(forms.ModelForm):
                 "class": "form-control",
                 "type": "number",
             }),
-            "pre_order": forms.CheckboxInput(attrs={
-                "class": "form-control d-none",
-            })
         }
 
     def clean(self) -> Dict[str, Any]:
@@ -321,6 +323,9 @@ class SearchRoomsEmty(forms.Form):
 
 class BookingCheckOutForms(forms.ModelForm):
     guest_phone_number = PhoneNumberField(label="Số điện thoại", region="VN")
+    refund = forms.BooleanField(
+        label="Hoàn trả", required=False, widget=forms.CheckboxInput(attrs={"class": "form-check-input"})
+    )
 
     class Meta:
         model = BookingDetails
@@ -331,7 +336,7 @@ class BookingCheckOutForms(forms.ModelForm):
             'booking_status',
             'check_in_time',
             'check_out_time',
-            'room',
+        # 'room',
             'total_guests',
             'total_cost',
             'discounted_price',
@@ -345,10 +350,10 @@ class BookingCheckOutForms(forms.ModelForm):
             'booking_status': 'Trạng thái',
             'check_in_time': 'Thời gian nhận phòng',
             'check_out_time': 'Thời gian trả phòng',
-            'room': 'Phòng',
+            'room': 'Id Phòng',
             'total_guests': 'Số người',
             'drink_and_food': 'Menu',
-            'total_cost': 'Tổng tiền',
+            'total_cost': 'Tổng tiền (VNĐ)',
             'discounted_price': 'Giảm giá',
         }
 

@@ -1,5 +1,6 @@
 import json
 import math
+from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -30,12 +31,17 @@ def create_booking(request, pk):
             booking.hotel = room_book.hotel
             booking.room = room_book
 
-            booking.save()
+            book = booking.save()
             if request.user == room_book.hotel.owner:
                 messages.success(request, "Đặt phòng thành công")
                 return redirect('home')
             else:
-                return redirect("payment")
+                book_pre = BookingDetails.objects.get(booking_id=book.booking_id)
+                book_pre.pre_order = True
+                book_pre.save()
+                request.session['payment_status'] = 'booking'
+                messages.success(request, "Bạn cần đặt cọc để đặt phòng")
+                return redirect("payment", book_pk=book_pre.booking_id)
     else:
         form = BookingDetailsForms()
 
@@ -88,11 +94,25 @@ def booking_checkout(request, book_pk):
         return redirect(request.META.get('HTTP_REFERER'))
 
     book_form = BookingCheckOutForms(request.POST or None, instance=book)
-    if book_form.is_valid():
-        book_form.save()
-        return redirect("home")
+    if request.method == 'POST':
+        if book_form.is_valid():
+            room = RoomDetails.objects.get(pk=book.room.pk)
+            room.room_status = "E"
+            room.save()
+            book_form.save()
+            if book_form.cleaned_data['refund'] is False:
+                messages.success(request, "Trả phòng thành công")
+                return redirect("home")
+            request.session["refund_status"] = "hotel"
+            return redirect("payment_refund", book_pk=book_pk)
 
-    context = {"form": book_form}
+    pay_online = None
+    if book.pay_online is not None:
+        pay_online = book.pay_online.amount
+
+    room_name = book.room.room_name
+
+    context = {"form": book_form, "pay_online": pay_online, "menu": menu['amount__sum'], "room_name": room_name}
 
     return render(request, 'bookings/booking_checkout.html', context)
 
@@ -102,6 +122,21 @@ def guest_check_in(request, book_pk):
     if request.method == 'POST':
         try:
             book = BookingDetails.objects.get(pk=book_pk)
+            if book.pre_order:
+                if book.pay_online is not None:
+                    if book.pay_online.amount < 200000:
+                        messages.warning(request, "Khách chưa đặt cọc đủ tiền phòng")
+                        return redirect(request.path)
+                    else:
+                        book.booking_status = "NP"
+                        book.room.room_status = "L"
+                        book.room.save()
+                        book.seen = True
+                        book.save()
+                        return redirect('my_hotel_book', hotel_pk=book.hotel.pk)
+                else:
+                    messages.warning(request, "Khách chưa đặt cọc đủ tiền phòng")
+                    return redirect(request.path)
             book.booking_status = "NP"
             book.room.room_status = "L"
             book.room.save()
@@ -117,11 +152,14 @@ def hotel_guest_cancel(request, book_pk):
     if request.method == 'POST':
         try:
             book = BookingDetails.objects.get(pk=book_pk)
-            book.booking_status = "KSH"
-            book.room.room_status = "E"
-            book.room.save()
-            book.seen = True
-            book.save()
+            if datetime.now() < book.check_in_time:
+                book.booking_status = "KSH"
+                book.room.room_status = "E"
+                book.room.save()
+                book.seen = True
+                book.save()
+            else:
+                return redirect('payment_refund', book_pk=book_pk)
         except BookingDetails.DoesNotExist:
             pass
 

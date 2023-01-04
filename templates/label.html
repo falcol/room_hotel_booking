@@ -1,3 +1,3 @@
-<label for='{{ field.id_for_label }}' class="col-12 text-blue-dark">
+<label for='{{ field.id_for_label }}' class="col-12 text-blue-dark {% if field.name == 'room' %}d-none{%endif%}">
     {{ field.label }}
 </label>

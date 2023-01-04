@@ -6,8 +6,13 @@ import urllib.request
 from datetime import datetime
 
 from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
+
+from payment.models import Payment
+from room_booking.models import BookingDetails
 
 from .forms import PaymentForm
 from .vnpay import vnpay
@@ -23,15 +28,18 @@ def hmacsha512(key, data):
     return hmac.new(byteKey, byteData, hashlib.sha512).hexdigest()
 
 
-def payment(request):
-
+def payment(request, book_pk):
+    form = PaymentForm(request.POST or None)
+    try:
+        check_status = request.session.get('payment_status', False)
+    except KeyError:
+        check_status = None
     if request.method == 'POST':
         # Process input data and build url payment
-        form = PaymentForm(request.POST)
         if form.is_valid():
             order_type = form.cleaned_data['order_type']
             order_id = form.cleaned_data['order_id']
-            amount = form.cleaned_data['amount']
+            amount = form.cleaned_data['amount'] * 100
             order_desc = form.cleaned_data['order_desc']
             bank_code = form.cleaned_data['bank_code']
             language = form.cleaned_data['language']
@@ -57,14 +65,42 @@ def payment(request):
 
             vnp.requestData['vnp_CreateDate'] = datetime.now().strftime('%Y%m%d%H%M%S')    # 20150410063022
             vnp.requestData['vnp_IpAddr'] = ipaddr
-            vnp.requestData['vnp_ReturnUrl'] = settings.VNPAY_RETURN_URL
+            vnp.requestData['vnp_ReturnUrl'] = settings.VNPAY_RETURN_URL + f"?book_pk={book_pk}"
             vnpay_payment_url = vnp.get_payment_url(settings.VNPAY_PAYMENT_URL, settings.VNPAY_HASH_SECRET_KEY)
             print(vnpay_payment_url)
-            return redirect(vnpay_payment_url)
+
+            try:
+                book = BookingDetails.objects.get(booking_id=book_pk)
+                if book.pay_online:
+                    book.pay_online.order_id = order_id
+                    book.pay_online.order_type = order_type
+                    book.pay_online.amount = amount / 100
+                    book.pay_online.order_desc = order_desc
+                    book.pay_online.bank_code = bank_code
+                    book.pay_online.language = language
+                else:
+                    pay = Payment()
+                    pay.order_id = order_id
+                    pay.order_type = order_type
+                    pay.amount = amount / 100
+                    pay.order_desc = order_desc
+                    pay.bank_code = bank_code
+                    pay.language = language
+                    pay.save()
+                    book.pay_online = pay
+
+                book.pre_order = True
+                book.save()
+            except BookingDetails.DoesNotExist:
+                pass
+
+            return redirect(vnpay_payment_url, book_pk=book_pk)
         else:
-            print("Form input not validate")
+            context = {"title": "Thanh toán", "book_pk": book_pk, "form": form, "check_status": check_status}
+            return render(request, "payment.html", context)
     else:
-        return render(request, "payment.html", {"title": "Thanh toán"})
+        context = {"title": "Thanh toán", "book_pk": book_pk, "form": form, "check_status": check_status}
+        return render(request, "payment.html", context)
 
 
 def payment_ipn(request):
@@ -120,12 +156,24 @@ def payment_return(request):
         order_desc = inputData['vnp_OrderInfo']
         vnp_TransactionNo = inputData['vnp_TransactionNo']
         vnp_ResponseCode = inputData['vnp_ResponseCode']
+        book_pk = inputData['book_pk']
         vnp_TmnCode = inputData['vnp_TmnCode']
         vnp_PayDate = inputData['vnp_PayDate']
         vnp_BankCode = inputData['vnp_BankCode']
         vnp_CardType = inputData['vnp_CardType']
         if vnp.validate_response(settings.VNPAY_HASH_SECRET_KEY):
             if vnp_ResponseCode == "00":
+                if book_pk and request.session.get("payment_status", False) == 'paid':
+                    book = BookingDetails.objects.get(booking_id=book_pk)
+                    book.total_cost = book.pay_online.amount + amount
+                    book.booking_status = "TP"
+                    book.room.room_status = "E"
+                    book.room.save()
+                    book.is_pay = True
+                    book.pay_online.amount = book.pay_online.amount + amount
+                    book.pay_online.save()
+                    book.save()
+                request.session['payment_status'] = ''
                 return render(
                     request, "payment_return.html", {
                         "title": "Kết quả thanh toán",
@@ -134,7 +182,8 @@ def payment_return(request):
                         "amount": amount,
                         "order_desc": order_desc,
                         "vnp_TransactionNo": vnp_TransactionNo,
-                        "vnp_ResponseCode": vnp_ResponseCode
+                        "vnp_ResponseCode": vnp_ResponseCode,
+                        "book_pk": book_pk
                     }
                 )
             else:
@@ -146,7 +195,8 @@ def payment_return(request):
                         "amount": amount,
                         "order_desc": order_desc,
                         "vnp_TransactionNo": vnp_TransactionNo,
-                        "vnp_ResponseCode": vnp_ResponseCode
+                        "vnp_ResponseCode": vnp_ResponseCode,
+                        "book_pk": book_pk
                     }
                 )
         else:
@@ -195,8 +245,20 @@ def query(request):
         return render(request, "query.html", {"title": "Kiểm tra kết quả giao dịch", "data": vnp.responseData})
 
 
-def refund(request):
-    return render(request, "refund.html", {"title": "Gửi yêu cầu hoàn tiền"})
+@login_required(login_url='/signin')
+def refund(request, book_pk):
+    if book_pk is None:
+        return redirect("home")
+    book = BookingDetails.objects.get(booking_id=book_pk)
+    check_owner = False
+    if request.user == book.hotel.owner:
+        check_owner = True
+    if book.pay_online is None:
+        messages.warning(request, "Không có hóa đơn")
+        return redirect('home')
+    money_refund = book.pay_online.amount * 90 / 100
+    context = {"title": "Gửi yêu cầu hoàn tiền", "book": book, "check_owner": check_owner, "money_refund": money_refund}
+    return render(request, "refund.html", context)
 
 
 def get_client_ip(request):
