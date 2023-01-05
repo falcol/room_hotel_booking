@@ -31,16 +31,16 @@ def create_booking(request, pk):
             booking.hotel = room_book.hotel
             booking.room = room_book
 
-            book = booking.save()
+            booking.save()
             if request.user == room_book.hotel.owner:
                 messages.success(request, "Đặt phòng thành công")
                 return redirect('home')
             else:
-                book_pre = BookingDetails.objects.get(booking_id=book.booking_id)
+                book_pre = BookingDetails.objects.get(booking_id=booking.booking_id)
                 book_pre.pre_order = True
                 book_pre.save()
                 request.session['payment_status'] = 'booking'
-                messages.success(request, "Bạn cần đặt cọc để đặt phòng")
+                messages.success(request, "Đặt phòng thành công")
                 return redirect("payment", book_pk=book_pre.booking_id)
     else:
         form = BookingDetailsForms()

@@ -336,7 +336,7 @@ class BookingCheckOutForms(forms.ModelForm):
             'booking_status',
             'check_in_time',
             'check_out_time',
-        # 'room',
+            'room',
             'total_guests',
             'total_cost',
             'discounted_price',
@@ -388,9 +388,8 @@ class BookingCheckOutForms(forms.ModelForm):
                 "class": "form-control",
                 "type": "number",
             }),
-            'room': forms.TextInput(attrs={
-                "class": "form-control",
-                "type": "number",
+            'room': forms.Select(attrs={
+                "class": "form-control d-none",
             }),
         }
 

@@ -4,16 +4,6 @@
     Đăng nhập
 {% endblock title %}
 {% block body %}
-    {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} alert-dismissible fade show"
-             role="alert">
-            <strong>Message:</strong> {{ message }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    {% endfor %}
-
     <section class="vh-100 bg-image"
              style="background-image: url('https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp');">
         <div class="mask d-flex align-items-center h-100 gradient-custom-3">
@@ -32,6 +22,7 @@
                                                id="username"
                                                name="username"
                                                placeholder="Nhập tên tài khoản"
+                                               value="{{username}}"
                                                Required />
                                     </div>
                                     <div class="form-group">
@@ -41,6 +32,7 @@
                                                id="password"
                                                name="password"
                                                placeholder="Nhập mật khẩu"
+                                               value="{{password}}"
                                                Required />
                                     </div>
                                     <div class="d-flex justify-content-center">

@@ -113,10 +113,13 @@ def signin(request):
     if request.GET.get('next'):
         next_redirect = request.GET.get('next')
 
+    context = {"username": "", "password": ""}
+
     if request.method == 'POST':
         username = request.POST['username']
         pass1 = request.POST['password']
 
+        context = {"username": username, "password": pass1}
         user = authenticate(username=username, password=pass1)
 
         if user is not None:
@@ -128,12 +131,16 @@ def signin(request):
             return redirect('home')
         else:
             messages.error(request, "Đăng nhập thất bại, thông tin tài khoản hoặc mật khẩu không chính xác!!")
-            return redirect('home')
-
-    return render(request, "signin.html")
+            return redirect(request.path)
+    return render(request, "signin.html", context)
 
 
 def signout(request):
+    try:
+        del request.session['refund_status']
+        del request.session['payment_status']
+    except KeyError:
+        pass
     logout(request)
     messages.success(request, "Đăng xuất thành công!!")
     return redirect('home')

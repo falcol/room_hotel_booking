@@ -40,7 +40,7 @@
                name="{{ field.name }}"
                class="{{ field.field.widget.attrs.class }} form-control"
                placeholder="{{ field.label }}"
-               value="{% if request.user.is_authenticated %}{% if field.name == 'guest_name' %}{{ request.user.name|check_value_none }}{% elif field.field.widget.input_type == 'tel'  %}{{ request.user.info.first|check_value_none }}{% else %}{{ field.value|check_value_none }}{% endif %}{% else %}{{ field.value|check_value_none }}{% endif %}"/>
+               value="{% if request.user.is_authenticated %}{% if field.name == 'guest_name' %}{{ request.user.name|check_value_none }}{% elif field.field.widget.input_type == 'tel'  %}{{ request.user.info.first|check_value_none }}{% else %}{{ field.value|check_value_none }}{% endif %}{% else %}{{ field.value|check_value_none }}{% endif %}{% if field.name == 'discounted_price' %}0{% endif %}"/>
     {% elif field.field.widget.input_type == 'datetime-local' %}
         {% include 'label.html' %}
         <input type="{{ field.field.widget.input_type }}"

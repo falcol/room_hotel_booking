@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Kích hoạt thất bại</title>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/404.css' %}" />
+    <link rel="icon" type="image/x-icon" href="{% static 'images/404/tsParticles-64.png' %}">
+</head>
+
+<body class="permission_denied">
+    <div id="tsparticles"></div>
+    <div class="denied__wrapper">
+        <h1>LỖI</h1>
+        <h3>Kích hoạt tài khoản <span>Thất bại</span>Thử lại hoặc liên hệ với người hỗ trợ để được giải quyết</h3>
+        <img id="astronaut" src="{% static 'images/404/astronaut.svg' %}" />
+        <img id="planet" src="{% static 'images/404/planet.svg' %}" />
+        <a href="{% url 'home' %}"><button class="denied__link">Trang chủ</button></a>
+    </div>
+
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/tsparticles@2.3.4/tsparticles.bundle.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/404.js' %}"></script>
+
+</html>
