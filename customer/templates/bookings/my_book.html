@@ -70,6 +70,14 @@
                                                             Hủy phòng
                                                         </button>
                                                     </form>
+                                                    {% if book.pre_order == True and book.pay_online is None or book.pay_online.amount < 200000 %}
+                                                        <form action="{% url 'repay_book' book_pk=book.booking_id %}" method="post">
+                                                            {% csrf_token %}
+                                                            <button type="submit" class="btn primary-btn">
+                                                                Đặt tiền
+                                                            </button>
+                                                        </form>
+                                                    {% endif %}
                                                 {% endif %}
                                             </div>
                                         </div>

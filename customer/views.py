@@ -239,3 +239,10 @@ def pay_online(request, book_pk):
         request.session['payment_status'] = 'paid'
         return redirect("payment", book_pk=book_pk)
     pass
+
+
+def repay_book(request, book_pk):
+    if request.method == "POST":
+        request.session['payment_status'] = 'booking'
+        return redirect("payment", book_pk=book_pk)
+    pass

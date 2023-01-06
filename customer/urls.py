@@ -13,4 +13,5 @@ urlpatterns = [
     path('customer/<int:book_pk>/get_menu', views.get_menu, name='get_menu'),
     path('customer/order', views.order_menu, name='order_menu'),
     path('customer/<int:book_pk>/pay_online', views.pay_online, name='pay_online'),
+    path('customer/<int:book_pk>/repay_book', views.repay_book, name='repay_book'),
 ]

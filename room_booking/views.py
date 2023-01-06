@@ -100,7 +100,7 @@ def booking_checkout(request, book_pk):
             room.room_status = "E"
             room.save()
             book_form.save()
-            if book_form.cleaned_data['refund'] is False:
+            if book_form.cleaned_data['refund'] is None:
                 messages.success(request, "Trả phòng thành công")
                 return redirect("home")
             request.session["refund_status"] = "hotel"

@@ -28,12 +28,12 @@
             <div class="form-group">
                 <label for="order_id">Thời gian Thanh toán</label>
                 <input class="form-control" id="trans_date"
-                       name="trans_date" value="{{ book.pay_online.trans_date }}" type="text" {% if check_owner == False %}readonly{% endif %}/>
+                       name="trans_date" value="{{ book.pay_online.created_at }}" type="text" {% if check_owner == False %}readonly{% endif %}/>
             </div>
             <div class="form-group">
                 <label for="order_id">Ngày GD</label>
                 <input class="form-control" id="trans_date"
-                       name="trans_date" value="{{ book.pay_online.trans_date }}" type="text" {% if check_owner == False %}readonly{% endif %}/>
+                       name="trans_date" value="{{ book.pay_online.created_at }}" type="text" {% if check_owner == False %}readonly{% endif %}/>
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Query</button>

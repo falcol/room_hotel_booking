@@ -71,18 +71,11 @@ def payment(request, book_pk):
 
             try:
                 book = BookingDetails.objects.get(booking_id=book_pk)
-                if book.pay_online:
-                    book.pay_online.order_id = order_id
-                    book.pay_online.order_type = order_type
-                    book.pay_online.amount = amount / 100
-                    book.pay_online.order_desc = order_desc
-                    book.pay_online.bank_code = bank_code
-                    book.pay_online.language = language
-                else:
+                if book.pay_online is None:
                     pay = Payment()
                     pay.order_id = order_id
                     pay.order_type = order_type
-                    pay.amount = amount / 100
+                    pay.amount = 0
                     pay.order_desc = order_desc
                     pay.bank_code = bank_code
                     pay.language = language
@@ -173,6 +166,12 @@ def payment_return(request):
                     book.pay_online.amount = book.pay_online.amount + amount
                     book.pay_online.save()
                     book.save()
+
+                if book_pk and request.session.get("payment_status", False) == 'booking':
+                    book = BookingDetails.objects.get(booking_id=book_pk)
+                    if book.pay_online is not None:
+                        book.pay_online.amount = book.pay_online.amount + amount
+                        book.pay_online.save()
                 request.session['payment_status'] = ''
                 return render(
                     request, "payment_return.html", {

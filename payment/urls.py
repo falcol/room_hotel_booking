@@ -23,5 +23,5 @@ urlpatterns = [
     re_path(r'^payment_ipn$', views.payment_ipn, name='payment_ipn'),
     re_path(r'^payment_return$', views.payment_return, name='payment_return'),
     re_path(r'^query$', views.query, name='query'),
-    re_path('refund/<int:book_pk>', views.refund, name='payment_refund'),
+    path('refund/<int:book_pk>', views.refund, name='payment_refund'),
 ]
