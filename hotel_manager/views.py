@@ -7,6 +7,7 @@ from django.db.models.functions import TruncMonth, TruncYear
 from django.shortcuts import redirect, render
 
 from common.vietnam_province import VIETNAM_CITY
+from middleware.paginator import paginator_list_function
 from room_booking.forms import (
     PhotoForms,
     RoomDetailsForms,
@@ -25,10 +26,20 @@ from room_booking.models import (
 from .forms import CreateUpdateMenu, HotelCreateForm, UpdatePhotoHotel
 from .models import HotelDetails
 
+hotel_search = None
+data_search_global = None
+
 
 # Create your views here.
 def home(request):
     hotels = HotelDetails.objects.all().order_by("-id")
+    global hotel_search
+    global data_search_global
+
+    if not request.GET.get("page"):
+        data_search_global = None
+        hotel_search = None
+
     if request.method == "POST":
         form = SearchRoomsEmty(request.POST)
         if form.is_valid():
@@ -49,11 +60,17 @@ def home(request):
             hotels = HotelDetails.objects.filter(
                 Q(pk__in=[item['hotel__id'] for item in hotel_ids]) & Q(city__icontains=city)
             )
+            hotel_search = hotels
+            data_search_global = request.POST
             print(hotel_ids)
             pass
     else:
-        form = SearchRoomsEmty()
-    context = {"menu": "home", "hotels": hotels, 'search_form': form, "vietnam_city": VIETNAM_CITY}
+        if hotel_search is not None:
+            hotels = hotel_search
+        form = SearchRoomsEmty(data_search_global or None)
+
+    hotels = paginator_list_function(hotels, request.GET.get("page"))
+    context = {"menu": "home", "hotels": hotels, 'search_form': form, "vietnam_city": VIETNAM_CITY, "pages": hotels}
     return render(request, "hotels/index.html", context)
 
 
@@ -139,7 +156,7 @@ def list_room_price(request, hotel_pk):
         room_prices = RoomPriceDetails.objects.filter(hotel__pk=hotel_pk)
     except RoomPriceDetails.DoesNotExist:
         room_prices = []
-    context = {"room_prices": room_prices}
+    context = {"room_prices": room_prices, "hotel_pk": hotel_pk}
 
     return render(request, 'rooms/list_room_price.html', context)
 

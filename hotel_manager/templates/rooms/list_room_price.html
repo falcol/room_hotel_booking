@@ -1,4 +1,3 @@
-
 {% extends "base.html" %}
 {% load static %}
 {% load template_support %}
@@ -16,42 +15,48 @@
 {% endblock header %}
 {% block body %}
     <section class="hp-room-section pt-5 pb-5">
-    <div class="section-title">
-        <h2>Danh sách loại phòng của khách sạn</h2>
-    </div>
-    <div class="row">
-        <div class="col-lg-2"></div>
-        <div class="col-lg-8">
-            <section class="hp-room-section">
-                <div class="container-fluid">
-                    <div class="hp-room-items">
-                        <div class="row">
-                            {% for room_price in room_prices %}
-                                <div class="col-lg-3 col-6">
-                                    <!-- small box -->
-                                    <div class="small-box bg-info">
-                                        <div class="inner">
-                                            <h3>{{ room_price.room_type }}</h3>
-                                        </div>
-                                        <div class="icon">
-                                            <i class="fa fa-bed" aria-hidden="true"></i>
-                                        </div>
-                                        <a href="{% url 'update_room_price' room_price_pk=room_price.pk %}" class="small-box-footer">Chi tiết<i class="fa fa-arrow-circle-right"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endfor %}
-                    </div>
-                </div>
-            </section>
+        <div class="section-title">
+            <h2>Danh sách loại phòng của khách sạn</h2>
         </div>
-        <div class="col-lg-2"></div>
-    </div>
-</section>
+        <div class="row">
+            <div class="col-lg-12 text-center mb-5">
+                <a href="{% url 'hotel_room_price' hotel_pk=hotel_pk %}"
+                   class="btn btn-primary">Thêm loại phòng khách sạn</a>
+            </div>
+            <div class="col-lg-2"></div>
+            <div class="col-lg-8">
+                <section class="hp-room-section">
+                    <div class="container-fluid">
+                        <div class="hp-room-items">
+                            <div class="row">
+                                {% for room_price in room_prices %}
+                                    <div class="col-lg-3 col-6">
+                                        <!-- small box -->
+                                        <div class="small-box bg-info">
+                                            <div class="inner">
+                                                <h3>{{ room_price.room_type }}</h3>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="fa fa-bed" aria-hidden="true"></i>
+                                            </div>
+                                            <a href="{% url 'update_room_price' room_price_pk=room_price.pk %}"
+                                               class="small-box-footer">Chi tiết<i class="fa fa-arrow-circle-right"></i></a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="col-lg-2"></div>
+        </div>
+    </section>
 {% endblock body %}
 {% block footer %}
     <style type="text/css">
-        .nice-select, .nice-select > ul {
+        .nice-select,
+        .nice-select>ul {
             width: 100% !important;
         }
     </style>

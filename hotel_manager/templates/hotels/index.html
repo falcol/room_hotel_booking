@@ -102,7 +102,13 @@
                     </div>
                 </section>
             </div>
-            <div class="col-lg-2"></div>
+            <div class="col-lg-2 row">
+            </div>
+        </div>
+        <div class="row">
+            {% if pages.paginator.count > 1 %}
+                {% include 'pages.html' %}
+            {% endif %}
         </div>
     </section>
 {% endblock body %}

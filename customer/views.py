@@ -26,8 +26,18 @@ from .models import Comments, RatingStars
 @login_required(login_url='/signin')
 def my_book(request):
     bookings = request.user.guest_bookings.filter(Q(booking_status="DP") | Q(booking_status="NP"))
+    bookings = paginator_list_function(bookings, request.GET.get("page"))
 
-    context = {"bookings": bookings}
+    context = {"bookings": bookings, "pages": bookings}
+    return render(request, 'bookings/my_book.html', context)
+
+
+@login_required(login_url='/signin')
+def hotel_was_book(request):
+    bookings = request.user.guest_bookings.filter(Q(booking_status="TP"))
+    bookings = paginator_list_function(bookings, request.GET.get("page"))
+
+    context = {"bookings": bookings, "pages": bookings}
     return render(request, 'bookings/my_book.html', context)
 
 
@@ -63,6 +73,13 @@ def guest_cancel(request, book_pk):
                 book.save()
                 messages.success(request, "Hủy phòng thành công")
             else:
+                if request.user == book.hotel.owner:
+                    book.booking_status = "KH"
+                    book.room.room_status = "E"
+                    book.seen = True
+                    book.save()
+                    messages.success(request, "Hủy phòng thành công")
+                    return redirect("home")
                 request.session["refund_status"] = "guest"
                 return redirect("payment_refund", book_pk=book_pk)
         except BookingDetails.DoesNotExist:

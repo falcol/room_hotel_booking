@@ -71,7 +71,7 @@
                                             <a href="{% url 'my_book' %}">Phòng đã đặt</a>
                                         </li>
                                         <li>
-                                            <a href="#">Khách sạn đã ở</a>
+                                            <a href="{% url 'hotel_was_book' %}">Khách sạn đã ở</a>
                                         </li>
                                         {% if request.user.is_staff %}
                                             <li class=" {% if menu == 'hotel' %} active{% endif %}">
