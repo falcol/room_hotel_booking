@@ -18,6 +18,7 @@ from room_booking.forms import (
 from room_booking.models import (
     BookingDetails,
     DrinkAndFood,
+    DrinkAndFoodOrder,
     Photos,
     RoomDetails,
     RoomPriceDetails,
@@ -338,3 +339,32 @@ def update_menu(request, menu_pk):
 @login_required(login_url='/signin')
 def book_hander_in_hotel(request, hotel_pk):
     pass
+
+
+@login_required(login_url='/signin')
+def list_menu_order(request, hotel_pk):
+    hotel = HotelDetails.objects.filter(pk=hotel_pk).first()
+    books = BookingDetails.objects.filter(Q(hotel=hotel) & Q(booking_status="NP")).all()
+    menus = []
+
+    for book in books:
+        menu = book.menu.filter(accept=False).all()
+        menus.extend(menu)
+
+    context = {"menus": menus, "hotel_pk": hotel_pk, "hotel": hotel}
+
+    return render(request, "menus/menu_order.html", context)
+
+
+@login_required(login_url='/signin')
+def accept_menu(request, menu_pk):
+    if menu_pk:
+        try:
+            order = DrinkAndFoodOrder.objects.filter(pk=menu_pk).first()
+            order.accept = True
+            order.save()
+            messages.success(request, "Đã nhận đặt món")
+        except Exception:
+            messages.error(request, "Không cập nhập được sản phẩm")
+
+    return redirect("list_menu_order", hotel_pk=order.drink_and_food.hotel_id.pk)

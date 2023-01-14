@@ -99,6 +99,11 @@
                                             <li>
                                                 <a href="{% url 'signout' %}">Đăng xuất</a>
                                             </li>
+                                            <li>
+                                                <a href="{% url 'update_profile' %}" type="button" class="btn">
+                                                    <i class="fa fa-user" aria-hidden="true"></i>Thông tin
+                                                </a>
+                                            </li>
                                             {% if request.user.is_staff %}
                                                 <li>
                                                     <button id="btn-bell" type="button" class="btn">
@@ -106,31 +111,41 @@
                                                         <span class="notify_count badge badge-danger navbar-badge"
                                                               style="transform: translateX(40%)"></span>
                                                     </button>
-                                                    <div class="notifications" id="box">
+                                                    <div class="notifications d-none" id="box" style="height: auto; opacity: 1;">
                                                         <h2>
-                                                        Thông báo - <span class="notify_count"></span>
-                                                    </h2>
-                                                    <div id="notification-items">
+                                                        Thông báo đặt phòng - <span class="notify_count"></span>
+                                                        </h2>
+                                                        <div id="notification-items">
 
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                </li>
+                                                <li>
+                                                    <button id="btn-food" type="button" class="btn">
+                                                        <i class="fa fa-cutlery" aria-hidden="true"></i>
+                                                        <span class="notify_food_count badge badge-danger navbar-badge"
+                                                              style="transform: translateX(-40%)"></span>
+                                                    </button>
+                                                    <div class="notifications d-none" id="box2" style="height: auto; opacity: 1;">
+                                                        <h2>
+                                                        Thông báo menu - <span class="notify_food_count"></span>
+                                                        </h2>
+                                                        <div id="food-notification-items">
+
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            {% endif %}
+                                        {% else %}
+                                            <li>
+                                                <a href="{% url 'signin' %}">Đăng nhập</a>
+                                            </li>
+                                            <li>
+                                                <a href="{% url 'signup' %}">Đăng ký</a>
                                             </li>
                                         {% endif %}
-                                    {% else %}
-                                        <li>
-                                            <a href="{% url 'signin' %}">Đăng nhập</a>
-                                        </li>
-                                        <li>
-                                            <a href="{% url 'signup' %}">Đăng ký</a>
-                                        </li>
-                                    {% endif %}
-                                </ul>
-                            </nav>
-                            <div class="nav-right search-switch">
-                                <a href="{% url 'update_profile' %}" type="button" class="btn">
-                                    <i class="fa fa-user" aria-hidden="true"></i>Thông tin
-                                </a>
-                            </div>
+                                    </ul>
+                                </nav>
                         </div>
                     </div>
                 </div>
@@ -310,6 +325,31 @@
                                 html = "<div>Không có thông báo</div>"
                                 $("#notification-items").append(html)
                             }
+
+                            if (response.menus_count > 0) {
+                                $(".notify_food_count").text(response.menus_count)
+                                var menus = response.menus
+                                console.log(menus)
+                                menus.forEach(item => {
+                                    html = `<form action="/hotel/${item.book__hotel__pk}/list-order" method="get">
+                                                    <button type="submit" class="btn w-100">
+                                                        <div class="notifications-item">
+                                                            <img class="avatar" src="/media/${item.book__hotel__hotel_photos__image_hotel}">
+                                                            <div class="text">
+                                                                <h4>Khách sạn ${item.book__hotel__name}</h4>
+                                                                <p>Khách hàng: ${item.book__guest_name} </p>
+                                                            </div>
+                                                        </div>
+                                                    </button>
+                                                </form>`
+                                    $("#food-notification-items").append(html)
+                                })
+                            }
+                            else {
+                                html = "<div>Không có đặt món</div>"
+                                $("#food-notification-items").append(html)
+                            }
+
                         },
                         error: function(request, status, error) {
                             alert(request.responseText);
@@ -323,16 +363,26 @@
 
             $(document).ready(function() {
                 var down = false;
+                var downFood = false;
                 $('#btn-bell').click(function(e) {
                     var color = $(this).text();
                     if (down) {
-                        $('#box').css('height', '0px');
-                        $('#box').css('opacity', '0');
+                        $('#box').addClass('d-none');
                         down = false;
                     } else {
-                        $('#box').css('height', 'auto');
-                        $('#box').css('opacity', '1');
+                        $('#box').removeClass('d-none');
                         down = true;
+                    }
+                });
+
+                $('#btn-food').click(function(e) {
+                    var color = $(this).text();
+                    if (downFood) {
+                        $('#box2').addClass('d-none');
+                        downFood = false;
+                    } else {
+                        $('#box2').removeClass('d-none');
+                        downFood = true;
                     }
                 });
             });

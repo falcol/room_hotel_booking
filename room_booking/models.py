@@ -100,6 +100,7 @@ class DrinkAndFoodOrder(models.Model):
     book = models.ForeignKey(BookingDetails, related_name="menu", on_delete=models.DO_NOTHING, default=None)
     total = models.IntegerField(default=0)
     amount = models.FloatField(default=0)
+    accept = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

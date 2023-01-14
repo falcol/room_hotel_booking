@@ -4,7 +4,7 @@
         <select name="{{ field.name }}"
                 id="{{ field.auto_id }}"
                 class="{{ field.field.widget.attrs.class }} form-control">
-            <option value selected>
+            {% comment %} <option value selected> {% endcomment %}
             </option>
             {% if field.name != 'room_price' %}
                 {% for id, name in field.field.choices %}

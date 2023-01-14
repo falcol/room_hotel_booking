@@ -20,4 +20,6 @@ urlpatterns = [
     path('hotel/<int:hotel_pk>/menus/', views.menu_food_drink, name='menu_food_drink'),
     path('hotel/<int:hotel_pk>/menu-create/', views.create_menu, name='create_menu'),
     path('hotel/<int:menu_pk>/menu-update/', views.update_menu, name='update_menu'),
+    path('hotel/<int:hotel_pk>/list-order/', views.list_menu_order, name='list_menu_order'),
+    path('hotel/<int:menu_pk>/accept-update/', views.accept_menu, name='accept_menu'),
 ]

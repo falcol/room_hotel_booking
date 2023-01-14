@@ -175,7 +175,28 @@ def booking_notify(request):
     books_all = BookingDetails.objects.filter(Q(hotel__pk__in=hotels) & Q(booking_status='DP') & Q(seen=False))
     count = books_all.count()
     books = books_all.values("booking_id", "hotel__name", "guest_name", "hotel__hotel_photos__image_hotel")
-    return HttpResponse(json.dumps({"count": count, "books": list(books)}))
+
+    hotels_np = HotelDetails.objects.filter(owner__pk=user_pk)
+    books_np = BookingDetails.objects.filter(Q(hotel__in=hotels_np) & Q(booking_status="NP")).all()
+    menus = []
+
+    for book in books_np:
+        menu = book.menu.filter(
+            accept=False
+        ).values("book__hotel__pk", "book__hotel__name", "book__hotel__hotel_photos__image_hotel", "book__guest_name")
+        if menu:
+            menus.extend(menu)
+
+    menus_count = len(menus)
+
+    return HttpResponse(
+        json.dumps({
+            "count": count,
+            "books": list(books),
+            "menus_count": menus_count,
+            "menus": menus,
+        })
+    )
 
 
 @login_required(login_url='/signin')
