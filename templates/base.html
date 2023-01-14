@@ -60,7 +60,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-1"></div>
-                        <div class="col-lg-11">
+                        <div class="col-lg-11 d-flex justify-content-center">
                             <div class="nav-menu">
                                 <nav class="mainmenu">
                                     <ul>
@@ -326,8 +326,8 @@
                                 $("#notification-items").append(html)
                             }
 
+                            $(".notify_food_count").text(response.menus_count)
                             if (response.menus_count > 0) {
-                                $(".notify_food_count").text(response.menus_count)
                                 var menus = response.menus
                                 console.log(menus)
                                 menus.forEach(item => {
