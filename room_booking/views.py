@@ -101,12 +101,13 @@ def booking_checkout(request, book_pk):
             room.save()
             book_form.save()
             if book_form.cleaned_data['refund'] is None:
-                book = BookingDetails.objects.get(pk=book_pk)
+                book = BookingDetails.objects.filter(booking_id=book_pk).first()
                 book.is_pay = True
                 book.save()
                 messages.success(request, "Trả phòng thành công")
                 return redirect("home")
             request.session["refund_status"] = "hotel"
+            request.session["booking_pk"] = book_pk
             return redirect("payment_refund", book_pk=book_pk)
 
     pay_online = None
