@@ -25,6 +25,7 @@
                                                 <div class="card" style="width: 18rem;">
                                                     <div class="card-body">
                                                         <h5 class="card-title">Tên: {{ menu.drink_and_food.item_name }}</h5>
+                                                        <h5 class="card-title">Phòng: {{ menu.book.room.room_name }}</h5>
                                                         <h6 class="card-subtitle mb-2 text-muted">Giá tiền: {{ menu.drink_and_food.price|currency }} VNĐ/1 Sản phẩm</h6>
                                                         <p class="card-text">Số lượng: {{ menu.total }}</p>
                                                         <a href="{% url 'accept_menu' menu_pk=menu.pk %}" class="btn text-warning">Nhận</a>

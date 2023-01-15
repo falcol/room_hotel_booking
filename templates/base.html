@@ -90,17 +90,17 @@
                                         {% if request.user.is_authenticated %}
                                             <li>
                                                 <a href="#">Xin chào {{ request.user.username }}</a>
-                                                <ul class="dropdown">
+                                                {% comment %} <ul class="dropdown">
                                                     <li>
                                                         <a href="./room-details.html">Thông tin</a>
                                                     </li>
-                                                </ul>
+                                                </ul> {% endcomment %}
                                             </li>
                                             <li>
                                                 <a href="{% url 'signout' %}">Đăng xuất</a>
                                             </li>
                                             <li>
-                                                <a href="{% url 'update_profile' %}" type="button" class="btn">
+                                                <a href="{% url 'update_profile' %}" type="button" class="btn" style="color: #dfa974">
                                                     <i class="fa fa-user" aria-hidden="true"></i>Thông tin
                                                 </a>
                                             </li>

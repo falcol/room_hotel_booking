@@ -25,7 +25,8 @@ from .models import Comments, RatingStars
 
 @login_required(login_url='/signin')
 def my_book(request):
-    bookings = request.user.guest_bookings.filter(Q(booking_status="DP") | Q(booking_status="NP"))
+    bookings = request.user.guest_bookings.filter(Q(booking_status="DP")
+                                                  | Q(booking_status="NP")).order_by("check_in_time")
     bookings = paginator_list_function(bookings, request.GET.get("page"))
 
     context = {"bookings": bookings, "pages": bookings}
@@ -65,7 +66,7 @@ def update_booking(request, pk):
 def guest_cancel(request, book_pk):
     if request.method == 'POST':
         try:
-            book = BookingDetails.objects.get(pk=book_pk)
+            book = BookingDetails.objects.filter(booking_id=book_pk).first()
             if datetime.now() < book.check_in_time:
                 book.booking_status = "KH"
                 book.room.room_status = "E"
@@ -81,6 +82,7 @@ def guest_cancel(request, book_pk):
                     messages.success(request, "Hủy phòng thành công")
                     return redirect("home")
                 request.session["refund_status"] = "guest"
+                request.session["book_pk"] = book_pk
                 return redirect("payment_refund", book_pk=book_pk)
         except BookingDetails.DoesNotExist:
             pass
@@ -97,7 +99,9 @@ def my_profile(request):
 
         if user_form.is_valid() and detail_form.is_valid():
             user_form.save()
-            detail_form.save()
+            detail = detail_form.save(commit=False)
+            detail.customer_id = request.user
+            detail.save()
 
             messages.success(request, "Cập nhập thông tin thành công")
             return redirect("home")

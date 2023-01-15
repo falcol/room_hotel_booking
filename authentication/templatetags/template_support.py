@@ -51,6 +51,15 @@ def format_datetime_local(date):
 
 
 @register.filter
+def format_datetime_pay(date):
+    if date:
+        date = parse(str(date))
+        result = datetime.strftime(date, '%Y%m%d%H%M%S')
+        return result
+    return ""
+
+
+@register.filter
 def currency(money):
     thousands_separator = "."
     fractional_separator = ","

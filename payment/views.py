@@ -241,6 +241,19 @@ def query(request):
                 vnp.responseData[tmp[0]] = urllib.parse.unquote(tmp[1]).replace('+', ' ')
 
         print('Validate data from VNPAY:' + str(vnp.validate_response(settings.VNPAY_HASH_SECRET_KEY)))
+        if vnp.validate_response(settings.VNPAY_HASH_SECRET_KEY):
+            if request.session.get("refund_status", False) == "guest":
+                book_pk = int(request.session.get("book_pk", False))
+                try:
+                    book = BookingDetails.objects.filter(booking_id=book_pk).first()
+                    book.booking_status = "KH"
+                    book.room.room_status = "E"
+                    book.seen = True
+                    book.save()
+                except BookingDetails.DoesNotExist:
+                    messages.error(request, "Không có thông tin đặt phòng")
+                    return redirect("my_book")
+
         return render(request, "query.html", {"title": "Kiểm tra kết quả giao dịch", "data": vnp.responseData})
 
 
