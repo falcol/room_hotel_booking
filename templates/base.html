@@ -64,13 +64,13 @@
                             <div class="nav-menu">
                                 <nav class="mainmenu">
                                     <ul>
-                                        <li class=" {% if menu == 'home' %} active{% endif %}">
+                                        <li class="{% if menu == 'home' %}active{% endif %}">
                                             <a href="{% url 'home' %}">Trang chủ</a>
                                         </li>
-                                        <li>
+                                        <li class="{% if menu == 'my_book' %}active{% endif %}">
                                             <a href="{% url 'my_book' %}">Phòng đã đặt</a>
                                         </li>
-                                        <li>
+                                        <li class="{% if menu == 'hotel_was_book' %}active{% endif %}">
                                             <a href="{% url 'hotel_was_book' %}">Khách sạn đã ở</a>
                                         </li>
                                         {% if request.user.is_staff %}
@@ -99,7 +99,7 @@
                                             <li>
                                                 <a href="{% url 'signout' %}">Đăng xuất</a>
                                             </li>
-                                            <li>
+                                            <li class="{% if menu == 'user_profile' %}active{% endif %}">
                                                 <a href="{% url 'update_profile' %}" type="button" class="btn" style="color: #dfa974">
                                                     <i class="fa fa-user" aria-hidden="true"></i>Thông tin
                                                 </a>
@@ -137,10 +137,10 @@
                                                 </li>
                                             {% endif %}
                                         {% else %}
-                                            <li>
+                                            <li class="{% if menu == 'login' %}active{% endif %}">
                                                 <a href="{% url 'signin' %}">Đăng nhập</a>
                                             </li>
-                                            <li>
+                                            <li class="{% if menu == 'sign_up' %}active{% endif %}">
                                                 <a href="{% url 'signup' %}">Đăng ký</a>
                                             </li>
                                         {% endif %}

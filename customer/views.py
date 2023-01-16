@@ -29,7 +29,7 @@ def my_book(request):
                                                   | Q(booking_status="NP")).order_by("check_in_time")
     bookings = paginator_list_function(bookings, request.GET.get("page"))
 
-    context = {"bookings": bookings, "pages": bookings}
+    context = {"bookings": bookings, "pages": bookings, "menu": "my_book"}
     return render(request, 'bookings/my_book.html', context)
 
 
@@ -38,7 +38,7 @@ def hotel_was_book(request):
     bookings = request.user.guest_bookings.filter(Q(booking_status="TP"))
     bookings = paginator_list_function(bookings, request.GET.get("page"))
 
-    context = {"bookings": bookings, "pages": bookings}
+    context = {"bookings": bookings, "pages": bookings, "menu": "hotel_was_book"}
     return render(request, 'bookings/my_book.html', context)
 
 
@@ -106,7 +106,7 @@ def my_profile(request):
             messages.success(request, "Cập nhập thông tin thành công")
             return redirect("home")
 
-    context = {"user_form": user_form, "detail_form": detail_form, "vietnam_city": VIETNAM_CITY}
+    context = {"user_form": user_form, "detail_form": detail_form, "vietnam_city": VIETNAM_CITY, "menu": "user_profile"}
 
     return render(request, "customer/update.html", context)
 

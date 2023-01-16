@@ -69,4 +69,4 @@ def currency(money):
         new_main_currency = main_currency.replace(",", ".")
         amount = new_main_currency + fractional_separator + fractional_currency
 
-    return amount
+    return amount.split(",")[0]

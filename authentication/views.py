@@ -78,7 +78,7 @@ def signup(request):
 
             return redirect('signin')
 
-    context = {'register_form': form}
+    context = {'register_form': form, "menu": "sign_up"}
 
     return render(request, "signup.html", context)
 
@@ -113,7 +113,7 @@ def signin(request):
     if request.GET.get('next'):
         next_redirect = request.GET.get('next')
 
-    context = {"username": "", "password": ""}
+    context = {"username": "", "password": "", "menu": "login"}
 
     if request.method == 'POST':
         username = request.POST['username']

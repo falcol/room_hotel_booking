@@ -20,7 +20,7 @@
                                 {% for  book in bookings %}
                                     <div class="col-lg-4 col-md-6 mt-3">
                                         <div class="hp-room-item set-bg" data-setbg="{{ book.room.room_photos.first.image_room.url }}">
-                                            <div class="hr-text">
+                                            <div class="hr-text" style="backdrop-filter: blur(10px);">
                                                 <h3>Khách sạn</h3>
                                                 <h2>
                                                     {{ book.hotel }}

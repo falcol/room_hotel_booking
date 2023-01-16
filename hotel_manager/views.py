@@ -107,7 +107,7 @@ def create_hotel(request):
 def my_hotels(request):
     hotels = request.user.hotels.all()
 
-    context = {'hotels': hotels}
+    context = {'hotels': hotels, "menu": "hotel"}
     return render(request, 'hotels/my_hotels.html', context)
 
 
