@@ -3,7 +3,7 @@ from datetime import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Count, Q, Sum
-from django.db.models.functions import TruncMonth, TruncYear
+from django.db.models.functions import TruncDay, TruncMonth, TruncYear
 from django.shortcuts import redirect, render
 
 from common.vietnam_province import VIETNAM_CITY
@@ -127,7 +127,7 @@ def my_hotel_rooms(request, pk):
 
     rooms = RoomDetails.objects.filter(hotel__pk=pk)
 
-    context = {"room_prices": room_prices, "rooms": rooms}
+    context = {"room_prices": room_prices, "rooms": rooms, "menu": "hotel"}
     return render(request, 'rooms/my_rooms_hotel.html', context)
 
 
@@ -146,7 +146,7 @@ def create_room_price(request, hotel_pk):
     else:
         form = RoomPriceDetailsForms()
 
-    context = {"form": form, "screen": 'hotel'}
+    context = {"form": form, "screen": 'hotel', "menu": "hotel"}
 
     return render(request, 'rooms/create_room_price.html', context)
 
@@ -200,7 +200,14 @@ def create_room_hotel(request, hotel_pk):
     else:
         form = RoomDetailsForms()
         photo = PhotoForms()
-    context = {"form": form, "photo_form": photo, "room_prices": room_prices, "hotel_pk": hotel_pk, "screen": 'hotel'}
+    context = {
+        "form": form,
+        "photo_form": photo,
+        "room_prices": room_prices,
+        "hotel_pk": hotel_pk,
+        "screen": 'hotel',
+        "menu": "hotel"
+    }
 
     return render(request, 'rooms/create_room.html', context)
 
@@ -244,14 +251,14 @@ def update_hotel_info(request, hotel_pk):
     if form.is_valid():
         form.save()
         return redirect("my_hotel")
-    context = {'form': form, "photo_form": photo_form}
+    context = {'form': form, "photo_form": photo_form, "menu": "hotel"}
     return render(request, "hotels/update_hotel.html", context)
 
 
 @login_required(login_url='/signin')
 def my_hotel_book(request, hotel_pk):
     hotel_books = BookingDetails.objects.filter(Q(hotel=hotel_pk) & (Q(booking_status="DP") | Q(booking_status="NP")))
-    context = {"books": hotel_books}
+    context = {"books": hotel_books, "menu": "hotel"}
     return render(request, 'hotels/my_hotel_books.html', context)
 
 
@@ -270,6 +277,9 @@ def set_room_empty(request, room_pk):
 @login_required(login_url='/signin')
 def dashboard(request, hotel_pk):
     books = BookingDetails.objects.filter(hotel__pk=hotel_pk, booking_status="TP")
+    books_day = books.annotate(day=TruncDay('check_in_time')).values('day').annotate(
+        total_cost=Sum('total_cost'), total_book=Count('pk')
+    ).order_by()
     books_month = books.annotate(month=TruncMonth('check_in_time')).values('month').annotate(
         total_cost=Sum('total_cost'), total_book=Count('pk')
     ).order_by()
@@ -282,7 +292,14 @@ def dashboard(request, hotel_pk):
         total_cost=Sum('total_cost'), total_book=Count('pk')
     ).order_by()
 
-    context = {"books_month": books_month, "total_rooms": total_rooms, "cost_day": cost_day, "books_year": books_year}
+    context = {
+        "books_month": books_month,
+        "total_rooms": total_rooms,
+        "cost_day": cost_day,
+        "books_year": books_year,
+        "books_day": books_day,
+        "menu": "hotel"
+    }
     context.update(book_all)
     return render(request, 'hotels/dashboard.html', context)
 
@@ -291,7 +308,7 @@ def dashboard(request, hotel_pk):
 def menu_food_drink(request, hotel_pk):
     menus = DrinkAndFood.objects.filter(hotel_id__pk=hotel_pk).order_by('item_name')
     hotel = HotelDetails.objects.get(pk=hotel_pk)
-    context = {"menus": menus, "hotel_pk": hotel_pk, "hotel": hotel}
+    context = {"menus": menus, "hotel_pk": hotel_pk, "hotel": hotel, "menu": "hotel"}
     return render(request, 'menus/menu_view.html', context=context)
 
 
@@ -351,7 +368,7 @@ def list_menu_order(request, hotel_pk):
         menu = book.menu.filter(accept=False).all()
         menus.extend(menu)
 
-    context = {"menus": menus, "hotel_pk": hotel_pk, "hotel": hotel}
+    context = {"menus": menus, "hotel_pk": hotel_pk, "hotel": hotel, "menu": "hotel"}
 
     return render(request, "menus/menu_order.html", context)
 

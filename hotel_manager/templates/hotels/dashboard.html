@@ -91,7 +91,7 @@
                             <tbody>
                                 {% for book in books_month %}
                                     <tr>
-                                        <td>{{ book.month|date:"d/m/Y" }}</td>
+                                        <td>{{ book.month|date:"m/Y" }}</td>
                                         <td>{{ book.total_book }}</td>
                                         <td>{{ book.total_cost|currency }} VNĐ</td>
                                     </tr>
@@ -117,6 +117,30 @@
                                 {% for book in books_year %}
                                     <tr>
                                         <td>{{ book.year|date:"Y" }}</td>
+                                        <td>{{ book.total_book }}</td>
+                                        <td>{{ book.total_cost|currency }} VNĐ</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-5 mt-5">
+                    <h2>Doanh thu ngày</h2>
+                    <div class="card-body table-responsive p-0">
+                        <table id="invoice_day_table"
+                               class="table table-striped table-valign-middle cell-border table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Ngày</th>
+                                    <th>Số phòng thuê</th>
+                                    <th>Doanh thu</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for book in books_day %}
+                                    <tr>
+                                        <td>{{ book.day|date:"d/m/Y" }}</td>
                                         <td>{{ book.total_book }}</td>
                                         <td>{{ book.total_cost|currency }} VNĐ</td>
                                     </tr>
@@ -153,6 +177,16 @@
             paging: false,
 		})
 		$("#invoice_year_table").DataTable({
+			language: {
+                "sSearch": "Tìm kiếm",
+                "infoEmpty": "",
+				"sInfo": "",
+            },
+			scrollY: '200px',
+            scrollCollapse: true,
+            paging: false,
+		})
+		$("#invoice_day_table").DataTable({
 			language: {
                 "sSearch": "Tìm kiếm",
                 "infoEmpty": "",
