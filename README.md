@@ -16,4 +16,9 @@ dot -Tpng myapp_models.dot -omyapp_models.png
 dot -Tpng my_project_visualized.dot -omy_project_visualized.png
 ```
 
+# run ws
+```bash
+daphne app.asgi:application -p 9000
+```
+
 [Vnpay](https://123code.net/a-cai-dat-vnpay-thanh-toan-online-tren-moi-truong-dev-9.html)

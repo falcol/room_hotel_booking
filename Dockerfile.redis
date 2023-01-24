@@ -1,0 +1,8 @@
+FROM redis:latest
+WORKDIR /redis_data
+VOLUME /redis_data
+EXPOSE 6379
+
+# FIRST: docker network create -d bridge notify_net
+# PRIORITY: 1
+# docker run --rm -d  -p 6379:6379/tcp -h redishost --net=notify_net redis_notify:latest

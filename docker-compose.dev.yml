@@ -42,11 +42,28 @@ services:
             - "8000:8000"
         depends_on:
             - db
+            - redis_notify
         networks:
             - hotel_net
 
+    redis_notify:
+        build:
+            context: .
+            dockerfile: Dockerfile.redis
+        restart: always
+        container_name: notifyredis
+        hostname: redishost
+        ports:
+            - "6379:6379"
+        volumes:
+            - redis_notify_data:/data
+        networks:
+            - hotel_net
+
+
 volumes:
     postgres_db:
+    redis_notify_data:
 
 
 networks:

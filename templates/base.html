@@ -36,8 +36,9 @@
         <link rel="stylesheet"
               type="text/css"
               href="{% static 'css/jquery.rateyo.min.css' %}"/>
-        <link rel="stylesheet" type="text/css" href="{% static 'css/jumbotron-narrow.css' %}" />
-
+        <link rel="stylesheet"
+              type="text/css"
+              href="{% static 'css/jumbotron-narrow.css' %}"/>
         <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}"/>
         <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
         <link rel="stylesheet" type="text/css" href="{% static 'css/toastr.css' %}"/>
@@ -99,7 +100,10 @@
                                                 <a href="{% url 'signout' %}">Đăng xuất</a>
                                             </li>
                                             <li class="{% if menu == 'user_profile' %}active{% endif %}">
-                                                <a href="{% url 'update_profile' %}" type="button" class="btn" style="color: #dfa974">
+                                                <a href="{% url 'update_profile' %}"
+                                                   type="button"
+                                                   class="btn"
+                                                   style="color: #dfa974">
                                                     <i class="fa fa-user" aria-hidden="true"></i>Thông tin
                                                 </a>
                                             </li>
@@ -110,115 +114,109 @@
                                                         <span class="notify_count badge badge-danger navbar-badge"
                                                               style="transform: translateX(40%)"></span>
                                                     </button>
-                                                    <div class="notifications d-none" id="box" style="height: auto; opacity: 1;">
+                                                    <div class="notifications d-none"
+                                                         id="box"
+                                                         style="height: auto;
+                                                                opacity: 1;">
                                                         <h2>
                                                         Thông báo đặt phòng - <span class="notify_count"></span>
-                                                        </h2>
-                                                        <div id="notification-items">
-
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <button id="btn-food" type="button" class="btn">
-                                                        <i class="fa fa-cutlery" aria-hidden="true"></i>
-                                                        <span class="notify_food_count badge badge-danger navbar-badge"
-                                                              style="transform: translateX(-40%)"></span>
-                                                    </button>
-                                                    <div class="notifications d-none" id="box2" style="height: auto; opacity: 1;">
-                                                        <h2>
-                                                        Thông báo menu - <span class="notify_food_count"></span>
-                                                        </h2>
-                                                        <div id="food-notification-items">
-
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            {% endif %}
-                                        {% else %}
-                                            <li class="{% if menu == 'login' %}active{% endif %}">
-                                                <a href="{% url 'signin' %}">Đăng nhập</a>
+                                                    </h2>
+                                                    <div id="notification-items"></div>
+                                                </div>
                                             </li>
-                                            <li class="{% if menu == 'sign_up' %}active{% endif %}">
-                                                <a href="{% url 'signup' %}">Đăng ký</a>
-                                            </li>
-                                        {% endif %}
-                                    </ul>
-                                </nav>
+                                            <li>
+                                                <button id="btn-food" type="button" class="btn">
+                                                    <i class="fa fa-cutlery" aria-hidden="true"></i>
+                                                    <span class="notify_food_count badge badge-danger navbar-badge"
+                                                          style="transform: translateX(-40%)"></span>
+                                                </button>
+                                                <div class="notifications d-none"
+                                                     id="box2"
+                                                     style="height: auto;
+                                                            opacity: 1;">
+                                                    <h2>
+                                                    Thông báo menu - <span class="notify_food_count"></span>
+                                                </h2>
+                                                <div id="food-notification-items"></div>
+                                            </div>
+                                        </li>
+                                    {% endif %}
+                                {% else %}
+                                    <li class="{% if menu == 'login' %}active{% endif %}">
+                                        <a href="{% url 'signin' %}">Đăng nhập</a>
+                                    </li>
+                                    <li class="{% if menu == 'sign_up' %}active{% endif %}">
+                                        <a href="{% url 'signup' %}">Đăng ký</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+{% comment %} End Header {% endcomment %}
+<div class="main">
+    {% block body %}
+    {% endblock body %}
+</div>
+<div>
+    {% block footer %}
+    {% endblock footer %}
+    <!-- Footer Section Begin -->
+    <footer class="footer-section">
+        <div class="container">
+            <div class="footer-text">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="ft-about">
+                            <div class="logo">
+                                <a href="#">
+                                    {% comment %} <img src="img/footer-logo.png" alt=""> {% endcomment %}
+                                </a>
+                            </div>
+                            <p>Chúng tôi truyền cảm hứng và tiếp cận hàng triệu khách du lịch</p>
+                            <div class="fa-social">
+                                <a href="#"><i class="fa fa-facebook"></i></a>
+                                <a href="#"><i class="fa fa-twitter"></i></a>
+                                <a href="#"><i class="fa fa-tripadvisor"></i></a>
+                                <a href="#"><i class="fa fa-instagram"></i></a>
+                                <a href="#"><i class="fa fa-youtube-play"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 offset-lg-1">
+                        <div class="ft-contact">
+                            <h6>Liên hệ chúng tôi</h6>
+                            <ul>
+                                <li>(84) 0000000000</li>
+                                <li>test@gmail.com</li>
+                                <li>D13CNPM4 Đại học điện lực</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 offset-lg-1">
+                        <div class="ft-newslatter">
+                            <h6>Gửi ý kiến qua hòm thư</h6>
+                            <p>hello@gmail.com</p>
+                            {% comment %} <form action="#" class="fn-form">
+                                        <input type="text" placeholder="Email" />
+                                        <button type="submit">
+                                            <i class="fa fa-send"></i>
+                                        </button>
+                            </form> {% endcomment %}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </header>
-    {% comment %} End Header {% endcomment %}
-    <div class="main">
-        {% block body %}
-        {% endblock body %}
-    </div>
-    <div>
-        {% block footer %}
-        {% endblock footer %}
-        <!-- Footer Section Begin -->
-        <footer class="footer-section">
+        <div class="copyright-option">
             <div class="container">
-                <div class="footer-text">
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <div class="ft-about">
-                                <div class="logo">
-                                    <a href="#">
-                                        {% comment %} <img src="img/footer-logo.png" alt=""> {% endcomment %}
-                                    </a>
-                                </div>
-                                <p>Chúng tôi truyền cảm hứng và tiếp cận hàng triệu khách du lịch</p>
-                                <div class="fa-social">
-                                    <a href="#"><i class="fa fa-facebook"></i></a>
-                                    <a href="#"><i class="fa fa-twitter"></i></a>
-                                    <a href="#"><i class="fa fa-tripadvisor"></i></a>
-                                    <a href="#"><i class="fa fa-instagram"></i></a>
-                                    <a href="#"><i class="fa fa-youtube-play"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 offset-lg-1">
-                            <div class="ft-contact">
-                                <h6>Liên hệ chúng tôi</h6>
-                                <ul>
-                                    <li>(84) 0000000000</li>
-                                    <li>
-                                        test@gmail.com
-                                    </li>
-                                    <li>
-                                        D13CNPM4 Đại học điện lực
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 offset-lg-1">
-                            <div class="ft-newslatter">
-                                <h6>
-                                    Gửi ý kiến qua hòm thư
-                                </h6>
-                                <p>
-                                    hello@gmail.com
-                                </p>
-                                {% comment %} <form action="#" class="fn-form">
-                                        <input type="text" placeholder="Email" />
-                                        <button type="submit">
-                                            <i class="fa fa-send"></i>
-                                        </button>
-                                </form> {% endcomment %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="copyright-option">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-7">
-                            {% comment %} <ul>
+                <div class="row">
+                    <div class="col-lg-7">
+                        {% comment %} <ul>
                                     <li>
                                         <a href="#">Contact</a>
                                     </li>
@@ -231,41 +229,41 @@
                                     <li>
                                         <a href="#">Environmental Policy</a>
                                     </li>
-                            </ul> {% endcomment %}
-                        </div>
-                        <div class="col-lg-5">
-                            <div class="co-text">
-                                <p id="license">
-                                </p>
-                            </div>
+                        </ul> {% endcomment %}
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="co-text">
+                            <p id="license">
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
-            {% csrf_token %}
-        </footer>
-        <!-- Footer Section End -->
-    </div>
-    <!-- Js Plugins -->
-    <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/jquery.nice-select.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/jquery.slicknav.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/owl.carousel.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/toastr.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/sweetalert2.all.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/jquery.rateyo.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/jquery.rateyo.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/ie-emulation-modes-warning.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/ie10-viewport-bug-workaround.js' %}"></script>
-    {% if messages %}
-        {% for message in messages %}
-            <script type=text/javascript>
+        </div>
+        {% csrf_token %}
+    </footer>
+    <!-- Footer Section End -->
+</div>
+<!-- Js Plugins -->
+<script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.nice-select.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.slicknav.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/owl.carousel.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/toastr.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/sweetalert2.all.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.rateyo.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.rateyo.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/ie-emulation-modes-warning.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/ie10-viewport-bug-workaround.js' %}"></script>
+{% if messages %}
+    {% for message in messages %}
+        <script type=text/javascript>
             toastr.options = {
                 "newestOnTop": true,
                 "progressBar": true,
@@ -282,10 +280,10 @@
                 "hideMethod": "fadeOut"
             }
             toastr.{{ message.tags }}('{{ message }}')
-            </script>
-        {% endfor %}
-    {% endif %}
-    <script type="text/javascript">
+        </script>
+    {% endfor %}
+{% endif %}
+<script type="text/javascript">
             var csrftoken = $("[name=csrfmiddlewaretoken]").val();
 
             window.onload = function() {
@@ -386,8 +384,33 @@
                 });
             });
 
-    </script>
-    {% block script %}
-    {% endblock script %}
+            let socket = new WebSocket(`ws://localhost:9000/ws/chat/notify/`);
+
+            socket.onopen = function(e) {
+                console.log("[open] Connection established");
+                socket.send(JSON.stringify({type: "test", message: "Hello, world 2!"}))
+            };
+
+            socket.onmessage = function(event) {
+                console.log(event.data);
+            };
+
+            socket.onclose = function(event) {
+                if (event.wasClean) {
+                    console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+                } else {
+                    // e.g. server process killed or network down
+                    // event.code is usually 1006 in this case
+                    console.log('[close] Connection died');
+                }
+            };
+
+            socket.onerror = function(error) {
+                console.log(`[error]`);
+            };
+
+</script>
+{% block script %}
+{% endblock script %}
 </body>
 </html>

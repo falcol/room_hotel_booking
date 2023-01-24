@@ -34,8 +34,8 @@ CSRF_TRUSTED_ORIGINS = ["http://hotel.local/"]
 
 INSTALLED_APPS = [
     "django.contrib.admin", "django.contrib.auth", "django.contrib.contenttypes", "django.contrib.sessions",
-    "django.contrib.messages", 'django_browser_reload', "django.contrib.staticfiles", 'crispy_forms', 'authentication',
-    "phonenumber_field", "customer", "hotel_manager", "payment", "room_booking"
+    "django.contrib.messages", 'django_browser_reload', "channels", "django.contrib.staticfiles", 'crispy_forms',
+    'authentication', "phonenumber_field", "customer", "hotel_manager", "payment", "room_booking"
 ]
 
 MIDDLEWARE = [
@@ -161,3 +161,5 @@ VNPAY_PAYMENT_URL = config("VNPAY_PAYMENT_URL")    # get from config
 VNPAY_API_URL = config("VNPAY_API_URL")
 VNPAY_TMN_CODE = config("VNPAY_TMN_CODE")    # Website ID in VNPAY System, get from config
 VNPAY_HASH_SECRET_KEY = config("VNPAY_HASH_SECRET_KEY")    # Secret key for create checksum,get from config
+
+CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
