@@ -1,0 +1,58 @@
+version: "3.9"
+
+services:
+    db:
+        image: postgres
+        hostname: postgresql
+        restart: always
+        ports:
+            - "5432:5432"
+        volumes:
+            - postgres_db:/var/lib/postgresql/data
+        env_file:
+            - .env
+        networks:
+            - hotel_net
+
+    web:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        tty: true
+        restart: always
+        env_file:
+            - .env
+        command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+        volumes:
+            - .:/app
+        ports:
+            - "8000:8000"
+        depends_on:
+            - db
+            - redis_notify
+        networks:
+            - hotel_net
+
+    redis_notify:
+        build:
+            context: .
+            dockerfile: Dockerfile.redis
+        restart: always
+        container_name: notifyredis
+        hostname: redishost
+        ports:
+            - "6379:6379"
+        volumes:
+            - redis_notify_data:/data
+        networks:
+            - hotel_net
+
+
+volumes:
+    postgres_db:
+    redis_notify_data:
+
+
+networks:
+    hotel_net:
+
