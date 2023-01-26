@@ -10,6 +10,7 @@ from django.shortcuts import redirect, render
 
 from hotel_manager.models import HotelDetails
 from room_booking.models import BookingDetails, DrinkAndFoodOrder, RoomDetails
+from websocket.redis_publish import publish_event
 
 from .forms import BookingCheckOutForms, BookingDetailsForms
 
@@ -32,6 +33,11 @@ def create_booking(request, pk):
             booking.room = room_book
 
             booking.save()
+
+            hotel_owner = room_book.hotel.owner.pk
+            event = {"event_type": "reload_notify", "payload": {"user_id": hotel_owner}}
+            channel = f"notify_{hotel_owner}"
+            publish_event(channel=channel, event=event)
             if request.user == room_book.hotel.owner:
                 messages.success(request, "Đặt phòng thành công")
                 return redirect('home')

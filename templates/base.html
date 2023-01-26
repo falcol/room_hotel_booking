@@ -286,9 +286,8 @@
 <script type="text/javascript">
             var csrftoken = $("[name=csrfmiddlewaretoken]").val();
 
-            window.onload = function() {
-                {% if request.user.is_authenticated %}
-                    $.ajax({
+            function loadNotify() {
+                $.ajax({
                         url: "{% url 'booking_notify' %}",
                         type: "GET",
                         headers: {
@@ -352,6 +351,11 @@
                             alert(request.responseText);
                         }
                     });
+            }
+
+            window.onload = function() {
+                {% if request.user.is_authenticated %}
+                    loadNotify()
                 {% endif %}
 
                 $("#license").text(`Bản quyền ${new Date().getFullYear()}`)
@@ -384,30 +388,36 @@
                 });
             });
 
-            let socket = new WebSocket(`ws://localhost:9000/ws/chat/notify/`);
+            {% if request.user.is_authenticated %}
+                var userId = "{{ request.user.pk }}";
+                let socket = new WebSocket(`ws://localhost:9000/ws/chat/${userId}/`);
 
-            socket.onopen = function(e) {
-                console.log("[open] Connection established");
-                socket.send(JSON.stringify({type: "test", message: "Hello, world 2!"}))
-            };
+                socket.onopen = function(e) {
+                    console.log("[open] Connection established");
+                };
 
-            socket.onmessage = function(event) {
-                console.log(event.data);
-            };
+                socket.onmessage = function(event) {
+                    const data = JSON.parse(event.data)
+                    if (data.event_type == "reload_notify" && data.payload.user_id == parseInt(userId)) {
+                        console.log("Load notification from server")
+                        loadNotify()
+                    }
+                };
 
-            socket.onclose = function(event) {
-                if (event.wasClean) {
-                    console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
-                } else {
-                    // e.g. server process killed or network down
-                    // event.code is usually 1006 in this case
-                    console.log('[close] Connection died');
-                }
-            };
+                socket.onclose = function(event) {
+                    if (event.wasClean) {
+                        console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+                    } else {
+                        // e.g. server process killed or network down
+                        // event.code is usually 1006 in this case
+                        console.log('[close] Connection died');
+                    }
+                };
 
-            socket.onerror = function(error) {
-                console.log(`[error]`);
-            };
+                socket.onerror = function(error) {
+                    console.log(`[error]`);
+                };
+            {% endif %}
 
 </script>
 {% block script %}

@@ -162,4 +162,12 @@ VNPAY_API_URL = config("VNPAY_API_URL")
 VNPAY_TMN_CODE = config("VNPAY_TMN_CODE")    # Website ID in VNPAY System, get from config
 VNPAY_HASH_SECRET_KEY = config("VNPAY_HASH_SECRET_KEY")    # Secret key for create checksum,get from config
 
-CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
+CHANNEL_LAYERS = {
+    "default":
+        {
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [(config("REDIS_HOST"), config("REDIS_PORT"))],
+            },
+        },
+}

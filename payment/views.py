@@ -13,6 +13,7 @@ from django.shortcuts import redirect, render
 
 from payment.models import Payment
 from room_booking.models import BookingDetails
+from websocket.redis_publish import publish_event
 
 from .forms import PaymentForm
 from .vnpay import vnpay
@@ -156,6 +157,7 @@ def payment_return(request):
         vnp_CardType = inputData['vnp_CardType']
         if vnp.validate_response(settings.VNPAY_HASH_SECRET_KEY):
             if vnp_ResponseCode == "00":
+                hotel_owner = ""
                 if book_pk and request.session.get("payment_status", False) == 'paid':
                     book = BookingDetails.objects.get(booking_id=book_pk)
                     book.total_cost = book.pay_online.amount + amount
@@ -166,12 +168,19 @@ def payment_return(request):
                     book.pay_online.amount = book.pay_online.amount + amount
                     book.pay_online.save()
                     book.save()
+                    hotel_owner = book.hotel.owner.pk
 
                 if book_pk and request.session.get("payment_status", False) == 'booking':
                     book = BookingDetails.objects.get(booking_id=book_pk)
                     if book.pay_online is not None:
                         book.pay_online.amount = book.pay_online.amount + amount
                         book.pay_online.save()
+                        hotel_owner = book.hotel.owner.pk
+
+                event = {"event_type": "reload_notify", "payload": {"user_id": hotel_owner}}
+                channel = f"notify_{hotel_owner}"
+                publish_event(channel=channel, event=event)
+
                 request.session['payment_status'] = ''
                 return render(
                     request, "payment_return.html", {

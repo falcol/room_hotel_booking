@@ -1,6 +1,8 @@
 import json
 
+import aioredis
 from channels.generic.websocket import AsyncWebsocketConsumer
+from decouple import config
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -13,6 +15,30 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
 
         await self.accept()
+        try:
+            self.redis = await aioredis.create_redis_pool(config("REDIS_URI"))
+            self.response = await self.redis.subscribe(channel=f"notify_{self.room_name}")
+            channel = self.response[0]
+            print("Connect to redis")
+            while await channel.wait_message():
+                print("Vao 3")
+                raw_event = await channel.get(encoding="utf8")
+                try:
+                    event = json.loads(raw_event)
+                except json.JSONDecodeError as e:
+                    print(f"[{self.room_name}]Event '{raw_event}' was ignored. Decode failed")
+                    await self.send(text_data=raw_event)
+                    continue
+                else:
+                    await self.send(text_data=raw_event)
+        except Exception as e:
+            print(f"User {self.room_name} Disconnected")
+            print(e)
+        finally:
+            self.redis.close()
+            await self.redis.wait_closed()
+            print("Redis closed successfully")
+
         print("Joined chat room %s" % self.room_name)
         print("Joined chat group: %s" % self.room_group_name)
 
