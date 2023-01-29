@@ -37,6 +37,12 @@
                                             <td class="r-o">Thời gian ra</td>
                                             <td>{{ book.check_out_time|format_datetime_local }}</td>
                                         </tr>
+                                        {% if book.pre_order %}
+                                            <tr>
+                                                <td class="r-o">Đặt cọc</td>
+                                                <td>{{ book.pay_online.amount }}</td>
+                                            </tr>
+                                        {% endif %}
                                     </tbody>
                                 </table>
                                 {% if book.booking_status == "DP" %}

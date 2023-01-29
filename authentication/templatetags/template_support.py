@@ -61,12 +61,14 @@ def format_datetime_pay(date):
 
 @register.filter
 def currency(money):
-    thousands_separator = "."
-    fractional_separator = ","
-    amount = "{:,.2f}".format(money)
-    if thousands_separator == ".":
-        main_currency, fractional_currency = amount.split(".")[0], amount.split(".")[1]
-        new_main_currency = main_currency.replace(",", ".")
-        amount = new_main_currency + fractional_separator + fractional_currency
+    if money:
+        thousands_separator = "."
+        fractional_separator = ","
+        amount = "{:,.2f}".format(money)
+        if thousands_separator == ".":
+            main_currency, fractional_currency = amount.split(".")[0], amount.split(".")[1]
+            new_main_currency = main_currency.replace(",", ".")
+            amount = new_main_currency + fractional_separator + fractional_currency
 
-    return amount.split(",")[0]
+        return amount.split(",")[0]
+    return 0

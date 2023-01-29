@@ -28,6 +28,24 @@ services:
         ports:
             - "8000:8000"
         depends_on:
+            - websocket
+        networks:
+            - hotel_net
+
+    websocket:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        tty: true
+        restart: always
+        env_file:
+            - .env
+        command: bash -c "daphne app.asgi:application -p 9000 -b 0.0.0.0"
+        volumes:
+            - .:/app
+        ports:
+            - "9000:9000"
+        depends_on:
             - db
             - redis_notify
         networks:

@@ -136,7 +136,7 @@ def guest_check_in(request, book_pk):
                 if book.pay_online is not None:
                     if book.pay_online.amount < 200000:
                         messages.warning(request, "Khách chưa đặt cọc đủ tiền phòng")
-                        return redirect(request.path)
+                        return redirect("my_hotel_book", hotel_pk=book.hotel.pk)
                     else:
                         book.booking_status = "NP"
                         book.room.room_status = "L"
@@ -146,7 +146,7 @@ def guest_check_in(request, book_pk):
                         return redirect('my_hotel_book', hotel_pk=book.hotel.pk)
                 else:
                     messages.warning(request, "Khách chưa đặt cọc đủ tiền phòng")
-                    return redirect(request.path)
+                    return redirect("my_hotel_book", hotel_pk=book.hotel.pk)
             book.booking_status = "NP"
             book.room.room_status = "L"
             book.room.save()

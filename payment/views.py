@@ -288,7 +288,10 @@ def refund(request, book_pk):
     if request.user == book.hotel.owner:
         check_owner = True
     if book.pay_online is None:
-        messages.warning(request, "Không có hóa đơn")
+        if request.user.pk is not book.hotel.owner.pk:
+            messages.warning(request, "Không có hóa đơn")
+        else:
+            messages.success(request, "Trả phòng thành công")
         return redirect('home')
     money_refund = book.pay_online.amount * 90 / 100
     context = {"title": "Gửi yêu cầu hoàn tiền", "book": book, "check_owner": check_owner, "money_refund": money_refund}

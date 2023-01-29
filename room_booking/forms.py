@@ -168,12 +168,12 @@ class BookingDetailsForms(forms.ModelForm):
             check_out_time = cleaned_data.get('check_out_time')
 
             books_room = BookingDetails.objects.filter(
-                (~Q(booking_status__contains='DP') | ~Q(booking_status__contains="NP")) & Q(hotel__pk=hotel_pk)
-                & ~Q(room__pk=room_pk) & (
+                (Q(booking_status__contains='DP') | Q(booking_status__contains="NP")) & Q(hotel__pk=hotel_pk)
+                & Q(room__pk=room_pk) & (
                     Q(check_in_time__range=[check_in_time, check_out_time])
                     | Q(check_out_time__range=[check_in_time, check_out_time])
                 )
-            )
+            ).first()
             if books_room:
                 self.add_error('check_in_time', 'Thời gian này đang có người ở')
                 self.add_error('check_out_time', 'Thời gian này đang có người ở')

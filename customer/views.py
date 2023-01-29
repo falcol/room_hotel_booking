@@ -16,6 +16,7 @@ from room_booking.models import (
     DrinkAndFoodOrder,
     RoomDetails,
 )
+from websocket.redis_publish import publish_event
 
 from .forms import CustomerDetailsForm, UserInfoForm
 from .models import Comments, RatingStars
@@ -233,6 +234,12 @@ def order_menu(request):
                     new_order.total = new_order.total + int(total)
                     new_order.amount = new_order.amount + (menu.price * int(total))
                     new_order.save()
+
+                    hotel_owner = book.hotel.owner.pk
+                    event = {"event_type": "reload_notify", "payload": {"user_id": hotel_owner}}
+                    channel = f"notify_{hotel_owner}"
+                    publish_event(channel=channel, event=event)
+
                     response = {
                         "success": True,
                         "total": menu.total,

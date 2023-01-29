@@ -278,24 +278,24 @@ def set_room_empty(request, room_pk):
 def dashboard(request, hotel_pk):
     books = BookingDetails.objects.filter(hotel__pk=hotel_pk, booking_status="TP")
     books_day = books.annotate(day=TruncDay('check_in_time')).values('day').annotate(
-        total_cost=Sum('total_cost'), total_book=Count('pk')
+        total_cost=Sum('total_cost'), total_book=Count('pk'), menu_cost=Sum("menu__amount")
     ).order_by()
     books_month = books.annotate(month=TruncMonth('check_in_time')).values('month').annotate(
-        total_cost=Sum('total_cost'), total_book=Count('pk')
+        total_cost=Sum('total_cost'), total_book=Count('pk'), menu_cost=Sum("menu__amount")
     ).order_by()
     book_all = books.aggregate(Sum('total_cost'), Count('pk'))
     cost_day = BookingDetails.objects.filter(
         hotel__pk=hotel_pk, booking_status="TP", created_at__date=datetime.date(datetime.now())
-    ).aggregate(Sum('total_cost'))['total_cost__sum']
+    ).aggregate(Sum('total_cost'), Sum("menu__amount"))
     total_rooms = RoomDetails.objects.filter(hotel__pk=hotel_pk).count()
     books_year = books.annotate(year=TruncYear('check_in_time')).values('year').annotate(
-        total_cost=Sum('total_cost'), total_book=Count('pk')
+        total_cost=Sum('total_cost'), total_book=Count('pk'), menu_cost=Sum("menu__amount")
     ).order_by()
 
     context = {
         "books_month": books_month,
         "total_rooms": total_rooms,
-        "cost_day": cost_day,
+        "cost_day": cost_day['total_cost__sum'] + cost_day['menu__amount__sum'],
         "books_year": books_year,
         "books_day": books_day,
         "menu": "hotel"
@@ -319,7 +319,7 @@ def create_menu(request, hotel_pk):
     except HotelDetails.DoesNotExist:
         hotel = None
         messages.error(request, "Khách sạn không tồn tại")
-        return redirect(request.path)
+        return redirect('my_hotel')
 
     form = CreateUpdateMenu(request.POST or None)
 
