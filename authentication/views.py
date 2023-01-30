@@ -139,6 +139,8 @@ def signout(request):
     try:
         del request.session['refund_status']
         del request.session['payment_status']
+        del request.session['book_guest_out']
+        del request.session['book_out']
     except KeyError:
         pass
     logout(request)

@@ -69,8 +69,13 @@ def guest_cancel(request, book_pk):
         try:
             book = BookingDetails.objects.filter(booking_id=book_pk).first()
             if datetime.now() < book.check_in_time:
+                if book.pay_online:
+                    request.session["book_guest_out"] = "True"
+                    request.session["book_pk"] = book_pk
+                    return redirect('payment_refund', book_pk=book_pk)
                 book.booking_status = "KH"
                 book.room.room_status = "E"
+                book.room.save()
                 book.seen = True
                 book.save()
                 messages.success(request, "Hủy phòng thành công")
@@ -79,6 +84,7 @@ def guest_cancel(request, book_pk):
                     book.booking_status = "KH"
                     book.room.room_status = "E"
                     book.seen = True
+                    book.room.save()
                     book.save()
                     messages.success(request, "Hủy phòng thành công")
                     return redirect("home")

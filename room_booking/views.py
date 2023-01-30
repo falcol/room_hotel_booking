@@ -163,6 +163,10 @@ def hotel_guest_cancel(request, book_pk):
         try:
             book = BookingDetails.objects.get(pk=book_pk)
             if datetime.now() < book.check_in_time:
+                if book.pay_online:
+                    request.session["book_out"] = "True"
+                    request.session["book_pk"] = book_pk
+                    return redirect('payment_refund', book_pk=book_pk)
                 book.booking_status = "KSH"
                 book.room.room_status = "E"
                 book.room.save()

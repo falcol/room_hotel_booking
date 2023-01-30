@@ -175,6 +175,7 @@ def payment_return(request):
                     if book.pay_online is not None:
                         book.pay_online.amount = book.pay_online.amount + amount
                         book.pay_online.save()
+                        book.save()
                         hotel_owner = book.hotel.owner.pk
 
                 event = {"event_type": "reload_notify", "payload": {"user_id": hotel_owner}}
@@ -258,6 +259,7 @@ def query(request):
                     book.booking_status = "KH"
                     book.room.room_status = "E"
                     book.seen = True
+                    book.room.save()
                     book.save()
                     messages.success(request, "Thanh toán hoàn trả thành công")
                     del request.session['refund_status']
@@ -265,13 +267,46 @@ def query(request):
                 except BookingDetails.DoesNotExist:
                     messages.error(request, "Không có thông tin đặt phòng")
                     return redirect("my_book")
+
             if request.session.get("refund_status", False) == "hotel":
                 book_pk = int(request.session.get("booking_pk", False))
                 book = BookingDetails.objects.filter(booking_id=book_pk).first()
                 book.is_pay = True
+                book.room.room_status = "E"
+                book.room.save()
                 book.save()
                 del request.session['refund_status']
                 del request.session['booking_pk']
+
+            if request.session.get("book_out", False) == "True":
+                book_pk = int(request.session.get("book_pk", False))
+                book = BookingDetails.objects.filter(booking_id=book_pk).first()
+                book.booking_status = "KSH"
+                book.room.room_status = "E"
+                book.room.save()
+                book.seen = True
+                book.save()
+                hotel_owner = book.hotel.owner.pk
+                event = {"event_type": "reload_notify", "payload": {"user_id": hotel_owner}}
+                channel = f"notify_{hotel_owner}"
+                publish_event(channel=channel, event=event)
+                del request.session["book_out"]
+                del request.session["book_pk"]
+
+            if request.session.get("book_guest_out", False) == "True":
+                book_pk = int(request.session.get("book_pk", False))
+                book = BookingDetails.objects.filter(booking_id=book_pk).first()
+                book.booking_status = "KH"
+                book.room.room_status = "E"
+                book.seen = True
+                book.room.save()
+                book.save()
+                hotel_owner = book.hotel.owner.pk
+                event = {"event_type": "reload_notify", "payload": {"user_id": hotel_owner}}
+                channel = f"notify_{hotel_owner}"
+                publish_event(channel=channel, event=event)
+                del request.session["book_guest_out"]
+                del request.session["book_pk"]
 
                 messages.success(request, "Thanh toán hoàn trả thành công")
                 return redirect("home")
@@ -293,7 +328,11 @@ def refund(request, book_pk):
         else:
             messages.success(request, "Trả phòng thành công")
         return redirect('home')
+
     money_refund = book.pay_online.amount * 90 / 100
+    if request.session.get("book_out", False) == "True" or request.session.get("book_guest_out", False) == "True":
+        money_refund = book.pay_online.amount
+
     context = {"title": "Gửi yêu cầu hoàn tiền", "book": book, "check_owner": check_owner, "money_refund": money_refund}
     return render(request, "refund.html", context)
 
