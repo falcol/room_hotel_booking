@@ -168,6 +168,10 @@ def hotel_guest_cancel(request, book_pk):
                 book.room.save()
                 book.seen = True
                 book.save()
+                hotel_owner = book.hotel.owner.pk
+                event = {"event_type": "reload_notify", "payload": {"user_id": hotel_owner}}
+                channel = f"notify_{hotel_owner}"
+                publish_event(channel=channel, event=event)
             else:
                 return redirect('payment_refund', book_pk=book_pk)
         except BookingDetails.DoesNotExist:
