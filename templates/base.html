@@ -390,7 +390,8 @@
 
             {% if request.user.is_authenticated %}
                 var userId = "{{ request.user.pk }}";
-                let socket = new WebSocket(`ws://${window.location.host.replace('8', '9')}/ws/chat/${userId}/`);
+                var host = "{{ request.session.WS_HOST }}"
+                let socket = new WebSocket(`ws://${host}/ws/chat/${userId}/`);
 
                 socket.onopen = function(e) {
                     console.log("[open] Connection established");

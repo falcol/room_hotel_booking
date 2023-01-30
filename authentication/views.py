@@ -1,5 +1,6 @@
 from smtplib import SMTPException
 
+from decouple import config
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -114,6 +115,7 @@ def signin(request):
         next_redirect = request.GET.get('next')
 
     context = {"username": "", "password": "", "menu": "login"}
+    request.session["WS_HOST"] = config("WS_HOST")
 
     if request.method == 'POST':
         username = request.POST['username']
