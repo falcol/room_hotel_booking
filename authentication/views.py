@@ -46,6 +46,7 @@ def signup(request):
                 message += "\n Chào mừng bạn đến với website của chúng tôi"
                 message += "\n Tôi sẽ gửi bạn email để xác nhận danh tính"
                 message += "\n Xin hãy xác nhận lại trong email"
+                message += "\n Nếu không thấy hãy kiểm tra mục thư nháp"
                 from_email = settings.EMAIL_HOST_USER
                 to_list = [myuser.email]
                 send_mail(subject, message, from_email, to_list, fail_silently=True)
