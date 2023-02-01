@@ -88,9 +88,18 @@ def guest_cancel(request, book_pk):
                     book.save()
                     messages.success(request, "Hủy phòng thành công")
                     return redirect("home")
-                request.session["refund_status"] = "guest"
-                request.session["book_pk"] = book_pk
-                return redirect("payment_refund", book_pk=book_pk)
+                if book.pay_online:
+                    request.session["refund_status"] = "guest"
+                    request.session["book_pk"] = book_pk
+                    return redirect("payment_refund", book_pk=book_pk)
+                else:
+                    book.booking_status = "KH"
+                    book.room.room_status = "E"
+                    book.seen = True
+                    book.room.save()
+                    book.save()
+                    messages.success(request, "Hủy phòng thành công")
+                    return redirect("home")
         except BookingDetails.DoesNotExist:
             pass
 

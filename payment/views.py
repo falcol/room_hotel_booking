@@ -250,7 +250,7 @@ def query(request):
             if len(tmp) == 2:
                 vnp.responseData[tmp[0]] = urllib.parse.unquote(tmp[1]).replace('+', ' ')
 
-        print('Validate data from VNPAY:' + str(vnp.validate_response(settings.VNPAY_HASH_SECRET_KEY)))
+        # print('Validate data from VNPAY:' + str(vnp.validate_response(settings.VNPAY_HASH_SECRET_KEY)))
         if vnp.validate_response(settings.VNPAY_HASH_SECRET_KEY):
             if request.session.get("refund_status", False) == "guest":
                 book_pk = int(request.session.get("book_pk", False))
@@ -324,13 +324,41 @@ def refund(request, book_pk):
         check_owner = True
     if book.pay_online is None:
         if request.user.pk is not book.hotel.owner.pk:
+            book_pk = int(request.session.get("book_pk", False))
+            if book_pk:
+                book = BookingDetails.objects.filter(booking_id=book_pk).first()
+                book.booking_status = "KH"
+                book.room.room_status = "E"
+                book.room.save()
+                book.seen = True
+                book.save()
+                hotel_owner = book.hotel.owner.pk
+                event = {"event_type": "reload_notify", "payload": {"user_id": hotel_owner}}
+                channel = f"notify_{hotel_owner}"
+                publish_event(channel=channel, event=event)
+                del request.session["book_out"]
+                del request.session["book_pk"]
             messages.warning(request, "Không có hóa đơn")
         else:
+            if request.session.get("book_out", False) == "True":
+                book_pk = int(request.session.get("book_pk", False))
+                book = BookingDetails.objects.filter(booking_id=book_pk).first()
+                book.booking_status = "KSH"
+                book.room.room_status = "E"
+                book.room.save()
+                book.seen = True
+                book.save()
+                hotel_owner = book.hotel.owner.pk
+                event = {"event_type": "reload_notify", "payload": {"user_id": hotel_owner}}
+                channel = f"notify_{hotel_owner}"
+                publish_event(channel=channel, event=event)
+                del request.session["book_out"]
+                del request.session["book_pk"]
             messages.success(request, "Trả phòng thành công")
         return redirect('home')
 
     money_refund = book.pay_online.amount * 90 / 100
-    if request.session.get("book_out", False) == "True" or request.session.get("book_guest_out", False) == "True":
+    if request.session.get("book_out", False) == "True" or request.session.get("book_guest_out", False) == "True" or book.check_in_time < datetime.now():
         money_refund = book.pay_online.amount
 
     context = {"title": "Gửi yêu cầu hoàn tiền", "book": book, "check_owner": check_owner, "money_refund": money_refund}

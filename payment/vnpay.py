@@ -2,6 +2,7 @@ import hashlib
 import hmac
 import urllib.parse
 
+
 class vnpay:
     requestData = {}
     responseData = {}
@@ -22,7 +23,10 @@ class vnpay:
         return vnpay_payment_url + "?" + queryString + '&vnp_SecureHash=' + hashValue
 
     def validate_response(self, secret_key):
-        vnp_SecureHash = self.responseData['vnp_SecureHash']
+        try:
+            vnp_SecureHash = self.responseData['vnp_SecureHash']
+        except Exception:
+            return False
         # Remove hash params
         if 'vnp_SecureHash' in self.responseData.keys():
             self.responseData.pop('vnp_SecureHash')

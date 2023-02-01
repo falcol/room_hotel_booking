@@ -298,6 +298,8 @@
                         },
                         dataType: 'json',
                         success: function(response) {
+                            $("#food-notification-items").empty()
+                            $("#notification-items").empty()
                             $(".notify_count").text(response.count)
                             if (response.count > 0) {
                                 var books = response.books
