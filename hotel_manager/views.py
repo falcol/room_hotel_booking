@@ -295,7 +295,7 @@ def dashboard(request, hotel_pk):
     context = {
         "books_month": books_month,
         "total_rooms": total_rooms,
-        "cost_day": cost_day['total_cost__sum'] + cost_day['menu__amount__sum'],
+        "cost_day": (cost_day['total_cost__sum'] or 0) + (cost_day['menu__amount__sum'] or 0),
         "books_year": books_year,
         "books_day": books_day,
         "menu": "hotel"
