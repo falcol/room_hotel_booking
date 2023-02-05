@@ -37,6 +37,7 @@
                                         <button class="btn btn-outline-primary btn-lg" type="submit">Trả phòng</button>
                                     </div>
                                 </form>
+                                <img id="qr_code_id" src="{% url 'generate_qrcode' book_pk=book_pk %}?money={{total_cost}}" alt="QR Code" />
                             </div>
                         </div>
                     </div>
@@ -55,3 +56,14 @@
 
     </script>
 {% endblock footer %}
+
+{% block script %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#id_total_cost").on("keyup", function() {
+                total_cost = $(this).val()
+                $("#qr_code_id").attr("src", `{% url 'generate_qrcode' book_pk=book_pk %}?money=${total_cost}`)
+            })
+        })
+    </script>
+{% endblock script %}

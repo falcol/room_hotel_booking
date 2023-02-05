@@ -29,7 +29,7 @@
             <div class="form-group">
                 <label for="amount">Số tiền</label>
                 <input class="form-control" id="amount"
-                       name="amount" type="number" value="{% if check_status == 'booking' %}200000{% endif %} "/>
+                       name="amount" type="number" value="{% if check_status == 'booking' %}200000{% endif %}{% if money %}{{money}}{% endif %}"/>
                 {% for error in form.amount.errors %}<p style="color: red">{{ error }}</p>{% endfor %}
             </div>
             <div class="form-group">

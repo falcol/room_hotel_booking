@@ -122,7 +122,14 @@ def booking_checkout(request, book_pk):
 
     room_name = book.room.room_name
 
-    context = {"form": book_form, "pay_online": pay_online, "menu": menu['amount__sum'], "room_name": room_name}
+    context = {
+        "form": book_form,
+        "pay_online": pay_online,
+        "menu": menu['amount__sum'],
+        "room_name": room_name,
+        "book_pk": book_pk,
+        "total_cost": book.total_cost or 0
+    }
 
     return render(request, 'bookings/booking_checkout.html', context)
 

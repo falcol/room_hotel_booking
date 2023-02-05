@@ -106,7 +106,7 @@
             </div>
         </div>
         <div class="row">
-            {% if pages.paginator.count > 1 %}
+            {% if pages.paginator.num_pages > 1 %}
                 {% include 'pages.html' %}
             {% endif %}
         </div>

@@ -22,4 +22,5 @@ urlpatterns = [
     path('hotel/<int:menu_pk>/menu-update/', views.update_menu, name='update_menu'),
     path('hotel/<int:hotel_pk>/list-order/', views.list_menu_order, name='list_menu_order'),
     path('hotel/<int:menu_pk>/accept-update/', views.accept_menu, name='accept_menu'),
+    path('qrcode/<int:book_pk>/', views.generate_qrcode, name='generate_qrcode'),
 ]

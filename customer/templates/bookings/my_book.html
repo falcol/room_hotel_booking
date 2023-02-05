@@ -69,6 +69,7 @@
                                                 {% endif %}
                                                 {% if book.booking_status == "TP" %}
                                                 <a href="" class="primary-btn text-danger">Đã ở</a>
+                                                <a href="{% url 'create_booking' pk=book.room.pk %}" class="primary-btn text-success">Đặt lại</a>
                                                 {% endif %}
                                                 {% if book.booking_status == "DP" %}
                                                     <a href="{% url 'update_booking' pk=book.hotel.pk %}?bpk={{ book.booking_id }}" class="primary-btn">Cập nhập lịch</a>
@@ -100,7 +101,7 @@
             </div>
         </div>
         <div class="row">
-            {% if pages.paginator.count > 1 %}
+            {% if pages.paginator.num_pages > 1 %}
                 {% include 'pages.html' %}
             {% endif %}
         </div>

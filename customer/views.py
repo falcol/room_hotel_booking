@@ -196,7 +196,7 @@ def create_rating(request):
 
 def load_comments(request):
     room_pk = request.GET.get("room_pk")
-    comments = Comments.objects.filter(room__pk=room_pk).order_by("-pk").values(
+    comments = Comments.objects.filter(room__pk=room_pk).order_by("pk").values(
         "comment", "created_at__year", "created_at__month", "created_at__day", "user__username", "user__name"
     )
     page_number = request.GET.get("page", 1)

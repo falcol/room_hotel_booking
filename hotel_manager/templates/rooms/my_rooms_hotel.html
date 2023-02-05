@@ -55,19 +55,22 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <a href="{% url 'update_room_hotel' room_pk=room.pk %}" class="primary-btn">Chi tiết</a>
+                            <div class="row">
+                                <a href="{% url 'update_room_hotel' room_pk=room.pk %}" class="primary-btn">Chi tiết</a>
+                                <a href="{% url 'create_booking' pk=room.pk %}" class="primary-btn ml-4">Nhận khách</a>
+                            </div>
                         </div>
                     </div>
                 </div>
                 {% endfor %}
 
-                <div class="col-lg-12">
+                {% comment %} <div class="col-lg-12">
                     <div class="room-pagination">
                         <a href="#">1</a>
                         <a href="#">2</a>
                         <a href="#">Tiếp <i class="fa fa-long-arrow-right"></i></a>
                     </div>
-                </div>
+                </div> {% endcomment %}
             </div>
         </div>
     </section>

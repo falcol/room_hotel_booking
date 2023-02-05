@@ -1,9 +1,11 @@
 from datetime import datetime
 
+import qrcode
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Count, Q, Sum
 from django.db.models.functions import TruncDay, TruncMonth, TruncYear
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
 from common.vietnam_province import VIETNAM_CITY
@@ -385,3 +387,14 @@ def accept_menu(request, menu_pk):
             messages.error(request, "Không cập nhập được sản phẩm")
 
     return redirect("list_menu_order", hotel_pk=order.drink_and_food.hotel_id.pk)
+
+
+@login_required(login_url='/signin')
+def generate_qrcode(request, book_pk):
+    money = request.GET.get("money")
+    url = f"http://localhost:8000/pay/payment/{book_pk}?money={money}"
+    img = qrcode.make(url)
+
+    response = HttpResponse(content_type="image/png")
+    img.save(response, "PNG")
+    return response

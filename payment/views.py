@@ -31,6 +31,9 @@ def hmacsha512(key, data):
 
 def payment(request, book_pk):
     form = PaymentForm(request.POST or None)
+    money = request.GET.get("money")
+    if money:
+        request.session["payment_status"] = 'paid'
     try:
         check_status = request.session.get('payment_status', False)
     except KeyError:
@@ -93,7 +96,13 @@ def payment(request, book_pk):
             context = {"title": "Thanh toán", "book_pk": book_pk, "form": form, "check_status": check_status}
             return render(request, "payment.html", context)
     else:
-        context = {"title": "Thanh toán", "book_pk": book_pk, "form": form, "check_status": check_status}
+        context = {
+            "title": "Thanh toán",
+            "book_pk": book_pk,
+            "form": form,
+            "check_status": check_status,
+            "money": money
+        }
         return render(request, "payment.html", context)
 
 
@@ -356,7 +365,8 @@ def refund(request, book_pk):
         return redirect('home')
 
     money_refund = book.pay_online.amount * 90 / 100
-    if request.session.get("book_out", False) == "True" or request.session.get("book_guest_out", False) == "True" or book.check_in_time < datetime.now():
+    if request.session.get("book_out", False) == "True" or request.session.get(
+            "book_guest_out", False) == "True" or book.check_in_time < datetime.now():
         money_refund = book.pay_online.amount
 
     context = {"title": "Gửi yêu cầu hoàn tiền", "book": book, "check_owner": check_owner, "money_refund": money_refund}
