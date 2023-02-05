@@ -263,7 +263,6 @@ def query(request):
                     book.save()
                     messages.success(request, "Thanh toán hoàn trả thành công")
                     del request.session['refund_status']
-                    return redirect("home")
                 except BookingDetails.DoesNotExist:
                     messages.error(request, "Không có thông tin đặt phòng")
                     return redirect("my_book")
@@ -309,7 +308,6 @@ def query(request):
                 del request.session["book_pk"]
 
                 messages.success(request, "Thanh toán hoàn trả thành công")
-                return redirect("home")
 
         return render(request, "query.html", {"title": "Kiểm tra kết quả giao dịch", "data": vnp.responseData})
 
