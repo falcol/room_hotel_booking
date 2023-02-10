@@ -178,6 +178,7 @@ def payment_return(request):
                     book.pay_online.save()
                     book.save()
                     hotel_owner = book.hotel.owner.pk
+                    messages.success(request, "Thanh toán phòng thành công")
 
                 if book_pk and request.session.get("payment_status", False) == 'booking':
                     book = BookingDetails.objects.get(booking_id=book_pk)
@@ -186,6 +187,7 @@ def payment_return(request):
                         book.pay_online.save()
                         book.save()
                         hotel_owner = book.hotel.owner.pk
+                        messages.success(request, "Đặt phòng thành công")
 
                 event = {"event_type": "reload_notify", "payload": {"user_id": hotel_owner}}
                 channel = f"notify_{hotel_owner}"
