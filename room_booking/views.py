@@ -128,7 +128,8 @@ def booking_checkout(request, book_pk):
         "menu": menu['amount__sum'],
         "room_name": room_name,
         "book_pk": book_pk,
-        "total_cost": book.total_cost or 0
+        "total_cost": book.total_cost or 0,
+        "screen": "checkout"
     }
 
     return render(request, 'bookings/booking_checkout.html', context)

@@ -327,7 +327,7 @@
                             $(".notify_food_count").text(response.menus_count)
                             if (response.menus_count > 0) {
                                 var menus = response.menus
-                                console.log(menus)
+                                // console.log(menus)
                                 menus.forEach(item => {
                                     html = `<form action="/hotel/${item.book__hotel__pk}/list-order" method="get">
                                                     <button type="submit" class="btn w-100">

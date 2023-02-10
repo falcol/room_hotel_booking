@@ -60,11 +60,18 @@
                                     </form>
                                 {% endif %}
                                 {% if book.booking_status == "NP"  %}
-                                    <form action="{% url 'booking_checkout' book_pk=book.pk %}">
-                                        <button type="submit" class="btn primary-btn">
-                                            Trả phòng
-                                        </button>
-                                    </form>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <form action="{% url 'booking_checkout' book_pk=book.pk %}">
+                                            <button type="submit" class="btn primary-btn">
+                                                Trả phòng
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <div class="col-6">
+                                        <a href="{% url 'get_menu' book_pk=book.pk %}" class="primary-btn mt-2">Đồ ăn/uống</a>
+                                    </div>
+                                </div>
                                 {% endif %}
                             </div>
                         </div>

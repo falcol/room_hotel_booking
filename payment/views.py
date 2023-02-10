@@ -319,6 +319,7 @@ def query(request):
                 del request.session["book_pk"]
 
                 messages.success(request, "Thanh toán hoàn trả thành công")
+            messages.success(request, "Thanh toán hoàn trả thành công")
 
         return render(request, "query.html", {"title": "Kiểm tra kết quả giao dịch", "data": vnp.responseData})
 

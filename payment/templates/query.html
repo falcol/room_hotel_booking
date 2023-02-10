@@ -3,7 +3,7 @@
     <h3>{{ title }}</h3>
     <div class="table-responsive">
         <form action="{% url "query" %}" id="create_form" method="post">
-            <div class="form-group">
+            {% comment %} <div class="form-group">
                 <label for="order_id">Mã hóa đơn</label>
                 <input class="form-control" id="order_id" name="order_id" type="text"/>
             </div>
@@ -13,6 +13,9 @@
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Query</button>
+            </div> {% endcomment %}
+            <div class="form-group">
+                <a type="button" href="{% url 'home' %}" class="btn btn-primary">Trang chủ</a>
             </div>
             {% csrf_token %}
         </form>

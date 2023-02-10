@@ -5,62 +5,71 @@
                 id="{{ field.auto_id }}"
                 class="{{ field.field.widget.attrs.class }} form-control">
             {% comment %} <option value selected> {% endcomment %}
-            </option>
-            {% if field.name != 'room_price' %}
-                {% for id, name in field.field.choices %}
-                    {% if id != '' %}
-                        <option value="{{ id }}"
-                                {% if field.value|to_str == id|to_str %}selected{% endif %}>
-                            {{ name }}
-                        </option>
-                    {% endif %}
-                {% endfor %}
-            {% else %}
-                {% for price in room_prices %}
-                    <option value="{{ price.pk }}"
-                            {% if field.value == price.pk|to_str %}selected{% endif %}>
-                        {{ price.room_type }}
+        </option>
+        {% if field.name != 'room_price' %}
+            {% for id, name in field.field.choices %}
+                {% if id != '' %}
+                    <option value="{{ id }}"
+                            {% if field.value|to_str == id|to_str %}selected{% endif %}>
+                        {{ name }}
                     </option>
-                {% endfor %}
-            {% endif %}
-        </select>
-        {% if field.name == 'room_price' %}
-            <div id="room-price">
-                {% if screen == 'hotel' %}
-                    <a href="{% url 'hotel_room_price' hotel_pk=hotel_pk %}">Thêm giá phòng</a>
-                {% else %}
-                    <a href="{% url 'hotel_room_price' hotel_pk=room.hotel.pk %}">Thêm giá phòng</a>
                 {% endif %}
-            </div>
+            {% endfor %}
+        {% else %}
+            {% for price in room_prices %}
+                <option value="{{ price.pk }}"
+                        {% if field.value == price.pk|to_str %}selected{% endif %}>
+                    {{ price.room_type }}
+                </option>
+            {% endfor %}
         {% endif %}
-    {% elif field.field.widget.input_type in "text email password tel number" %}
-        {% include 'label.html' %}
+    </select>
+    {% if field.name == 'room_price' %}
+        <div id="room-price">
+            {% if screen == 'hotel' %}
+                <a href="{% url 'hotel_room_price' hotel_pk=hotel_pk %}">Thêm giá phòng</a>
+            {% else %}
+                <a href="{% url 'hotel_room_price' hotel_pk=room.hotel.pk %}">Thêm giá phòng</a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% elif field.field.widget.input_type in "text email password tel number" %}
+    {% include 'label.html' %}
+    {% if screen == 'checkout' %}
         <input type="{{ field.field.widget.input_type }}"
-               id="{{ field.auto_id }}"
-               name="{{ field.name }}"
-               class="{{ field.field.widget.attrs.class }} form-control"
-               placeholder="{{ field.label }}"
-               value="{% if request.user.is_authenticated %}{% if field.name == 'guest_name' %}{{ request.user.name|check_value_none }}{% elif field.field.widget.input_type == 'tel'  %}{{ request.user.info.first|check_value_none }}{% else %}{{ field.value|check_value_none }}{% endif %}{% else %}{{ field.value|check_value_none }}{% endif %}{% if field.name == 'discounted_price' %}0{% endif %}"/>
-    {% elif field.field.widget.input_type == 'datetime-local' %}
-        {% include 'label.html' %}
-        <input type="{{ field.field.widget.input_type }}"
-               id="{{ field.auto_id }}"
-               name="{{ field.name }}"
-               class="{{ field.field.widget.attrs.class }} form-control"
-               placeholder="{{ field.label }}"
-               value="{{ field.value|format_datetime_local }}"/>
-    {% elif field.field.widget.input_type is None %}
-        {% include 'label.html' %}
-        <textarea name="{{ field.name }}" value="{{ field.value|check_value_none }}" id="{{ field.auto_id }}" class="{{ field.field.widget.attrs.class }}" placeholder="{{ field.label }}" cols="30" rows="10">{{ field.value|check_value_none }}</textarea>
+            id="{{ field.auto_id }}"
+            name="{{ field.name }}"
+            class="{{ field.field.widget.attrs.class }} form-control"
+            placeholder="{{ field.label }}"
+            value="{{ field.value|check_value_none }}"/>
     {% else %}
         <input type="{{ field.field.widget.input_type }}"
-               id="{{ field.auto_id }}"
-               name="{{ field.name }}"
-               class="{{ field.field.widget.attrs.class }} rounded-item"
-               placeholder="{{ field.label }}"
-               value="{{ field.value|check_value_none }}"/>
-        {% include 'label.html' %}
+            id="{{ field.auto_id }}"
+            name="{{ field.name }}"
+            class="{{ field.field.widget.attrs.class }} form-control"
+            placeholder="{{ field.label }}"
+            value="{% if request.user.is_authenticated %}{% if field.name == 'guest_name' %}{{ request.user.name|check_value_none }}{% elif field.field.widget.input_type == 'tel'  %}{{ request.user.info.first|check_value_none }}{% else %}{{ field.value|check_value_none }}{% endif %}{% else %}{{ field.value|check_value_none }}{% endif %}{% if field.name == 'discounted_price' %}0{% endif %}"/>
     {% endif %}
-    {% for error in field.errors %}<p style="color: red">{{ error }}</p>{% endfor %}
-    {% if field.help_text %}<small style="color: grey">{{ field.help_text }}</small>{% endif %}
+{% elif field.field.widget.input_type == 'datetime-local' %}
+    {% include 'label.html' %}
+    <input type="{{ field.field.widget.input_type }}"
+           id="{{ field.auto_id }}"
+           name="{{ field.name }}"
+           class="{{ field.field.widget.attrs.class }} form-control"
+           placeholder="{{ field.label }}"
+           value="{{ field.value|format_datetime_local }}"/>
+{% elif field.field.widget.input_type is None %}
+    {% include 'label.html' %}
+    <textarea name="{{ field.name }}" value="{{ field.value|check_value_none }}" id="{{ field.auto_id }}" class="{{ field.field.widget.attrs.class }}" placeholder="{{ field.label }}" cols="30" rows="10">{{ field.value|check_value_none }}</textarea>
+{% else %}
+    <input type="{{ field.field.widget.input_type }}"
+           id="{{ field.auto_id }}"
+           name="{{ field.name }}"
+           class="{{ field.field.widget.attrs.class }} rounded-item"
+           placeholder="{{ field.label }}"
+           value="{{ field.value|check_value_none }}"/>
+    {% include 'label.html' %}
+{% endif %}
+{% for error in field.errors %}<p style="color: red">{{ error }}</p>{% endfor %}
+{% if field.help_text %}<small style="color: grey">{{ field.help_text }}</small>{% endif %}
 </div>
