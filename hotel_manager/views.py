@@ -3,6 +3,7 @@ from datetime import datetime
 import qrcode
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.sites.shortcuts import get_current_site
 from django.db.models import Count, Q, Sum
 from django.db.models.functions import TruncDay, TruncMonth, TruncYear
 from django.http import HttpResponse
@@ -392,7 +393,8 @@ def accept_menu(request, menu_pk):
 @login_required(login_url='/signin')
 def generate_qrcode(request, book_pk):
     money = request.GET.get("money")
-    url = f"http://localhost:8000/pay/payment/{book_pk}?money={money}"
+    current_site = get_current_site(request)
+    url = f"http://{current_site.domain}/pay/payment/{book_pk}?money={money}"
     img = qrcode.make(url)
 
     response = HttpResponse(content_type="image/png")
