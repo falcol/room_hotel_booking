@@ -80,15 +80,21 @@ def staff_create_booking(request, pk):
 def booking_checkout(request, book_pk):
     try:
         book = BookingDetails.objects.get(pk=book_pk)
+        more_money = 0
         if book.booking_type == 0:
-            more_hours = math.ceil((book.check_out_time - book.check_in_time).seconds / 3600) - 2
+            more_hours = math.ceil((book.check_out_time - book.check_in_time).total_seconds() / 3600) - 2
             book.total_cost = book.room.room_price.price_first_two_hours + (
                 more_hours * book.room.room_price.price_next_hours
             )
         if book.booking_type == 1:
-            book.total_cost = book.room.room_price.price_per_night
+            more_hours = math.ceil((book.check_out_time - book.check_in_time).total_seconds() / 3600)
+            if more_hours > 12:
+                more_money = book.room.room_price.price_next_hours * (more_hours - 12)
+            book.total_cost = book.room.room_price.price_per_night + more_money
         if book.booking_type == 2:
-            book.total_cost = book.room.room_price.price_per_day
+            more_hours = math.ceil((book.check_out_time - book.check_in_time).total_seconds() / 3600)
+            day = math.ceil(more_hours / 24)
+            book.total_cost = day * book.room.room_price.price_per_day
 
         try:
             menu = DrinkAndFoodOrder.objects.filter(book=book).aggregate(Sum('amount'))
@@ -106,7 +112,7 @@ def booking_checkout(request, book_pk):
             room.room_status = "E"
             room.save()
             book_form.save()
-            if book_form.cleaned_data['refund'] is None:
+            if book_form.cleaned_data['refund'] in {None, "False", False}:
                 book = BookingDetails.objects.filter(booking_id=book_pk).first()
                 book.is_pay = True
                 book.save()
