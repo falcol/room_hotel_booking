@@ -94,7 +94,7 @@ def create_hotel(request):
                 photo = Photos.objects.create(hotel_id=new_hotel, image_hotel=image, image_name=image.name)
                 photo.save()
                 pass
-
+            messages.success(request, "Tạo khách sạn thành công")
             return redirect('home')
     else:
         hotel_create_form = HotelCreateForm()
